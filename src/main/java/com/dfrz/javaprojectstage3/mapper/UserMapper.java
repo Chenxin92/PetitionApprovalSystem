@@ -2,7 +2,9 @@ package com.dfrz.javaprojectstage3.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dfrz.javaprojectstage3.bean.User;
+import org.springframework.stereotype.Repository;
 
-public interface UserMapper extends BaseMapper<UserMapper> {
+@Repository
+public interface UserMapper extends BaseMapper<User> {
 
 }
