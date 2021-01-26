@@ -1,6 +1,7 @@
 package com.dfrz.javaprojectstage3.bean;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -25,7 +26,11 @@ public class User {
 
     private String department;
 
-    private String role;
+    private Integer role;
+
+    //不是数据库里的字段
+    @TableField(exist = false)
+    private Role urole;
 
     private Date createtime;
 
@@ -42,7 +47,7 @@ public class User {
         this.realname = realname;
     }
 
-    public User(Integer id, String username, String realname, String password, String phone, String email, String headpic, String department, String role, Date createtime, Date updatetime) {
+    public User(Integer id, String username, String realname, String password, String phone, String email, String headpic, String department, Integer role, Date createtime, Date updatetime) {
         this.id = id;
         this.username = username;
         this.realname = realname;
@@ -137,12 +142,12 @@ public class User {
         this.department = department == null ? null : department.trim();
     }
 
-    public String getRole() {
+    public Integer getRole() {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role == null ? null : role.trim();
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     public Date getCreatetime() {
@@ -159,5 +164,13 @@ public class User {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public Role getUrole() {
+        return urole;
+    }
+
+    public void setUrole(Role urole) {
+        this.urole = urole;
     }
 }
