@@ -21,7 +21,6 @@ public class Permission {
 
     private String key;
 
-    private String permissionkey;
 
     public Permission(Integer id, String name, String url, Integer pid, String key, String permissionkey) {
         this.id = id;
@@ -29,7 +28,6 @@ public class Permission {
         this.url = url;
         this.pid = pid;
         this.key = key;
-        this.permissionkey = permissionkey;
     }
 
     //子节点
@@ -95,13 +93,8 @@ public class Permission {
         this.pid = pid;
     }
 
-    public String getPermissionkey() {
-        return permissionkey;
-    }
 
-    public void setPermissionkey(String permissionkey) {
-        this.permissionkey = permissionkey == null ? null : permissionkey.trim();
-    }
+
 
     @Override
     public String toString() {
@@ -111,7 +104,6 @@ public class Permission {
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
                 ", key='" + key + '\'' +
-                ", permissionkey='" + permissionkey + '\'' +
                 '}';
     }
 }
