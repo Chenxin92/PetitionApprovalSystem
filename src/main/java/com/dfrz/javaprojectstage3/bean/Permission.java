@@ -12,22 +12,39 @@ import java.util.List;
 public class Permission {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-
-    private String name;
+    @TableField(value = "permissionName")
+    private String permissionName;
 
     private String url;
 
     private Integer pid;
+    @TableField(value = "permissionKey")
+    private String permissionKey;
 
-    private String key;
 
-
-    public Permission(Integer id, String name, String url, Integer pid, String key, String permissionkey) {
+    public Permission(Integer id, String permissionName, Integer pid, String permissionKey) {
         this.id = id;
-        this.name = name;
+        this.permissionName = permissionName;
+        this.pid = pid;
+        this.permissionKey = permissionKey;
+    }
+
+    public Permission(Integer id, String permissionName, String url, Integer pid, String permissionKey, List<Permission> children, boolean checked) {
+        this.id = id;
+        this.permissionName = permissionName;
         this.url = url;
         this.pid = pid;
-        this.key = key;
+        this.permissionKey = permissionKey;
+        this.children = children;
+        this.checked = checked;
+    }
+
+    public Permission(Integer id, String permissionName, String url, Integer pid, String permissionKey) {
+        this.id = id;
+        this.permissionName = permissionName;
+        this.url = url;
+        this.pid = pid;
+        this.permissionKey = permissionKey;
     }
 
     //子节点
@@ -52,13 +69,7 @@ public class Permission {
         }
     }
 
-    public String getKey() {
-        return key;
-    }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     public Integer getId() {
         return id;
@@ -68,12 +79,20 @@ public class Permission {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getPermissionName() {
+        return permissionName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setPermissionName(String permissionName) {
+        this.permissionName = permissionName;
+    }
+
+    public String getPermissionKey() {
+        return permissionKey;
+    }
+
+    public void setPermissionKey(String permissionKey) {
+        this.permissionKey = permissionKey;
     }
 
     public String getUrl() {
@@ -93,17 +112,16 @@ public class Permission {
         this.pid = pid;
     }
 
-
-
-
     @Override
     public String toString() {
         return "Permission{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", permissionName='" + permissionName + '\'' +
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
-                ", key='" + key + '\'' +
+                ", permissionKey='" + permissionKey + '\'' +
+                ", children=" + children +
+                ", checked=" + checked +
                 '}';
     }
 }

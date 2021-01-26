@@ -61,6 +61,21 @@ public class User {
         this.updatetime = updatetime;
     }
 
+    public User(Integer id, String username, String realname, String password, String phone, String email, String headpic, String department, Integer role, Role urole, Date createtime, Date updatetime) {
+        this.id = id;
+        this.username = username;
+        this.realname = realname;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.headpic = headpic;
+        this.department = department;
+        this.role = role;
+        this.urole = urole;
+        this.createtime = createtime;
+        this.updatetime = updatetime;
+    }
+
     @Override
     public String toString() {
         return "User{" +

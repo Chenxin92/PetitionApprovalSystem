@@ -11,13 +11,29 @@ import java.util.List;
 public class Role {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-
-    private String key;
-
-    private String name;
+    @TableField(value = "rolekey")
+    private String roleKey;
+    @TableField(value = "roleName")
+    private String roleName;
 
     @TableField(exist = false)
     private List<Permission> permissions;
+
+    public Role(Integer id, String roleKey, String roleName) {
+        this.id = id;
+        this.roleKey = roleKey;
+        this.roleName = roleName;
+    }
+
+    public Role(Integer id, String roleKey, String roleName, List<Permission> permissions) {
+        this.id = id;
+        this.roleKey = roleKey;
+        this.roleName = roleName;
+        this.permissions = permissions;
+    }
+
+
+
 
     public Integer getId() {
         return id;
@@ -27,20 +43,20 @@ public class Role {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getRoleKey() {
+        return roleKey;
     }
 
-    public void setKey(String key) {
-        this.key = key == null ? null : key.trim();
+    public void setRoleKey(String roleKey) {
+        this.roleKey = roleKey;
     }
 
-    public String getName() {
-        return name;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public List<Permission> getPermissions() {
@@ -55,8 +71,8 @@ public class Role {
     public String toString() {
         return "Role{" +
                 "id=" + id +
-                ", key='" + key + '\'' +
-                ", name='" + name + '\'' +
+                ", roleKey='" + roleKey + '\'' +
+                ", roleName='" + roleName + '\'' +
                 '}';
     }
 }
