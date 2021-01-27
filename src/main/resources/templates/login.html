@@ -41,16 +41,37 @@
               //   });
               //监听提交
               form.on('submit(login)', function(data){
-                // alert(888)
-                layer.msg(JSON.stringify(data.field),function(){
-                    location.href='index.html'
-                });
-                return false;
+                  $.ajax({
+                      url:"login",
+                      data:{username:data.field.username,password:data.field.password},
+                      success:function (data) {
+                          if(data.flag=="1"){
+                              layer.msg("登陆成功",function(){
+                                  location.href='toIndex';
+                              });
+
+                          }
+                          else if(data.flag=="-1"){
+                              layer.alert("没有此账号");
+                          }
+                          else if(data.flag=="-2"){
+                              layer.alert("密码不正确");
+                          }
+                          else{
+                              layer.alert("认证失败");
+
+                          }
+
+                      }
+                  });
+
+                  // alert(888)
+                  // JSON.stringify 将对象转json串
+
+                  return false;
               });
             });
         })
-
-        
     </script>
 
     

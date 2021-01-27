@@ -42,6 +42,10 @@ public class User {
         this.realname = realname;
     }
 
+    public User() {
+    }
+
+
     public User(String username, String realname) {
         this.username = username;
         this.realname = realname;

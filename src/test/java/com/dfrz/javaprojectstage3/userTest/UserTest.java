@@ -58,7 +58,14 @@ public class UserTest {
         Integer result=permissionMapper.getRolePermissionCount(1,7);
         System.out.println(result);
     }
-
+    @Test
+    public void test05(){
+        User user=new User();
+        user.setUsername("1");
+        user.setPassword("2");
+        boolean a=userService.login(user);
+        System.out.println(a);
+    }
 
     }
 

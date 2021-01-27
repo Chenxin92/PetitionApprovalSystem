@@ -29,6 +29,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean login(User user) {
         //条件构造器
+        System.out.println("进入");
         QueryWrapper<User> queryWrapper=new QueryWrapper();
         Map<String,String> parm=new HashMap<>();
         parm.put("username",user.getUsername());
