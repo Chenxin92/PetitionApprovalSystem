@@ -3,7 +3,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import com.dfrz.javaprojectstage3.bean.User;
+import com.dfrz.javaprojectstage3.mapper.NoticeMapper;
 import com.dfrz.javaprojectstage3.service.IUserService;
+import com.dfrz.javaprojectstage3.service.NoticeService;
+import com.dfrz.javaprojectstage3.utils.Result;
+import com.dfrz.javaprojectstage3.utils.ResultUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +47,12 @@ import java.util.Map;
 public class Usercontroller {
     private static Logger logger= LoggerFactory.getLogger(Usercontroller.class);
     @Autowired
+    NoticeService noticeService;
+    @Autowired
     IUserService userService;
+
+
+
 
 
     /*
@@ -55,8 +64,52 @@ public class Usercontroller {
         mv.setViewName("login");
         return mv;
     }
+    /*
+   用户列表页面
+    */
+    @RequestMapping("/touserlist")
+    public ModelAndView userlist(){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("userlist");
+        return mv;
+    }
+    /*
+  信访单列表页面
+   */
+    @RequestMapping("/tonotice")
+    public ModelAndView notice(){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("noticelist");
+        return mv;
+    }
 
+    @RequestMapping("/listAjax")
+    public Result getList(Integer page, Integer limit){
+        // List<User> list=userService.getUsers();
+        //分页
+        Page p=new Page();
+        p.setCurrent(page);
+        p.setSize(limit);
+        IPage iPage =userService.getUsersByPage(p);
+        Result result=ResultUtils.success(iPage.getRecords());
+        result.setCode(0);
+        result.setCount((int)iPage.getTotal());
+        return result;
+    }
+    @RequestMapping("/noticelistAjax")
+    public Result getList1(Integer page, Integer limit){
+        // List<User> list=userService.getUsers();
+        //分页
+        Page p=new Page();
+        p.setCurrent(page);
+        p.setSize(limit);
 
+        IPage iPage =noticeService.getNoticeByPage(p);
+        Result result=ResultUtils.success(iPage.getRecords());
+        result.setCode(0);
+        result.setCount((int)iPage.getTotal());
+        return result;
+    }
 /*
 登录方法
  */

@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class IndexController {
     private static Logger logger= LoggerFactory.getLogger(IndexController.class);
+
     @RequestMapping("/toIndex")
     public ModelAndView toIndex(){
         ModelAndView mv=new ModelAndView();

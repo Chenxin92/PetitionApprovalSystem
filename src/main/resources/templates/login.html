@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>后台登录-X-admin2.0</title>
+	<title>信访管理系统</title>
 	<meta name="renderer" content="webkit|ie-comp|ie-stand">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -19,7 +19,7 @@
 <body class="login-bg">
     
     <div class="login layui-anim layui-anim-up">
-        <div class="message">x-admin2.0-管理登录</div>
+        <div class="message"><p align="center"><font size="5">信访审批系统</font></p></div>
         <div id="darkbannerwrap"></div>
         
         <form method="post" class="layui-form" >
@@ -29,6 +29,7 @@
             <hr class="hr15">
             <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
             <hr class="hr20" >
+
         </form>
     </div>
 
@@ -36,10 +37,6 @@
         $(function  () {
             layui.use('form', function(){
               var form = layui.form;
-              // layer.msg('玩命卖萌中', function(){
-              //   //关闭后的操作
-              //   });
-              //监听提交
               form.on('submit(login)', function(data){
                   $.ajax({
                       url:"login",
@@ -49,7 +46,6 @@
                               layer.msg("登陆成功",function(){
                                   location.href='toIndex';
                               });
-
                           }
                           else if(data.flag=="-1"){
                               layer.alert("没有此账号");
@@ -59,17 +55,12 @@
                           }
                           else{
                               layer.alert("认证失败");
-
                           }
-
                       }
                   });
-
-                  // alert(888)
-                  // JSON.stringify 将对象转json串
-
                   return false;
               });
+
             });
         })
     </script>
