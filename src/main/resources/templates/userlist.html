@@ -51,7 +51,7 @@
       <table id="demo" lay-filter="test"></table>
     </div>
     <script type="text/html" id="barDemo">
-      <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+      <a class="layui-btn layui-btn-xs" lay-event="detail">详细信息</a>
       <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
       <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
@@ -97,23 +97,22 @@
           var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
           if(layEvent === 'detail'){ //查看
-            layer.msg("【查看id="+data.id+",uname="+data.uname+",upass="+data.upass+"】")
-            x_admin_show('查看用户','./toDetails?id='+data.id,600,400)
+            x_admin_show('查看用户','./todetails?id='+data.id,600,400)
           } else if(layEvent === 'del'){ //删除
             layer.confirm('确定删除该员工吗？', function(index){
               obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
               layer.close(index);
               //向服务端发送删除指令
-            });
+            });<!--1-->
           } else if(layEvent === 'edit'){ //编辑
             //do something
-            layer.msg("【编辑id="+data.id+",uname="+data.uname+",upass="+data.upass+"】")
+              x_admin_show('编辑用户','./todeit?id='+data.id,600,550)
 
-            //同步更新缓存对应的值
-            obj.update({
-              username: '123'
-              ,title: 'xxx'
-            });
+            // //同步更新缓存对应的值
+            // obj.update({
+            //   username: '123'
+            //   ,title: 'xxx'
+            // });
           } else if(layEvent === 'LAYTABLE_TIPS'){
             layer.alert('Hi，头部工具栏扩展的右侧图标。');
           }

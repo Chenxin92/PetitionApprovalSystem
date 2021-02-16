@@ -68,13 +68,13 @@
           ,page: true //开启分页
           ,cols: [
                   [ //表头
-            {field: 'id', title: 'ID', width:65, sort: true, fixed: 'left'}
-            ,{field: 'title', title: '标题', width:90}
-            ,{field: 'type', title: '类型', width:90,}
-            ,{field: 'user_id', title: '发送人', width:120,}
+            {field: 'id', title: 'ID', width:140, sort: true, fixed: 'left'}
+            ,{field: 'title', title: '标题', width:200}
+            ,{field: 'type', title: '类型', width:150,}
+            ,{field: 'user_id', title: '发送人', width:157,}
 
-            ,{fixed: 'right',title: '操作', width:200, align:'center', toolbar: '#barDemo'}
-
+            ,{fixed: 'right',title: '操作', width:250, align:'center', toolbar: '#barDemo'}
+                      <!--1-->
           ]
           ]
         });
@@ -89,7 +89,7 @@
             layer.msg("【查看id="+data.id+",uname="+data.uname+",upass="+data.upass+"】")
             x_admin_show('查看用户','./toDetails?id='+data.id,600,400)
           } else if(layEvent === 'del'){ //删除
-            layer.confirm('确定删除该员工吗？', function(index){
+            layer.confirm('确定删除该信件吗？', function(index){
               obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
               layer.close(index);
               //向服务端发送删除指令
