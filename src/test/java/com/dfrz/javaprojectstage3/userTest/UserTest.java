@@ -27,7 +27,7 @@ public class UserTest {
     PermissionMapper permissionMapper;
     @Test
     public void test01(){
-        User user=userMapper.selectById(1);
+        User user=userService.getUserById(10);
         System.out.println(user);
     }
     @Test

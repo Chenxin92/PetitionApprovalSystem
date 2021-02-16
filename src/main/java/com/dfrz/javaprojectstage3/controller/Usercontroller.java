@@ -82,7 +82,9 @@ public class Usercontroller {
         mv.setViewName("noticelist");
         return mv;
     }
-
+    /*
+      用户列表页面数据
+       */
     @RequestMapping("/listAjax")
     public Result getList(Integer page, Integer limit){
         // List<User> list=userService.getUsers();
@@ -96,6 +98,10 @@ public class Usercontroller {
         result.setCount((int)iPage.getTotal());
         return result;
     }
+
+    /*
+  信访单列表页面数据
+   */
     @RequestMapping("/noticelistAjax")
     public Result getList1(Integer page, Integer limit){
         // List<User> list=userService.getUsers();
@@ -109,6 +115,30 @@ public class Usercontroller {
         result.setCode(0);
         result.setCount((int)iPage.getTotal());
         return result;
+    }
+    /*
+      查看用户
+       */
+    @RequestMapping("/todetails")
+    public ModelAndView toDetails(Integer id){
+        ModelAndView mv=new ModelAndView();
+        //获取数据
+        User user=userService.getUserById(id);
+        mv.setViewName("userdetails");
+        mv.addObject("user",user);
+        return mv;
+    }
+    /*
+          编辑用户
+           */
+    @RequestMapping("/todeit")
+    public ModelAndView toDeit(Integer id){
+        ModelAndView mv=new ModelAndView();
+        //获取数据
+        User user=userService.getUserById(id);
+        mv.setViewName("useredit");
+        mv.addObject("user",user);
+        return mv;
     }
 /*
 登录方法
