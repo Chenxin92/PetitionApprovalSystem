@@ -3,6 +3,7 @@ package com.dfrz.javaprojectstage3.bean;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ public class Petition {
 
     private String code;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date acceptTime;
 
     private String reflectName;
@@ -31,6 +33,7 @@ public class Petition {
 
     private String stateDetail;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date createTime;
 
     private Integer userId;

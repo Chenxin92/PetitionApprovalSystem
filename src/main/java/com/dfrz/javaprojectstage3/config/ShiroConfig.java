@@ -22,6 +22,7 @@ public class ShiroConfig {
         UserRealm userRealm = new UserRealm();
         return userRealm;
     }
+
     // 创建 SecurityManager 对象
     @Bean
     public DefaultWebSecurityManager securityManager() {
@@ -29,6 +30,7 @@ public class ShiroConfig {
         securityManager.setRealm(userRealm());
         return securityManager;
     }
+
     // Filter工厂，设置对应的过滤条件和跳转条件
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
@@ -42,33 +44,29 @@ public class ShiroConfig {
          * role：对应角色权限可访问
          */
         Map<String, String> map = new LinkedHashMap<>();
-        // 开放登录接口
+
         // 静态资源放行
         map.put("/static/**", "anon");
-        map.put("/css/**","anon");
-        map.put("/lib/**","anon");
-        map.put("/js/**","anon");
-        map.put("/images/**","anon");
-        map.put("/dist/**","anon");
-        map.put("/plugins/**","anon");
-        map.put("/login", "anon");
-        map.put("/toLogin", "anon");//转向登陆页面
-        map.put("/user/toLogin","anon");//登陆动作
-        map.put("/user/login","anon");//登陆动作
-//        map.put("/login", "authc");
-        // 对登录跳转接口进行释放
-        map.put("/error", "anon");
+        map.put("/css/**", "anon");
+        map.put("/images/**", "anon");
+        map.put("/js/**", "anon");
+        map.put("/lib/**", "anon");
+
+        // 转向登录页面
+        map.put("/user/toLogin", "anon");
+        // 登陆动作
+        map.put("/user/login", "anon");
         // 对所有用户认证
         map.put("/**", "authc");
-        // 登出
-        map.put("/logout", "logout");
+
         // 登录
         // 注意：这里配置的 /login 是指到 @RequestMapping(value="/login")中的 /login
         shiroFilterFactoryBean.setLoginUrl("/user/toLogin");
         // 首页
-        shiroFilterFactoryBean.setSuccessUrl("/index");
+        shiroFilterFactoryBean.setSuccessUrl("/toIndex");
         // 错误页面，认证不通过跳转
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error/unAuth");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;
     }
@@ -89,9 +87,10 @@ public class ShiroConfig {
         app.setProxyTargetClass(true);
         return app;
     }
+
     /*运行在模板中使用shiro的标签*/
     @Bean(name = "shiroDialect")
-    public ShiroDialect shiroDialect(){
+    public ShiroDialect shiroDialect() {
 
         return new ShiroDialect();
 

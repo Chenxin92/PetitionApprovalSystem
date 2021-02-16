@@ -15,7 +15,6 @@ import java.util.Map;
  * 描述:
  */
 @RestController
-
 public class IndexController {
     private static Logger logger= LoggerFactory.getLogger(IndexController.class);
 

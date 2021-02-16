@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-body layui-anim layui-anim-up">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>编号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="code" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">
+                <span class="x-red">*</span>收件时间
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="acceptTime" required=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>反映人姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="reflectName" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">
+                <span class="x-red">*</span>被反映人岗位
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectPost" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>被反映人部门
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectDepartment" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">
+                <span class="x-red">*</span>内容分类
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectDepartment" required=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>信源分类
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectDepartment" required=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="textEditor" class="layui-form-label">
+                <span class="x-red">*</span>举报内容
+            </label>
+            <div class="layui-input-inline">
+            <textarea id="textEditor" name="textEditor" required lay-verify="required" placeholder="请输入"
+                      class="layui-textarea" style="width: 500px;height: 180px"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-upload">
+                <button type="button" class="layui-icon layui-icon-picture layui-btn uploadPic"
+                        lay-data="{url: 'uploadImage'}"> 上传图片
+                </button>
+                <button type="button" class="layui-icon layui-icon-template-1 layui-btn layui-btn-normal uploadDoc"
+                        lay-data="{url: 'uploadDoc',accept:'file',exts:'doc|docx|pdf'}"> 上传WORD/PDF
+                </button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <ul class="layui-row layui-col-space10" id="hw_res"></ul>
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-filter="submitPetition" lay-submit="">
+                提交
+            </button>
+
+            <button class="layui-btn" lay-filter="savePetition" lay-submit="">
+                保存
+            </button>
+
+            <button class="layui-btn" lay-filter="cancelPetition" onclick="x_admin_close()">
+                取消
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    // 布置作业相关信息
+    layui.use(['form', 'layer', 'upload'], function () {
+        $ = layui.jquery;
+        var form = layui.form;
+        var layer = layui.layer;
+
+        //监听提交
+        form.on('submit(add)', function (data) {
+            // 作业对象
+            var homework = new Object();
+            homework.dataField = data.field;
+            homework.arr = upload_arr;
+            // 转成JSON格式
+            var homeworkJSON = JSON.stringify(homework);
+            // 发异步，把数据提交给php
+            $.ajax({
+                url: "add",
+                data: {homeworkJSON: homeworkJSON},
+                success: function (data) {
+                    if (data.flag == "true") {
+                        layer.msg("布置成功", function () {
+                            //获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.msg("布置失败");
+                    }
+                }
+            });
+            return false;
+        });
+
+        // 附件数组
+        var upload_arr = new Array();
+        //得到 upload 对象
+        var upload = layui.upload;
+        // 上传图片
+        upload.render({
+            elem: '.uploadPic'
+            , done: function (res, index, upload) {
+                //上传完毕回调
+                if (res.code == 0) {
+                    layer.msg("上传成功");
+                    // 回显
+                    var content =
+                        "<li class=\"layui-col-xs2 \">\n" +
+                        "   <div class=\"layui-card layui-bg-gray\">\n" +
+                        "       <div class=\"layui-card-header\">\n" +
+                        "           <span>" +
+                        "               <a href=\"#\"><i class=\"layui-icon\">&#x1007;</i></a>" +
+                        "           </span>\n" +
+                        "       </div>\n" +
+                        "       <div class=\"layui-card-body\">\n" +
+                        "           <img width='50px' height='50px' src='" + "../upload/homework/picture/" + res.data.src + "'>\n" +
+                        "       </div>\n" +
+                        "   </div>\n" +
+                        "</li>"
+                    ;
+                    $("#hw_res").append(content);
+                    // 构建附件对象添加至数组中
+                    var res_object = new Object();
+                    res_object.url = res.data.src;
+                    res_object.type = 1;
+                    upload_arr.push(res_object);
+                } else {
+                    layer.msg("上传失败");
+                }
+            }
+        });
+
+        // 上传DOC
+        upload.render({
+            elem: '.uploadDoc'
+            , done: function (res, index, upload) {
+                //上传完毕回调
+                if (res.code == 0) {
+                    layer.msg("上传成功");
+                    // 回显
+                    var content =
+                        "<li class=\"layui-col-xs2 \">\n" +
+                        "   <div class=\"layui-card layui-bg-gray\">\n" +
+                        "       <div class=\"layui-card-header\">\n" +
+                        "           <span>" +
+                        "               <a href=\"#\"><i class=\"layui-icon\">&#x1007;</i></a>" +
+                        "           </span>\n" +
+                        "       </div>\n" +
+                        "       <div class=\"layui-card-body\">\n" +
+                        "           <img width='50px' height='50px' src='../images/DOC.jpg'>\n" +
+                        "       </div>\n" +
+                        "   </div>\n" +
+                        "</li>"
+                    ;
+                    $("#hw_res").append(content);
+                    // 构建附件对象添加至数组中
+                    var res_object = new Object();
+                    res_object.url = res.data.src;
+                    res_object.type = 2;
+                    upload_arr.push(res_object);
+                } else {
+                    layer.msg("上传失败");
+                }
+            }
+        });
+    });
+
+    // 鼠标移至图片上方,鼠标样式变为手状态
+    $("ul").on("mouseover", "img", function() {
+        this.style.cursor = "pointer";
+    });
+
+    // 图片点击预览,ul为父类元素,img为已存在元素或者未来生成元素
+    $("ul").on("click","img", function () {
+        clickPicture(this);
+    });
+
+    // 点击图片放大预览
+    function clickPicture(obj) {
+        var img = new Image();
+        img.src = obj.src;
+        img.onload = function (ev) {
+            // 获取图片高度
+            var height = this.height;
+            // 获取图片宽度
+            var width = this.width;
+            // 图片URL地址
+            var imgHtml = "<img style='height: 100%;width: 100%' src='" + obj.src + "' />";
+            // 图片显示面积,前参数为宽,后参数为高
+            var area = [];
+            if (height <= 747 && width <= 1680) {
+                area = [width + 'px', height + 'px'];
+            } else if (height > 747 && width <= 1680) {
+                area = [width + 'px', 747 + 'px'];
+            } else if (height <= 747 && width > 1680) {
+                area = [1680 +'px', height + 'px'];
+            } else {
+                area = [1680 + 'px', 747 + 'px'];
+            }
+            //弹出层
+            top.layer.open({
+                type: 1,
+                shade: 0.8,
+                offset: 'auto',
+                area: area,
+                shadeClose: true,//点击外围关闭弹窗
+                scrollbar: false,//不显示滚动条
+                title: false, //不显示标题
+                content: imgHtml, //捕获的元素
+                cancel: function () {
+                    //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+                }
+            });
+        };
+    }
+</script>
+</body>
+
+</html>

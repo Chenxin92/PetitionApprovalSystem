@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="layui-anim layui-anim-up">
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a>首页</a>
+        <a>
+          <cite>信访件列表</cite>
+        </a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input class="layui-input" placeholder="开始日" name="start" id="start">
+            <input class="layui-input" placeholder="截止日" name="end" id="end">
+            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+    <xblock>
+        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+        <button class="layui-btn" onclick="x_admin_show('添加信访件','./toPetitionAdd',750,650)"><i class="layui-icon"></i>添加信访件
+        </button>
+    </xblock>
+    <table id="list" lay-filter="list"></table>
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: '#list'
+                , height: 550
+                , url: 'getPetitionList' //数据接口
+                , page: true //开启分页
+                , cols: [
+                    [
+                        //表头
+                        {field: 'code', title: '编号', width: 80, sort: true, fixed: 'left'}
+                        , {field: 'contentType', title: '内容分类', width: 100}
+                        , {field: 'petitionType', title: '信源分类', width: 100}
+                        , {field: 'reflectName', title: '反映人', width: 100}
+                        , {field: 'bereflectName', title: '被反映人', width: 100}
+                        , {field: 'acceptTime', title: '收件时间', width: 200}
+                        , {field: 'stateDetail', title: '核实结果', width: 100}
+                        , {field: 'petitionState', title: '处理状态', width: 100}
+                        , {title: '相关操作', fixed: 'right', width: 300, align: 'center', toolbar: '#toolBar'}
+                    ]
+                ]
+            });
+
+            //监听工具条
+            table.on('tool(list)', function (obj) { //注：tool 是工具条事件名，list 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+                // 编辑
+                if (layEvent === 'edit') {
+                    x_admin_show("编辑", "toStudentView?homeworkId=" + data.id, 600, 550);
+                }
+                // 删除
+                else if (layEvent === 'delete') {
+                    x_admin_show("删除", "toStudentSubmit?homeworkId=" + data.id, 700, 650);
+                }
+                // 报告上传
+                else if (layEvent === 'submit') {
+                    x_admin_show("报告上传", "toStudentSubmit?homeworkId=" + data.id, 700, 650);
+                }
+                // 退回
+                else if (layEvent === 'return') {
+                    x_admin_show("退回", "toStudentSubmit?homeworkId=" + data.id, 700, 650);
+                }
+            });
+        });
+    </script>
+    <script type="text/html" id="toolBar">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs" lay-event="delete">删除</a>
+        <a class="layui-btn layui-btn-xs" lay-event="submit">报告上传</a>
+        <a class="layui-btn layui-btn-xs" lay-event="return">退回</a>
+    </script>
+
+</div>
+
+<script>
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+</script>
+
+</body>
+
+</html>
