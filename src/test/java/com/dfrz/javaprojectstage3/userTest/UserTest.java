@@ -27,8 +27,7 @@ public class UserTest {
     PermissionMapper permissionMapper;
     @Test
     public void test01(){
-        User user=userService.getUserById(10);
-        System.out.println(user);
+
     }
     @Test
     public void test02(){
@@ -60,11 +59,10 @@ public class UserTest {
     }
     @Test
     public void test05(){
-        User user=new User();
-        user.setUsername("1");
-        user.setPassword("2");
-        boolean a=userService.login(user);
-        System.out.println(a);
+        User user=new User(1, "1", "333");
+
+
+
     }
 
     }

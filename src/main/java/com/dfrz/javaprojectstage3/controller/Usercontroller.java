@@ -2,6 +2,7 @@ package com.dfrz.javaprojectstage3.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import com.dfrz.javaprojectstage3.bean.Notice;
 import com.dfrz.javaprojectstage3.bean.User;
 import com.dfrz.javaprojectstage3.mapper.NoticeMapper;
 import com.dfrz.javaprojectstage3.service.IUserService;
@@ -126,6 +127,19 @@ public class Usercontroller {
         User user=userService.getUserById(id);
         mv.setViewName("userdetails");
         mv.addObject("user",user);
+        return mv;
+    }
+
+    /*
+      查看信访件
+       */
+    @RequestMapping("/toletterdetails")
+    public ModelAndView toLetterdetails(Integer id){
+        ModelAndView mv=new ModelAndView();
+        //获取数据
+        Notice notice=noticeService.getNoticeById(id);
+        mv.setViewName("letterdetails");
+        mv.addObject("notice",notice);
         return mv;
     }
     /*

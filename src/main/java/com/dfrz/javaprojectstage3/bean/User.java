@@ -32,6 +32,18 @@ public class User {
 
     private String status;
 
+    public User(Integer id, String username, String realname, String sex, String phone, String email, String department, String address, String status) {
+        this.id = id;
+        this.username = username;
+        this.realname = realname;
+        this.sex = sex;
+        this.phone = phone;
+        this.email = email;
+        this.department = department;
+        this.address = address;
+        this.status = status;
+    }
+
     public String getAddress() {
         return address;
     }

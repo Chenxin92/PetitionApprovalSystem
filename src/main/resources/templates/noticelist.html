@@ -52,7 +52,7 @@
     </div>
     <script type="text/html" id="barDemo">
       <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-      <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+      <a class="layui-btn layui-btn-xs" lay-event="edit">受理信件</a>
       <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
       <script>
@@ -70,11 +70,11 @@
                   [ //表头
             {field: 'id', title: 'ID', width:140, sort: true, fixed: 'left'}
             ,{field: 'title', title: '标题', width:200}
-            ,{field: 'type', title: '类型', width:150,}
-            ,{field: 'user_id', title: '发送人', width:157,}
+            ,{field: 'type', title: '信源类型', width:150,}
+            ,{field: 'userId', title: '受理人', width:157,}
 
             ,{fixed: 'right',title: '操作', width:250, align:'center', toolbar: '#barDemo'}
-                      <!--1-->
+
           ]
           ]
         });
@@ -87,7 +87,7 @@
 
           if(layEvent === 'detail'){ //查看
             layer.msg("【查看id="+data.id+",uname="+data.uname+",upass="+data.upass+"】")
-            x_admin_show('查看用户','./toDetails?id='+data.id,600,400)
+            x_admin_show('查看信访件','./toletterdetails?id='+data.id,600,400)
           } else if(layEvent === 'del'){ //删除
             layer.confirm('确定删除该信件吗？', function(index){
               obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -98,11 +98,7 @@
             //do something
             layer.msg("【编辑id="+data.id+",uname="+data.uname+",upass="+data.upass+"】")
 
-            //同步更新缓存对应的值
-            obj.update({
-              username: '123'
-              ,title: 'xxx'
-            });
+            //
           } else if(layEvent === 'LAYTABLE_TIPS'){
             layer.alert('Hi，头部工具栏扩展的右侧图标。');
           }

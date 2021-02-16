@@ -22,7 +22,21 @@
   </head>
   
   <body>
-  <form class="layui-form" action="">
+  <form  class="layui-form" action="">
+      <!--id主键-->
+      <div class="layui-form-item">
+          <label for="L_uname" class="layui-form-label">
+              <span class="x-red">*</span>id
+          </label>
+          <div class="layui-input-inline">
+
+              <input type="text" id="L_id" name="id" th:value="${user.id}"
+                     class="layui-input" disabled>
+          </div>
+          <div class="layui-form-mid layui-word-aux">
+              <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
+          </div>
+      </div>
       <!--用户名-->
       <div class="layui-form-item">
           <label for="L_uname" class="layui-form-label">
@@ -148,6 +162,7 @@
           form.on('submit(formDemo)', function(data){
               layer.msg(JSON.stringify(data.field));
               return false;
+
           });
       });
   </script>
