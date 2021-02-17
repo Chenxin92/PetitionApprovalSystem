@@ -15,4 +15,18 @@ public interface IPetitionService {
      * @return
      */
     IPage<Petition> getPetitionPage(Page page);
+
+    /**
+     * 添加信访件
+     * @param petition
+     * @return
+     */
+    Boolean addPetition(Petition petition);
+
+    /**
+     * 根据信访件ID获取信访件
+     * @param id
+     * @return
+     */
+    Petition getPetitionById(Integer id);
 }

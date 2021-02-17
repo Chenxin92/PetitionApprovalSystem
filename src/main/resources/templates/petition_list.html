@@ -80,26 +80,31 @@
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
+                // 查看
+                if (layEvent === 'view') {
+                    x_admin_show("查看", "toView?petitionId=" + data.id, 750, 650);
+                }
                 // 编辑
-                if (layEvent === 'edit') {
-                    x_admin_show("编辑", "toStudentView?homeworkId=" + data.id, 600, 550);
+                else if (layEvent === 'edit') {
+                    x_admin_show("编辑", "toEdit?petitionId=" + data.id, 750, 650);
                 }
                 // 删除
                 else if (layEvent === 'delete') {
-                    x_admin_show("删除", "toStudentSubmit?homeworkId=" + data.id, 700, 650);
+                    x_admin_show("删除", "toDelete?petitionId=" + data.id, 750, 650);
                 }
                 // 报告上传
                 else if (layEvent === 'submit') {
-                    x_admin_show("报告上传", "toStudentSubmit?homeworkId=" + data.id, 700, 650);
+                    x_admin_show("报告上传", "toNoticeSubmit?petitionId=" + data.id, 750, 650);
                 }
                 // 退回
                 else if (layEvent === 'return') {
-                    x_admin_show("退回", "toStudentSubmit?homeworkId=" + data.id, 700, 650);
+                    x_admin_show("退回", "toBack?petitionId=" + data.id, 700, 650);
                 }
             });
         });
     </script>
     <script type="text/html" id="toolBar">
+        <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-xs" lay-event="delete">删除</a>
         <a class="layui-btn layui-btn-xs" lay-event="submit">报告上传</a>
