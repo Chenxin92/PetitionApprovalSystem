@@ -1,16 +1,20 @@
 package com.dfrz.javaprojectstage3.bean;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+/**
+ * @author Sora
+ */
 @TableName(value = "t_data")
-public class Data {
+public class DictionaryData {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-
+    @TableField(value = "dictionary_id")
     private Integer dictionaryId;
-
+    @TableField(value = "dictionary_content")
     private String dictionaryContent;
 
     private Integer value;
@@ -49,7 +53,7 @@ public class Data {
 
     @Override
     public String toString() {
-        return "Data{" +
+        return "DictionaryData{" +
                 "id=" + id +
                 ", dictionaryId=" + dictionaryId +
                 ", dictionaryContent='" + dictionaryContent + '\'' +

@@ -37,7 +37,8 @@
                 <span class="x-red">*</span>收件时间
             </label>
             <div class="layui-input-inline">
-                <input type="text" name="acceptTime" required=""
+                <input type="text" id="acceptTime" name="acceptTime"
+                       required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -52,15 +53,23 @@
             </div>
 
             <label class="layui-form-label">
+                <span class="x-red">*</span>被反映人姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectName" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>被反映人岗位
             </label>
             <div class="layui-input-inline">
                 <input type="text" name="bereflectPost" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
-        </div>
 
-        <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>被反映人部门
             </label>
@@ -68,32 +77,42 @@
                 <input type="text" name="bereflectDepartment" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
+        </div>
 
+        <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>内容分类
             </label>
             <div class="layui-input-inline">
-                <input type="text" name="bereflectDepartment" required=""
-                       autocomplete="off" class="layui-input">
+                <select name="contentType" lay-verify="required">
+                    <option value="">请选择分类</option>
+                    <option th:each="content:${contentList}"
+                            th:value="${content.value}"
+                            th:text="${content.dictionaryContent}">
+                    </option>
+                </select>
+            </div>
+
+            <label class="layui-form-label">
+                <span class="x-red">*</span>信源分类
+            </label>
+            <div class="layui-input-inline">
+                <select name="petitionType" lay-verify="required">
+                    <option value="">请选择分类</option>
+                    <option th:each="petition:${petitionList}"
+                            th:value="${petition.value}"
+                            th:text="${petition.dictionaryContent}">
+                    </option>
+                </select>
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>信源分类
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="bereflectDepartment" required=""
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label for="textEditor" class="layui-form-label">
                 <span class="x-red">*</span>举报内容
             </label>
             <div class="layui-input-inline">
-            <textarea id="textEditor" name="textEditor" required lay-verify="required" placeholder="请输入"
+            <textarea name="content" required lay-verify="required" placeholder="请输入"
                       class="layui-textarea" style="width: 500px;height: 180px"></textarea>
             </div>
         </div>
@@ -120,45 +139,80 @@
                 保存
             </button>
 
-            <button class="layui-btn" lay-filter="cancelPetition" onclick="x_admin_close()">
+            <a class="layui-btn" href="javascript:" onclick="x_admin_close()">
                 取消
-            </button>
+            </a>
         </div>
     </form>
 </div>
 <script>
     // 布置作业相关信息
-    layui.use(['form', 'layer', 'upload'], function () {
+    layui.use(['form', 'layer', 'upload', 'laydate'], function () {
         $ = layui.jquery;
         var form = layui.form;
         var layer = layui.layer;
+        var laydate = layui.laydate;
 
-        //监听提交
-        form.on('submit(add)', function (data) {
+        // 监听提交
+        form.on('submit(submitPetition)', function (data) {
             // 作业对象
-            var homework = new Object();
-            homework.dataField = data.field;
-            homework.arr = upload_arr;
+            var petition = new Object();
+            petition.dataField = data.field;
+            petition.arr = upload_arr;
             // 转成JSON格式
-            var homeworkJSON = JSON.stringify(homework);
+            var petitionJSON = JSON.stringify(petition);
             // 发异步，把数据提交给php
             $.ajax({
-                url: "add",
-                data: {homeworkJSON: homeworkJSON},
+                url: "submitPetition",
+                data: {petitionJSON: petitionJSON},
                 success: function (data) {
                     if (data.flag == "true") {
-                        layer.msg("布置成功", function () {
+                        layer.msg("提交成功", function () {
                             //获得frame索引
                             var index = parent.layer.getFrameIndex(window.name);
                             //关闭当前frame
                             parent.layer.close(index);
                         });
                     } else {
-                        layer.msg("布置失败");
+                        layer.msg("提交失败");
                     }
                 }
             });
             return false;
+        });
+
+        // 监听保存
+        form.on('submit(savePetition)', function (data) {
+            // 作业对象
+            var petition = new Object();
+            petition.dataField = data.field;
+            petition.arr = upload_arr;
+            // 转成JSON格式
+            var petitionJSON = JSON.stringify(petition);
+            // 发异步，把数据提交给php
+            $.ajax({
+                url: "savePetition",
+                data: {petitionJSON: petitionJSON},
+                success: function (data) {
+                    if (data.flag == "true") {
+                        layer.msg("保存成功", function () {
+                            //获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.msg("保存失败");
+                    }
+                }
+            });
+            return false;
+        });
+
+        //执行一个laydate日期选择
+        laydate.render({
+            elem: '#acceptTime' //指定元素
+            ,type: 'datetime'
         });
 
         // 附件数组
@@ -182,7 +236,7 @@
                         "           </span>\n" +
                         "       </div>\n" +
                         "       <div class=\"layui-card-body\">\n" +
-                        "           <img width='50px' height='50px' src='" + "../upload/homework/picture/" + res.data.src + "'>\n" +
+                        "           <img width='80px' height='70px' src='" + "../upload/petition/picture/" + res.data.src + "'>\n" +
                         "       </div>\n" +
                         "   </div>\n" +
                         "</li>"
@@ -190,7 +244,7 @@
                     $("#hw_res").append(content);
                     // 构建附件对象添加至数组中
                     var res_object = new Object();
-                    res_object.url = res.data.src;
+                    res_object.fileName = res.data.src;
                     res_object.type = 1;
                     upload_arr.push(res_object);
                 } else {
@@ -216,7 +270,7 @@
                         "           </span>\n" +
                         "       </div>\n" +
                         "       <div class=\"layui-card-body\">\n" +
-                        "           <img width='50px' height='50px' src='../images/DOC.jpg'>\n" +
+                        "           <img width='80px' height='70px' src='../images/DOC.jpg'>\n" +
                         "       </div>\n" +
                         "   </div>\n" +
                         "</li>"
@@ -224,7 +278,7 @@
                     $("#hw_res").append(content);
                     // 构建附件对象添加至数组中
                     var res_object = new Object();
-                    res_object.url = res.data.src;
+                    res_object.fileName = res.data.src;
                     res_object.type = 2;
                     upload_arr.push(res_object);
                 } else {
