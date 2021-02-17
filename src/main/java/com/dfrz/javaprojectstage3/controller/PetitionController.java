@@ -213,9 +213,9 @@ public class PetitionController {
             attachFile.setFileType(0);
             attachFile.setFileName(fileName);
             if (type == 1) {
-                attachFile.setFilePath("/upload/petition/picture");
+                attachFile.setFilePath("/upload/petition/picture/");
             } else {
-                attachFile.setFilePath("/upload/petition/doc");
+                attachFile.setFilePath("/upload/petition/doc/");
             }
             attachFile.setType(type);
             attachFileList.add(attachFile);
@@ -281,9 +281,9 @@ public class PetitionController {
             attachFile.setFileType(0);
             attachFile.setFileName(fileName);
             if (type == 1) {
-                attachFile.setFilePath("/upload/petition/picture");
+                attachFile.setFilePath("/upload/petition/picture/");
             } else {
-                attachFile.setFilePath("/upload/petition/doc");
+                attachFile.setFilePath("/upload/petition/doc/");
             }
             attachFile.setType(type);
             attachFileList.add(attachFile);
