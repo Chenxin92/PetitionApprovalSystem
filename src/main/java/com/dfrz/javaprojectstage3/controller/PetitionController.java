@@ -97,6 +97,20 @@ public class PetitionController {
     }
 
     /**
+     * 验证编号是否存在
+     *
+     * @param code
+     * @return
+     */
+    @RequestMapping("/codeVerification")
+    public String codeVerification(String code) {
+        if (petitionService.verificationPetitionByCode(code)) {
+            return "true";
+        }
+        return "";
+    }
+
+    /**
      * 图片上传
      *
      * @param file
@@ -161,12 +175,12 @@ public class PetitionController {
     }
 
     /**
-     * 提交信访件
+     * 添加信访件
      *
      * @param petitionJSON
      * @return
      */
-    @RequestMapping("/submitPetition")
+    @RequestMapping("/addPetition")
     public Map<String, String> submitPetition(String petitionJSON) {
         Map<String, String> map = new HashMap<>(1);
         map.put("flag", "false");
@@ -197,7 +211,7 @@ public class PetitionController {
         petition.setContentType(contentType);
         petition.setPetitionType(petitionType);
         petition.setContent(content);
-        // 提交后为一级审批
+        // 添加后为一级审批(经办人)
         petition.setPetitionState(1);
         petition.setUserId(user.getId());
 
@@ -213,77 +227,9 @@ public class PetitionController {
             attachFile.setFileType(0);
             attachFile.setFileName(fileName);
             if (type == 1) {
-                attachFile.setFilePath("/upload/petition/picture/");
+                attachFile.setFilePath("../upload/petition/picture/");
             } else {
-                attachFile.setFilePath("/upload/petition/doc/");
-            }
-            attachFile.setType(type);
-            attachFileList.add(attachFile);
-            petition.setAttachFileList(attachFileList);
-        }
-
-        if (petitionService.addPetition(petition)) {
-            map.put("flag", "true");
-        }
-        return map;
-    }
-
-    /**
-     * 保存信访件
-     *
-     * @param petitionJSON
-     * @return
-     */
-    @RequestMapping("/savePetition")
-    public Map<String, String> savePetition(String petitionJSON) {
-        Map<String, String> map = new HashMap<>(1);
-        map.put("flag", "false");
-        // 获取当前角色
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-
-        // 解析JSON串
-        JSONObject jsonObject = JSON.parseObject(petitionJSON);
-        // 获取petition参数
-        JSONObject petitionParameter = jsonObject.getJSONObject("dataField");
-        String code = petitionParameter.getString("code");
-        Date acceptTime = petitionParameter.getDate("acceptTime");
-        String reflectName = petitionParameter.getString("reflectName");
-        String bereflectName = petitionParameter.getString("bereflectName");
-        String bereflectPost = petitionParameter.getString("bereflectPost");
-        String bereflectDepartment = petitionParameter.getString("bereflectDepartment");
-        Integer contentType = petitionParameter.getInteger("contentType");
-        Integer petitionType = petitionParameter.getInteger("petitionType");
-        String content = petitionParameter.getString("content");
-
-        Petition petition = new Petition();
-        petition.setCode(code);
-        petition.setAcceptTime(acceptTime);
-        petition.setReflectName(reflectName);
-        petition.setBereflectName(bereflectName);
-        petition.setBereflectPost(bereflectPost);
-        petition.setBereflectDepartment(bereflectDepartment);
-        petition.setContentType(contentType);
-        petition.setPetitionType(petitionType);
-        petition.setContent(content);
-        // 保存为草稿状态
-        petition.setPetitionState(0);
-        petition.setUserId(user.getId());
-
-        // 获取petition附件
-        JSONArray arr = jsonObject.getJSONArray("arr");
-        List<AttachFile> attachFileList = new ArrayList<>();
-        for (int i = 0; i < arr.size(); i++) {
-            String fileName = arr.getJSONObject(i).getString("fileName");
-            Integer type = arr.getJSONObject(i).getInteger("type");
-            // 添加petition附件
-            AttachFile attachFile = new AttachFile();
-            // 信访件属性
-            attachFile.setFileType(0);
-            attachFile.setFileName(fileName);
-            if (type == 1) {
-                attachFile.setFilePath("/upload/petition/picture/");
-            } else {
-                attachFile.setFilePath("/upload/petition/doc/");
+                attachFile.setFilePath("../upload/petition/doc/");
             }
             attachFile.setType(type);
             attachFileList.add(attachFile);
@@ -298,6 +244,7 @@ public class PetitionController {
 
     /**
      * 转至查看信访件页面
+     *
      * @return
      */
     @RequestMapping("/toView")
@@ -332,5 +279,96 @@ public class PetitionController {
         mv.addObject("petitionValue", petitionType);
         mv.addObject("contentValue", contentType);
         return mv;
+    }
+
+
+    /**
+     * 转至信访件编辑页面
+     *
+     * @param petitionId
+     * @return
+     */
+    @RequestMapping("/toEdit")
+    public ModelAndView toEdit(Integer petitionId) {
+        // 获取信源分类
+        Dictionary petitionDictionary = dictionaryService.getDictionaryByTypeKey("petition");
+        // 获取内容分类
+        Dictionary contentDictionary = dictionaryService.getDictionaryByTypeKey("content");
+        // 获取信访件
+        Petition petition = petitionService.getPetitionById(petitionId);
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("petition_edit");
+        mv.addObject(petition);
+        mv.addObject("petitionList", petitionDictionary.getDictionaryDataList());
+        mv.addObject("contentList", contentDictionary.getDictionaryDataList());
+        return mv;
+    }
+
+    /**
+     * 编辑后保存信访件
+     *
+     * @param petitionJSON
+     * @return
+     */
+    @RequestMapping("/editSavePetition")
+    public Map<String, String> editSavePetition(String petitionJSON) {
+        Map<String, String> map = new HashMap<>(1);
+        map.put("flag", "false");
+        // 获取当前角色
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        // 解析JSON串
+        JSONObject jsonObject = JSON.parseObject(petitionJSON);
+        // 获取petition参数
+        JSONObject petitionParameter = jsonObject.getJSONObject("dataField");
+        Integer id = petitionParameter.getInteger("id");
+        String code = petitionParameter.getString("code");
+        Date acceptTime = petitionParameter.getDate("acceptTime");
+        String reflectName = petitionParameter.getString("reflectName");
+        String bereflectName = petitionParameter.getString("bereflectName");
+        String bereflectPost = petitionParameter.getString("bereflectPost");
+        String bereflectDepartment = petitionParameter.getString("bereflectDepartment");
+        Integer contentType = petitionParameter.getInteger("contentType");
+        Integer petitionType = petitionParameter.getInteger("petitionType");
+        String content = petitionParameter.getString("content");
+
+        Petition petition = new Petition();
+        petition.setId(id);
+        petition.setCode(code);
+        petition.setAcceptTime(acceptTime);
+        petition.setReflectName(reflectName);
+        petition.setBereflectName(bereflectName);
+        petition.setBereflectPost(bereflectPost);
+        petition.setBereflectDepartment(bereflectDepartment);
+        petition.setContentType(contentType);
+        petition.setPetitionType(petitionType);
+        petition.setContent(content);
+        petition.setUserId(user.getId());
+
+        // 获取petition附件
+        JSONArray arr = jsonObject.getJSONArray("arr");
+        List<AttachFile> attachFileList = new ArrayList<>();
+        for (int i = 0; i < arr.size(); i++) {
+            String fileName = arr.getJSONObject(i).getString("fileName");
+            Integer type = arr.getJSONObject(i).getInteger("type");
+            // 添加petition附件
+            AttachFile attachFile = new AttachFile();
+            // 信访件属性
+            attachFile.setFileType(0);
+            attachFile.setFileName(fileName);
+            if (type == 1) {
+                attachFile.setFilePath("../upload/petition/picture/");
+            } else {
+                attachFile.setFilePath("../upload/petition/doc/");
+            }
+            attachFile.setType(type);
+            attachFileList.add(attachFile);
+            petition.setAttachFileList(attachFileList);
+        }
+
+        if (petitionService.updatePetitionById(petition)) {
+            map.put("flag", "true");
+        }
+        return map;
     }
 }

@@ -30,11 +30,24 @@ public class PetitionServiceImpl implements IPetitionService {
     }
 
     @Override
+    public Boolean verificationPetitionByCode(String code) {
+        QueryWrapper<Petition> petitionQueryWrapper = new QueryWrapper<>();
+        petitionQueryWrapper.eq("code", code);
+        Petition petition = petitionMapper.selectOne(petitionQueryWrapper);
+        if (petition != null) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Boolean addPetition(Petition petition) {
+        // 添加petition失败返回
         if (petitionMapper.insert(petition) <= 0) {
             return false;
         }
 
+        // 添加附件
         List<AttachFile> petitionAttachList = petition.getAttachFileList();
         for (AttachFile attachFile : petitionAttachList) {
             // 设置对象ID
@@ -60,4 +73,34 @@ public class PetitionServiceImpl implements IPetitionService {
 
         return petition;
     }
+
+    @Override
+    public Boolean updatePetitionById(Petition petition) {
+        // 更新petition失败返回
+        if (petitionMapper.updateById(petition) <= 0) {
+            return false;
+        }
+
+        // 清空已存在附件记录
+        QueryWrapper<AttachFile> attachFileQueryWrapper = new QueryWrapper<>();
+        attachFileQueryWrapper.eq("object_id", petition.getId());
+        attachFileQueryWrapper.eq("file_type", 0);
+        List<AttachFile> databaseFileList = attachFileMapper.selectList(attachFileQueryWrapper);
+        for (AttachFile attachFile : databaseFileList) {
+            attachFileMapper.deleteById(attachFile.getId());
+        }
+        // 添加附件记录
+        List<AttachFile> petitionAttachList = petition.getAttachFileList();
+        for (AttachFile attachFile : petitionAttachList) {
+            // 设置对象ID
+            attachFile.setObjectId(petition.getId());
+            // 添加附件失败返回
+            if (attachFileMapper.insert(attachFile) <= 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

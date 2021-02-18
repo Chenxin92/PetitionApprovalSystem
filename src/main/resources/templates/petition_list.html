@@ -51,14 +51,16 @@
     </xblock>
     <table id="list" lay-filter="list"></table>
     <script>
+        //所获得的 tableIns 即为当前容器的实例
+        var tableIns;
         layui.use('table', function () {
             var table = layui.table;
-            table.render({
+            tableIns = table.render({
                 elem: '#list'
                 , height: 550
                 , url: 'getPetitionList' //数据接口
                 , page: true //开启分页
-                , cols: [
+                , cols: [ //设置表头
                     [
                         //表头
                         {field: 'code', title: '编号', width: 80, sort: true, fixed: 'left'}
@@ -90,25 +92,26 @@
                 }
                 // 删除
                 else if (layEvent === 'delete') {
-                    x_admin_show("删除", "toDelete?petitionId=" + data.id, 750, 650);
+
+                }
+                // 提交
+                else if (layEvent === 'petitionSubmit') {
+                    x_admin_show("提交", "toPetitionSubmit?petitionId=" + data.id, 750, 650);
                 }
                 // 报告上传
-                else if (layEvent === 'submit') {
-                    x_admin_show("报告上传", "toNoticeSubmit?petitionId=" + data.id, 750, 650);
-                }
-                // 退回
-                else if (layEvent === 'return') {
-                    x_admin_show("退回", "toBack?petitionId=" + data.id, 700, 650);
+                else if (layEvent === 'reportUpload') {
+                    x_admin_show("退回", "toReportUpload?petitionId=" + data.id, 700, 650);
                 }
             });
         });
+
     </script>
     <script type="text/html" id="toolBar">
-        <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-xs" lay-event="delete">删除</a>
-        <a class="layui-btn layui-btn-xs" lay-event="submit">报告上传</a>
-        <a class="layui-btn layui-btn-xs" lay-event="return">退回</a>
+        <a class="layui-btn layui-btn-xs" lay-event="petitionSubmit">提交</a>
+        <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
+        <a class="layui-btn layui-btn-xs" lay-event="reportUpload">报告上传</a>
     </script>
 
 </div>
