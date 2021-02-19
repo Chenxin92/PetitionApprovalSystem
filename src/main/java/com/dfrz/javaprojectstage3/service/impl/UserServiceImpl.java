@@ -54,6 +54,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public int updateById(User user) {
+        return userMapper.updateById(user);
+    }
+
+
+    @Override
     public User getUserById(Integer id) {
         return userMapper.selectById(id);
     }
@@ -81,7 +87,10 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
-
+    @Override
+    public int adduser(User user) {
+        return userMapper.insert(user);
+    }
 
 
     @Override

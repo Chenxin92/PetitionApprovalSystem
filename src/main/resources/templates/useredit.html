@@ -25,7 +25,7 @@
   <form  class="layui-form" action="">
       <!--id主键-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_id" class="layui-form-label">
               <span class="x-red">*</span>id
           </label>
           <div class="layui-input-inline">
@@ -39,12 +39,12 @@
       </div>
       <!--用户名-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_username" class="layui-form-label">
               <span class="x-red">*</span>用户名
           </label>
           <div class="layui-input-inline">
 
-              <input type="text" id="L_uname" name="uname" th:value="${user.username}"
+              <input type="text" id="L_username" name="username" th:value="${user.username}"
                      class="layui-input" >
           </div>
           <div class="layui-form-mid layui-word-aux">
@@ -53,11 +53,11 @@
       </div>
       <!--姓名-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_realname" class="layui-form-label">
               <span class="x-red">*</span>姓名
           </label>
           <div class="layui-input-inline">
-              <input type="text" id="L_username" name="username" th:value="${user.realname}"
+              <input type="text" id="L_realname" name="realname" th:value="${user.realname}"
                      class="layui-input" >
           </div>
           <div class="layui-form-mid layui-word-aux">
@@ -66,7 +66,7 @@
       </div>
       <!--性别-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_sex" class="layui-form-label">
               <span class="x-red">*</span>性别
           </label>
           <div class="layui-input-inline">
@@ -79,7 +79,7 @@
       </div>
       <!--手机-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_phone" class="layui-form-label">
               <span class="x-red">*</span>手机
           </label>
           <div class="layui-input-inline">
@@ -92,11 +92,11 @@
       </div>
       <!--邮箱-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_email" class="layui-form-label">
               <span class="x-red">*</span>邮箱
           </label>
           <div class="layui-input-inline">
-              <input type="text" id="L_email" name="L_email" th:value="${user.email}"
+              <input type="text" id="L_email" name="email" th:value="${user.email}"
                      class="layui-input" >
           </div>
           <div class="layui-form-mid layui-word-aux">
@@ -105,7 +105,7 @@
       </div>
       <!--部门-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_department" class="layui-form-label">
               <span class="x-red">*</span>部门
           </label>
           <div class="layui-input-inline">
@@ -118,7 +118,7 @@
       </div>
       <!--职位--><!--1-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_role" class="layui-form-label">
               <span class="x-red">*</span>职位
           </label>
           <div class="layui-input-inline">
@@ -133,7 +133,7 @@
       </div>
       <!--状态-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_status" class="layui-form-label">
               <span class="x-red">*</span>状态
           </label>
           <div class="layui-input-inline">
@@ -147,7 +147,7 @@
       </div>
       <!--住址-->
       <div class="layui-form-item">
-          <label for="L_uname" class="layui-form-label">
+          <label for="L_address" class="layui-form-label">
               <span class="x-red">*</span>家庭住址
           </label>
           <div class="layui-elip">
@@ -162,7 +162,7 @@
 
       <div class="layui-form-item">
           <div class="layui-input-block">
-              <button class="layui-btn" lay-submit lay-filter="formDemo">修改</button>
+              <button class="layui-btn" lay-submit lay-filter="updateuser"  onclick="window.parent.location.reload()">修改</button>
               <button type="reset" class="layui-btn layui-btn-primary">重置</button>
           </div><!--1-->
       </div>
@@ -174,8 +174,30 @@
           var form = layui.form;
 
           //监听提交
-          form.on('submit(formDemo)', function(data){
+          form.on('submit(updateuser)', function(data){
               layer.msg(JSON.stringify(data.field));
+              // user对象
+              var user = new Object();
+              user.dataField = data.field;
+              // 转成JSON格式
+              var updateuserJSON = JSON.stringify(user);
+              //发异步，把数据提交给php
+              $.ajax({
+                  url: "updateuser",
+                  data: {updateuserJSON: updateuserJSON},
+                  success: function (data) {
+                      if (data.data=="1" ) {
+                          layer.msg("修改成功", function () {
+                              //获得frame索引
+                              var index = parent.layer.getFrameIndex(window.name);
+                              //关闭当前frame
+                              parent.layer.close(index);
+                          });
+                      } else {
+                          layer.msg("修改失败");
+                      }
+                  }
+              });
               return false;
 
           });

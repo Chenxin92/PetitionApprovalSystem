@@ -1,8 +1,12 @@
 package com.dfrz.javaprojectstage3.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.Notice;
+import com.dfrz.javaprojectstage3.bean.Role;
 import com.dfrz.javaprojectstage3.bean.User;
 import com.dfrz.javaprojectstage3.service.IUserService;
 import com.dfrz.javaprojectstage3.service.NoticeService;
@@ -191,5 +195,71 @@ public class UserController {
             map.put("flag", "-3");
         }
         return map;
+    }
+    @RequestMapping("/adduser")
+    public Result adduser(String userJSON) {
+        logger.info(userJSON);
+        //获取当前登陆用户的信息
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        Session session=subject.getSession();
+        //解析json串
+        JSONObject jsonObject =JSON.parseObject(userJSON);
+        // 获取user参数
+        JSONObject adduser=jsonObject.getJSONObject("dataField");
+        String username=adduser.getString("username");
+        String password=adduser.getString("password");
+        Integer role = adduser.getInteger("role");
+        User user1=new User();
+        user1.setUsername(username);
+        user1.setPassword(password);
+        user1.setRole(role);
+        userService.adduser(user1);
+        Result result=ResultUtils.success(1);
+        result.setCode(0);
+        return result;
+    }
+    /**
+     * 更新用户
+     * @param updateuserJSON
+     * @return
+     */
+    @RequestMapping("/updateuser")
+    public Result updateuser(String updateuserJSON) {
+        logger.info(updateuserJSON);
+        //获取当前登陆用户的信息
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        Session session=subject.getSession();
+        //解析json串
+        JSONObject jsonObject =JSON.parseObject(updateuserJSON);
+        // 获取user参数
+        JSONObject updateuser=jsonObject.getJSONObject("dataField");
+        Integer id=updateuser.getInteger("id");
+        String username=updateuser.getString("username");
+        String realname=updateuser.getString("realname");
+        String sex=updateuser.getString("sex");
+        String phone=updateuser.getString("phone");
+        String email=updateuser.getString("email");
+        String department=updateuser.getString("department");
+        Integer role=updateuser.getInteger("role");
+        String status=updateuser.getString("status");
+        String address=updateuser.getString("address");
+
+        User user1=new User();
+        user1.setId(id);
+        user1.setUsername(username);
+        user1.setRealname(realname);
+        user1.setSex(sex);
+        user1.setPhone(phone);
+        user1.setEmail(email);
+        user1.setDepartment(department);
+        user1.setRole(role);
+        user1.setStatus(status);
+        user1.setAddress(address);
+        userService.updateById(user1);
+        Result result=ResultUtils.success(1);
+        result.setCode(0);
+        return result;
     }
 }

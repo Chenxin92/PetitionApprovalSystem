@@ -24,4 +24,10 @@ public class IndexController {
         mv.setViewName("index");
         return mv;
     }
+    @RequestMapping("/welcome")
+    public ModelAndView welcome(){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("welcome");
+        return mv;
+    }
 }
