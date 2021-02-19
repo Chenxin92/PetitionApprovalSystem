@@ -164,7 +164,9 @@
           <div class="layui-input-block">
               <button class="layui-btn" lay-submit lay-filter="updateuser"  onclick="window.parent.location.reload()">修改</button>
               <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-          </div><!--1-->
+              <button class="layui-btn layui-btn-danger" lay-submit lay-filter="deleteuser" onclick="window.parent.location.reload()"  >删除</button>
+
+          </div>
       </div>
   </form>
 
@@ -200,7 +202,36 @@
               });
               return false;
 
-          });
+          });//修改
+          form.on('submit(deleteuser)', function(data){
+              layer.msg(JSON.stringify(data.field));
+              // user对象
+              var user = new Object();
+              user.dataField = data.field;
+              // 转成JSON格式
+              var deleteuserJSON = JSON.stringify(user);
+              //发异步，把数据提交给php
+              $.ajax({
+                  url: "deleteuser",
+                  data: {deleteuserJSON: deleteuserJSON},
+                  success: function (data) {
+                      if (data.data=="1" ) {
+
+                          layer.msg("删除成功", function () {
+
+                              // 获得frame索引
+                              var index = parent.layer.getFrameIndex(window.name);
+                              //关闭当前frame
+                              parent.layer.close(index);
+                          });
+                      } else {
+                          layer.msg("删除失败");
+                      }
+                  }
+              });
+              return false;
+
+          });//删除
       });
   </script>
   </body>

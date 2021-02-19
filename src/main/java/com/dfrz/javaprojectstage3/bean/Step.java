@@ -41,6 +41,7 @@ public class Step {
         this.examineUser3 = examineUser3;
         this.createtime = createtime;
     }
+    private String adviceId;
 
     public Integer getId() {
         return id;
@@ -90,28 +91,12 @@ public class Step {
         this.createtime = createtime;
     }
 
-    public Integer getExamineUser1() {
-        return examineUser1;
+    public String getAdviceId() {
+        return adviceId;
     }
 
-    public void setExamineUser1(Integer examineUser1) {
-        this.examineUser1 = examineUser1;
-    }
-
-    public Integer getExamineUser2() {
-        return examineUser2;
-    }
-
-    public void setExamineUser2(Integer examineUser2) {
-        this.examineUser2 = examineUser2;
-    }
-
-    public Integer getExamineUser3() {
-        return examineUser3;
-    }
-
-    public void setExamineUser3(Integer examineUser3) {
-        this.examineUser3 = examineUser3;
+    public void setAdviceId(String adviceId) {
+        this.adviceId = adviceId == null ? null : adviceId.trim();
     }
 
     @Override
@@ -122,10 +107,8 @@ public class Step {
                 ", auditTime1=" + auditTime1 +
                 ", auditTime2=" + auditTime2 +
                 ", auditTime3=" + auditTime3 +
-                ", examineUser1=" + examineUser1 +
-                ", examineUser2=" + examineUser2 +
-                ", examineUser3=" + examineUser3 +
                 ", createtime=" + createtime +
+                ", adviceId='" + adviceId + '\'' +
                 '}';
     }
 }

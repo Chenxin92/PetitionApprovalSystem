@@ -35,50 +35,40 @@
 <!--1-->
           </div>
           <div class="layui-form-item">
-              <label for="L_details" >
-                  <span class="x-red">*</span>内容描述
+              <label for="L_content" >
+                  <span class="x-red">*</span>公告内容
               </label>
               <div>
-                  <textarea id="L_details" name="details" placeholder="请输入内容" class="layui-textarea"></textarea>
+                  <textarea id="L_content" name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
               </div>
           </div>
-
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>公告类型</label>
+                <div  class="layui-input-block">
+                    <select id="type" name="type">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div><!--1-->
             <div class="layui-form-item">
 
-                <div >
-                    <button type="button" class="layui-btn layui-btn-normal" id="test1">
-                        <i class="layui-icon">&#xe67c;</i>图片
-                    </button>
-                    <button type="button" class="layui-btn layui-btn-warm" id="test2">
-                        <i class="layui-icon">&#xe656;</i>PDF
-                    </button>
-                    <img id="imgHeadpic" src="" width="80" height="80" style="display: none">
-                    <input type="hidden" id="headpic" value=""/>
-                </div>
+
             </div>
             <ul class="layui-row layui-col-space10" id="hw_res">
             </ul>
-            <div class="layui-form-item">
-                <label for="L_details" class="layui-form-label">
-                    <span class="x-red">*</span>信件类型
-                </label>
-                <div class="layui-input-inline">
-                    <select name="courseid" lay-verify="required">
-                        <option th:each="c : ${courses}" th:value="${c.id}" th:text="${c.cname}"></option>
-                    </select>
-                </div>
-            </div>
+
           <div class="layui-form-item">
-              <label for="L_repass" class="layui-form-label">
+              <label for="L_add" class="layui-form-label">
               </label>
-              <button  class="layui-btn" lay-filter="add" lay-submit="">
+              <button  class="layui-btn" lay-filter="add" id="L_add" name="add" lay-submit="">
                   增加
               </button>
 
           </div>
-      </form>
+<!--1-->
     </div>
-
+        </form>
     <script>
         var hwres_arr=new Array();
         layui.use('upload', function(){
@@ -172,12 +162,10 @@
 
 
     <script>
-
         layui.use(['form','layer','layedit'], function(){
             $ = layui.jquery;
           var form = layui.form
           ,layer = layui.layer;
-
             var layedit = layui.layedit;
             layedit.set({
                 uploadImage: {
@@ -185,9 +173,7 @@
                     ,type: 'post' //默认post
                 }
             });
-
             var index2=layedit.build('demo'); //建立编辑器
-        
           //自定义验证规则
           form.verify({
             nikename: function(value){
@@ -202,47 +188,42 @@
                 }
             }
           });
-
+// 45
           //监听提交
-          form.on('submit(add)', function(data){
-            console.log(data);
-              var jsonParm=new Object();
-              //作业-附件
-              jsonParm.hwres=hwres_arr;
-              //作业-表单数据
-              jsonParm.dataField=data.field;
-              //对象转JSON
-              var jsonstr=JSON.stringify(jsonParm);
-              layer.msg(jsonstr);
-            //发异步
-              $.ajax({
-                  url:'./addHomeWork',
-                  type:'post',
-                  data:{"jsonParm":jsonstr},
-                  dataType:"json",
-                  success:function(data){
-                      if(data.data=="1"){
-                          layer.msg("发布成功",function(){
-                              //关闭层
-                              x_admin_close();
-                          });
-                      }
-                      else{
-                          layer.alert("发布失败！");
-                      }
-                  }
-              });
-
-            return false;
-          });
+            form.on('submit(add)', function(data){
+                layer.msg(JSON.stringify(data.field));
+                // notice对象
+                var notice = new Object();
+                notice.dataField = data.field;
+                // 转成JSON格式
+                var noticeJSON = JSON.stringify(notice);
+                //发异步，把数据提交给php
+                $.ajax({
+                    url: "addnotice",
+                    data: {noticeJSON: noticeJSON},
+                    success: function (data) {
+                        if (data.data=="1" ) {
+                            layer.msg("添加成功", function () {
+                                //获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                window.parent.location.reload();
+                            });
+                        } else {
+                            layer.msg("添加失败");
+                        }
+                    }
+                });
+                return false;
+            });
           
           
         });
 
 
     </script>
-
-
+        </div>
   </body>
 
 </html>

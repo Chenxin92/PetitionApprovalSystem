@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public int updateById(User user) {
+    public int updateuserById(User user) {
         return userMapper.updateById(user);
     }
 
@@ -105,5 +105,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User findById(Integer id) {
         return userMapper.selectById(id);
+    }
+
+    @Override
+    public int deleteuser(Integer id) {
+        return userMapper.deleteById(id);
     }
 }
