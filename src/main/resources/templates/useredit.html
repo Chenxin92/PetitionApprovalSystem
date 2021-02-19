@@ -108,42 +108,43 @@
           <label for="L_department" class="layui-form-label">
               <span class="x-red">*</span>部门
           </label>
-          <div class="layui-input-inline">
-              <input type="text" id="L_department" name="department" th:value="${user.department}"
-                     class="layui-input" >
-          </div>
+          <div class="layui-input-block">
+              <select id="L_department" name="department" >
+                  <option value="2">财务部门</option>
+                  <option value="财务部门">人事部门</option>
+                  <option value="生产部门">生产部门</option>
+                  <option value="安保部门">安保部门</option>
+                  <option value="人力资源部门">人力资源部门</option>
+                  <option value="研发部门">研发部门</option>
+                  <option value="行政部门">行政部门</option>
+              </select>
+          </div><!--1-->
           <div class="layui-form-mid layui-word-aux">
               <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
           </div>
       </div>
       <!--职位--><!--1-->
       <div class="layui-form-item">
-          <label for="L_role" class="layui-form-label">
-              <span class="x-red">*</span>职位
-          </label>
-          <div class="layui-input-inline">
-              <input type="text" id="L_role" name="role" th:value="${user.role}"
-
-                     class="layui-input" >
-
-          </div>
-          <div class="layui-form-mid layui-word-aux">
-              <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
-          </div>
+          <label class="layui-form-label"><span class="x-red">*</span>职位</label>
+          <div class="layui-input-block">
+              <select id="role" name="role" >
+                  <option value="2">经办人员</option>
+                  <option value="3">经理</option>
+                  <option value="4">领导</option>
+              </select>
+          </div><!--1-->
       </div>
       <!--状态-->
       <div class="layui-form-item">
-          <label for="L_status" class="layui-form-label">
-              <span class="x-red">*</span>状态
-          </label>
-          <div class="layui-input-inline">
-              <input type="text" id="L_status" name="status"
-                     th:value="${user.status}"
-                     class="layui-input" >
-          </div>
-          <div class="layui-form-mid layui-word-aux">
-              <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
-          </div>
+          <label class="layui-form-label"><span class="x-red">*</span>账号状态</label>
+          <div class="layui-input-block">
+              <select id="status" name="status" >
+                  <option  value="0"  >启用</option>
+                  <option  value="1"  >禁用</option>
+
+              </select>
+
+          </div><!--1-->
       </div>
       <!--住址-->
       <div class="layui-form-item">
