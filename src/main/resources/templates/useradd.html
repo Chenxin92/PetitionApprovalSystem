@@ -26,12 +26,31 @@
     <div class="x-body layui-anim layui-anim-up">
         <form class="layui-form">
             <div class="layui-form-item">
-                <label class="layui-form-label"><span class="x-red">*</span>角色</label>
+                <label class="layui-form-label"><span class="x-red">*</span>部门</label>
                 <div class="layui-input-block">
-                    <select name="role">
+                    <select id="L_department" name="department">
+                        <option value=""></option>
+                        <option value="财务部门">财务部门</option>
+                        <option value="人事部门">人事部门</option>
+                        <option value="生产部门">生产部门</option>
+                        <option value="行政部门">行政部门</option>
+                        <option value="研发部门">研发部门</option>
+                        <option value="安保部门">安保部门</option>
+                        <option value="人力资源部门">人力资源部门</option>
+
+                    </select>
+                </div><!--1-->
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>职位</label>
+                <div class="layui-input-block">
+                    <select id="role" name="role">
+                        <option value=""></option>
                         <option value="2">经办人</option>
                         <option value="3">经理</option>
                         <option value="4">领导</option>
+                        <
+
                     </select>
                 </div><!--1-->
             </div>

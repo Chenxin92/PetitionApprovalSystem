@@ -67,12 +67,22 @@
           ,cols: [
                   [ //表头
             {field: 'id', title: 'ID', width:65, sort: true, fixed: 'left'}
-            ,{field: 'username', title: '用户名', width:90}
-            ,{field: 'realname', title: '姓名', width:90,}
-            ,{field: 'phone', title: '手机', width:150,}
-            ,{field: 'email', title: '邮箱', width:150,}
-            ,{field: 'department', title: '部门', width:150,}
-            ,{field: 'status', title: '状态', width:85
+            ,{field: 'username', title: '用户名', width:100}
+            ,{field: 'realname', title: '姓名', width:100,}
+            ,{field: 'department', title: '部门', width:170,}
+            ,{field: 'role', title: '职位', width:170
+                      ,templet:function (d) {
+                          if(d.role=="2"){
+                              return "<span type='text'>经办人员</span>";
+                          }
+                          else if (d.role=="3") {
+                              return "<span type='text'>经理</span>";
+                          }else{
+                              return "<span type='text'>领导</span>";
+                          }
+                      }
+                  }
+            ,{field: 'status', title: '状态', width:100
                     ,templet:function (d) {
                         if(d.status=="0"){
                           return "<span class=\"layui-badge layui-bg-green\">启用</span>";
@@ -82,7 +92,7 @@
                         }
                     }
                   }
-            ,{fixed: 'right',title: '操作', width:200, align:'center', toolbar: '#barDemo'}
+            ,{fixed: 'right',title: '操作', width:300, align:'center', toolbar: '#barDemo'}
 
           ]
           ]

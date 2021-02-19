@@ -210,10 +210,12 @@ public class UserController {
         String username=adduser.getString("username");
         String password=adduser.getString("password");
         Integer role = adduser.getInteger("role");
+        String department=adduser.getString("department");
         User user1=new User();
         user1.setUsername(username);
         user1.setPassword(password);
         user1.setRole(role);
+        user1.setDepartment(department);
         userService.adduser(user1);
         Result result=ResultUtils.success(1);
         result.setCode(0);

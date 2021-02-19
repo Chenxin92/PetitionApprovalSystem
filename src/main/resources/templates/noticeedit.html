@@ -77,9 +77,10 @@
                   <option  value="全体公告"  >全体公告</option>
                   <option  value="部门公告"  >部门公告</option>
                   <option  value="通知"  >通知</option>
-
               </select>
-
+              <script th:inline="javascript">
+                  $("#L_type").val([[${notice.type}]]);
+              </script>
           </div><!--1-->
           <div class="layui-form-mid layui-word-aux">
               <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
