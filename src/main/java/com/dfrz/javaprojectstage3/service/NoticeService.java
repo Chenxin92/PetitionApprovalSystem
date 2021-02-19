@@ -18,6 +18,9 @@ public interface NoticeService {
     public void save(Notice notice);
     public Notice getNoticeById(Integer id);
     public Notice getNoticeBytitle(String title);
+    public int addnotice(Notice notice);
+    public int updatenoticeByid(Notice notice);
+    public int deletenoticeById(Integer id);
 
 
 }

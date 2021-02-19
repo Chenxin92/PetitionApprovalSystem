@@ -44,4 +44,29 @@ public class NoticeServiceImpl implements NoticeService {
     public Notice getNoticeBytitle(String title) {
         return null;
     }
+
+    /**
+     * 添加公告
+     * @param notice
+     * @return
+     */
+    @Override
+    public int addnotice(Notice notice) {
+        return noticeMapper.insert(notice);
+    }
+
+    /**
+     * 修改公告
+     * @param notice
+     * @return
+     */
+    @Override
+    public int updatenoticeByid(Notice notice) {
+        return noticeMapper.updateById(notice);
+    }
+
+    @Override
+    public int deletenoticeById(Integer id) {
+        return noticeMapper.deleteById(id);
+    }
 }

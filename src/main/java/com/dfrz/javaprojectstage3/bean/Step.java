@@ -19,25 +19,9 @@ public class Step {
 
     private Date auditTime3;
 
-    private Integer examineUser1;
-
-    private Integer examineUser2;
-
-    private Integer examineUser3;
-
     private Date createtime;
 
-    public Step(Integer id, Integer petitionId, Date auditTime1, Date auditTime2, Date auditTime3, Integer examineUser1, Integer examineUser2, Integer examineUser3, Date createtime) {
-        this.id = id;
-        this.petitionId = petitionId;
-        this.auditTime1 = auditTime1;
-        this.auditTime2 = auditTime2;
-        this.auditTime3 = auditTime3;
-        this.examineUser1 = examineUser1;
-        this.examineUser2 = examineUser2;
-        this.examineUser3 = examineUser3;
-        this.createtime = createtime;
-    }
+    private String adviceId;
 
     public Integer getId() {
         return id;
@@ -87,28 +71,12 @@ public class Step {
         this.createtime = createtime;
     }
 
-    public Integer getExamineUser1() {
-        return examineUser1;
+    public String getAdviceId() {
+        return adviceId;
     }
 
-    public void setExamineUser1(Integer examineUser1) {
-        this.examineUser1 = examineUser1;
-    }
-
-    public Integer getExamineUser2() {
-        return examineUser2;
-    }
-
-    public void setExamineUser2(Integer examineUser2) {
-        this.examineUser2 = examineUser2;
-    }
-
-    public Integer getExamineUser3() {
-        return examineUser3;
-    }
-
-    public void setExamineUser3(Integer examineUser3) {
-        this.examineUser3 = examineUser3;
+    public void setAdviceId(String adviceId) {
+        this.adviceId = adviceId == null ? null : adviceId.trim();
     }
 
     @Override
@@ -119,10 +87,8 @@ public class Step {
                 ", auditTime1=" + auditTime1 +
                 ", auditTime2=" + auditTime2 +
                 ", auditTime3=" + auditTime3 +
-                ", examineUser1=" + examineUser1 +
-                ", examineUser2=" + examineUser2 +
-                ", examineUser3=" + examineUser3 +
                 ", createtime=" + createtime +
+                ", adviceId='" + adviceId + '\'' +
                 '}';
     }
 }

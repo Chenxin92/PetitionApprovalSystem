@@ -245,7 +245,6 @@ public class UserController {
         Integer role=updateuser.getInteger("role");
         String status=updateuser.getString("status");
         String address=updateuser.getString("address");
-
         User user1=new User();
         user1.setId(id);
         user1.setUsername(username);
@@ -257,7 +256,34 @@ public class UserController {
         user1.setRole(role);
         user1.setStatus(status);
         user1.setAddress(address);
-        userService.updateById(user1);
+        userService.updateuserById(user1);
+        Result result=ResultUtils.success(1);
+        result.setCode(0);
+        return result;
+    }
+
+    /**
+     * 删除用户
+     * @param deleteuserJSON
+     * @return
+     */
+    @RequestMapping("/deleteuser")
+    public Result deleteuser(String deleteuserJSON) {
+        logger.info(deleteuserJSON);
+        //获取当前登陆用户的信息
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        Session session=subject.getSession();
+        //解析json串
+        JSONObject jsonObject =JSON.parseObject(deleteuserJSON);
+        // 获取user参数
+        JSONObject deleteuser=jsonObject.getJSONObject("dataField");
+        Integer id=deleteuser.getInteger("id");
+        String username=deleteuser.getString("username");
+        User user1=new User();
+        user1.setId(id);
+        user1.setUsername(username);
+        userService.deleteuser(id);
         Result result=ResultUtils.success(1);
         result.setCode(0);
         return result;
