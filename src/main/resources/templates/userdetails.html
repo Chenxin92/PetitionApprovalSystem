@@ -102,13 +102,24 @@
                     <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
                 </div>
             </div>
+
             <!--职位-->
             <div class="layui-form-item">
                 <label for="L_uname" class="layui-form-label">
                     <span class="x-red">*</span>职位
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_role" name="role" th:value="${user.role}"
+                    <input type="text" id="L_role2" name="role"
+                           th:if="${user.role}eq '2'"
+                           th:value="经办人员"
+
+                           class="layui-input" disabled="disabled">
+                    <input type="text" id="L_role3" name="role" th:if="${user.role}eq '3'"
+                           th:value="经理"
+
+                           class="layui-input" disabled="disabled">
+                    <input type="text" id="L_role4" name="role" th:if="${user.role}eq '4'"
+                           th:value="领导"
 
                            class="layui-input" disabled="disabled">
 
@@ -123,8 +134,14 @@
                     <span class="x-red">*</span>状态
                 </label>
                 <div class="layui-input-inline">
+
                     <input type="text" id="L_status" name="status"
-                           th:value="${user.status}"
+                           th:if="${user.status}eq '0'"
+                           th:value="启用"
+                           class="layui-input" disabled="disabled">
+                    <input type="text" id="L_status2" name="status"
+                           th:if="${user.status}eq '1'"
+                           th:value="禁用"
                            class="layui-input" disabled="disabled">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -139,6 +156,7 @@
                 <div class="layui-elip">
                     <input  type="textarea" textarea="both"   id="L_address" name="address"
                            th:value="${user.address}"
+
                            class="layui-input" disabled="disabled">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -150,6 +168,14 @@
       </form>
     </div>
     <script>
+        function initData(data){
+            let jsonObj=JSON.parse(data);
+            var status=jsonObj.user.status;
+            switch (jsonObj.user.status) {
+                case 0:status="启用";break;
+                case 1:status="禁用";break;
+            }
+        }
         layui.use(['form','layer'], function(){
             $ = layui.jquery;
           var form = layui.form

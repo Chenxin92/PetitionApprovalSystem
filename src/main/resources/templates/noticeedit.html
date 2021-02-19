@@ -72,11 +72,15 @@
           <label for="L_type" class="layui-form-label">
               <span class="x-red">*</span>类型
           </label>
-          <div class="layui-input-inline">
-              <input type="text" id="L_type" name="type"
-                     th:value="${notice.type}"
-                     class="layui-input" >
-          </div>
+          <div class="layui-input-block">
+              <select id="L_type" name="type" >
+                  <option  value="全体公告"  >全体公告</option>
+                  <option  value="部门公告"  >部门公告</option>
+                  <option  value="通知"  >通知</option>
+
+              </select>
+
+          </div><!--1-->
           <div class="layui-form-mid layui-word-aux">
               <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
           </div>
