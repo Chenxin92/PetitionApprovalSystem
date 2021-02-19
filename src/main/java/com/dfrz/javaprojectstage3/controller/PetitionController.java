@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.*;
 import com.dfrz.javaprojectstage3.bean.Dictionary;
 import com.dfrz.javaprojectstage3.mapper.PetitionMapper;
+import com.dfrz.javaprojectstage3.service.IAttachFileService;
 import com.dfrz.javaprojectstage3.service.IDictionaryService;
 import com.dfrz.javaprojectstage3.service.IPetitionService;
 import com.dfrz.javaprojectstage3.utils.Result;
@@ -40,6 +41,8 @@ public class PetitionController {
     @Autowired
     IPetitionService petitionService;
     @Autowired
+    IAttachFileService attachFileService;
+    @Autowired
     IDictionaryService dictionaryService;
 
     private static Logger logger = LoggerFactory.getLogger(PetitionController.class);
@@ -70,7 +73,10 @@ public class PetitionController {
         petitionPage.setCurrent(page);
         petitionPage.setSize(limit);
 
-        IPage<Petition> iPage = petitionService.getPetitionPage(petitionPage);
+        // 获取当前登入用户信息
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+
+        IPage<Petition> iPage = petitionService.getPetitionPage(petitionPage, user);
         Result result = ResultUtils.success(iPage.getRecords());
         result.setCode(0);
         result.setCount((int) iPage.getTotal());
@@ -197,8 +203,6 @@ public class PetitionController {
         String bereflectName = petitionParameter.getString("bereflectName");
         String bereflectPost = petitionParameter.getString("bereflectPost");
         String bereflectDepartment = petitionParameter.getString("bereflectDepartment");
-        Integer contentType = petitionParameter.getInteger("contentType");
-        Integer petitionType = petitionParameter.getInteger("petitionType");
         String content = petitionParameter.getString("content");
 
         Petition petition = new Petition();
@@ -208,10 +212,10 @@ public class PetitionController {
         petition.setBereflectName(bereflectName);
         petition.setBereflectPost(bereflectPost);
         petition.setBereflectDepartment(bereflectDepartment);
-        petition.setContentType(contentType);
-        petition.setPetitionType(petitionType);
+        petition.setContentType(0);
+        petition.setPetitionType(0);
         petition.setContent(content);
-        // 添加后为一级审批(经办人)
+        // 添加后为一级审批中(经办人)
         petition.setPetitionState(1);
         petition.setUserId(user.getId());
 
@@ -312,12 +316,13 @@ public class PetitionController {
      */
     @RequestMapping("/editClickDeletePicture")
     public String editClickDeletePicture(String id) {
+        // 节选出附件ID
         Integer attachFileId = Integer.valueOf(id.substring(1));
-        Petition petition = new Petition();
-        AttachFile attachFile = new AttachFile();
-        attachFile.setId(attachFileId);
-        petition.getAttachFileList().add(attachFile);
 
+        // 删除数据库中附件记录
+        if (attachFileService.deleteAttachFileById(attachFileId)) {
+            return "true";
+        }
 
         return "false";
     }
@@ -326,14 +331,27 @@ public class PetitionController {
      * 编辑后保存信访件
      *
      * @param petitionJSON
+     * @param deletePictureArrayJSON 已删除图片ID数组
      * @return
      */
     @RequestMapping("/editSavePetition")
-    public Map<String, String> editSavePetition(String petitionJSON) {
+    public Map<String, String> editSavePetition(String petitionJSON, String deletePictureArrayJSON) {
         Map<String, String> map = new HashMap<>(1);
         map.put("flag", "false");
         // 获取当前角色
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        logger.info("删除: " + deletePictureArrayJSON);
+
+        // 解析删除附件数组JSON串
+        JSONArray jsonDeleteArray = JSON.parseArray(deletePictureArrayJSON);
+        // 根据数组中的ID删除附件
+        for (Object object : jsonDeleteArray) {
+            // 获取附件ID
+            String idStr = ((String) object).substring(1);
+            Integer attachFileId = Integer.valueOf(idStr);
+            attachFileService.deleteAttachFileById(attachFileId);
+        }
 
         // 解析JSON串
         JSONObject jsonObject = JSON.parseObject(petitionJSON);
@@ -346,8 +364,6 @@ public class PetitionController {
         String bereflectName = petitionParameter.getString("bereflectName");
         String bereflectPost = petitionParameter.getString("bereflectPost");
         String bereflectDepartment = petitionParameter.getString("bereflectDepartment");
-        Integer contentType = petitionParameter.getInteger("contentType");
-        Integer petitionType = petitionParameter.getInteger("petitionType");
         String content = petitionParameter.getString("content");
 
         Petition petition = new Petition();
@@ -358,8 +374,6 @@ public class PetitionController {
         petition.setBereflectName(bereflectName);
         petition.setBereflectPost(bereflectPost);
         petition.setBereflectDepartment(bereflectDepartment);
-        petition.setContentType(contentType);
-        petition.setPetitionType(petitionType);
         petition.setContent(content);
         petition.setUserId(user.getId());
 
@@ -387,6 +401,91 @@ public class PetitionController {
         if (petitionService.updatePetitionById(petition)) {
             map.put("flag", "true");
         }
+        return map;
+    }
+
+    /**
+     * 根据信访件ID删除对应记录
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("deletePetition")
+    public String deletePetition(Integer id) {
+        if (petitionService.deletePetitionById(id)) {
+            return "true";
+        }
+        return "false";
+    }
+
+    /**
+     * 转至信访件提交页面
+     *
+     * @param petitionId
+     * @return
+     */
+    @RequestMapping("/toPetitionSubmit")
+    public ModelAndView toPetitionSubmit(Integer petitionId) {
+        // 获取信源分类
+        Dictionary petitionDictionary = dictionaryService.getDictionaryByTypeKey("petition");
+        // 获取内容分类
+        Dictionary contentDictionary = dictionaryService.getDictionaryByTypeKey("content");
+        // 获取信访件
+        Petition petition = petitionService.getPetitionById(petitionId);
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("petition_submit");
+        mv.addObject(petition);
+        mv.addObject("petitionList", petitionDictionary.getDictionaryDataList());
+        mv.addObject("contentList", contentDictionary.getDictionaryDataList());
+        return mv;
+    }
+
+    /**
+     * 经办人提交信访件
+     *
+     * @param petitionJSON
+     * @return
+     */
+    @RequestMapping("/agentSubmitPetition")
+    public Map<String, String> agentSubmitPetition(String petitionJSON) {
+        Map<String, String> map = new HashMap<>(1);
+        map.put("flag", "false");
+        // 获取当前角色
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        // 解析JSON串
+        JSONObject jsonObject = JSON.parseObject(petitionJSON);
+        // 获取petition参数
+        JSONObject petitionParameter = jsonObject.getJSONObject("dataField");
+
+        Integer petitionId = petitionParameter.getInteger("id");
+        Integer contentType = petitionParameter.getInteger("contentType");
+        Integer petitionType = petitionParameter.getInteger("petitionType");
+
+        Petition petition = new Petition();
+        // 信访件ID
+        petition.setId(petitionId);
+        // 内容分类
+        petition.setContentType(contentType);
+        // 信源分类
+        petition.setPetitionType(petitionType);
+        // 提交给经理(二级审批人员)
+        petition.setPetitionState(2);
+        if(!petitionService.updatePetitionById(petition)) {
+            return map;
+        }
+
+        Step step = new Step();
+        // 一级审批时间
+        Date date = new Date(System.currentTimeMillis());
+        step.setAuditTime1(date);
+        // 一级审批人
+        step.setExamineUser1(user.getId());
+        //todo:添加step
+        if (petitionService.addPetition(petition)) {
+            map.put("flag", "true");
+        }
+
         return map;
     }
 }

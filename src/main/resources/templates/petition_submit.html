@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--文本超出用...替代文本内容-->
+    <style>
+        .textOmit {
+            /*宽度自定义*/
+            width: 100%;
+            /*超过的地方隐藏掉*/
+            overflow: hidden;
+            /*末尾超过的地方用...代替*/
+            text-overflow: ellipsis;
+            /*声明为弹性布局*/
+            display: -webkit-box;
+            /*声明显示的个数*/
+            -webkit-line-clamp: 1;
+            /*声明布局为垂直布局或水平布局*/
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</head>
+
+<body>
+<div class="x-body layui-anim layui-anim-up">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <!--信访件ID放入隐藏域-->
+            <input type="hidden" name="id" th:value="${petition.id}">
+            <label class="layui-form-label">
+                编号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="code" required=""
+                       readonly="true" class="layui-input"
+                       th:value="${petition.code}">
+                </input>
+            </div>
+
+            <label class="layui-form-label">
+                收件时间
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="acceptTime"
+                       class="layui-input" readonly="true"
+                       th:value="${#dates.format(petition.acceptTime, 'yyyy-MM-dd HH:mm:ss')}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                反映人姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="reflectName"
+                       readonly="true" class="layui-input"
+                       th:value="${petition.reflectName}">
+            </div>
+
+            <label class="layui-form-label">
+                被反映人姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectName"
+                       readonly="true" class="layui-input"
+                       th:value="${petition.bereflectName}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                被反映人岗位
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectPost"
+                       readonly="true" class="layui-input"
+                       th:value="${petition.bereflectPost}">
+            </div>
+
+            <label class="layui-form-label">
+                被反映人部门
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="bereflectDepartment"
+                       readonly="true" class="layui-input"
+                       th:value="${petition.bereflectDepartment}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>内容分类
+            </label>
+            <div class="layui-input-inline">
+                <select name="contentType" lay-verify="required">
+                    <option value="">请选择分类</option>
+                    <option th:each="contenTypeObj:${contentList}"
+                            th:value="${contenTypeObj.value}"
+                            th:text="${contenTypeObj.dictionaryContent}"
+                    ></option>
+                </select>
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>信源分类
+            </label>
+            <div class="layui-input-inline">
+                <select name="petitionType" lay-verify="required">
+                    <option value="">请选择分类</option>
+                    <option th:each="petitionTypeObj:${petitionList}"
+                            th:value="${petitionTypeObj.value}"
+                            th:text="${petitionTypeObj.dictionaryContent}"
+                    ></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                举报内容
+            </label>
+            <div class="layui-input-inline">
+            <textarea name="content" readonly="true"
+                      class="layui-textarea" style="width: 500px;height: 180px"
+                      th:text="${petition.content}"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <ul class="layui-row layui-col-space10" id="hw_res">
+                <li class="layui-col-xs2"
+                    th:each="petitionAttach:${petition.getAttachFileList()}">
+                    <div class="layui-card layui-bg-gray">
+                        <div class="layui-card-header textOmit"
+                             th:text="${petitionAttach.getFileName()}">
+                        </div>
+                        <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 1">
+                            <img width="80px" height="70px"
+                                 th:src="${petitionAttach.getFilePath()} + ${petitionAttach.getFileName()}"
+                                 alt="加载失败"
+                            >
+                        </div>
+                        <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 2">
+                            <img width="80px" height="70px"
+                                 src="../images/DOC.jpg"
+                                 alt="加载失败"
+                            >
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-filter="submitPetition" lay-submit="">
+                提交
+            </button>
+            <a class="layui-btn" href="javascript:" onclick="x_admin_close()">
+                关闭
+            </a>
+        </div>
+    </form>
+</div>
+<script>
+    // 提交信访件相关信息
+    layui.use(['form', 'layer', 'upload'], function () {
+        $ = layui.jquery;
+        var form = layui.form;
+        var layer = layui.layer;
+
+        // 监听提交
+        form.on('submit(submitPetition)', function (data) {
+            // 作业对象
+            var petition = new Object();
+            petition.dataField = data.field;
+
+            // 转成JSON格式
+            var petitionJSON = JSON.stringify(petition);
+            // 发异步，把数据提交给php
+            $.ajax({
+                url: "agentSubmitPetition",
+                data: {
+                    petitionJSON: petitionJSON
+                },
+                success: function (data) {
+                    if (data.flag == "true") {
+                        layer.msg("提交成功", {icon: 6,time: 1500, shade:0.4},
+                            function () {
+                            //获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            // 刷新列表
+                            window.parent.location.reload();
+                        });
+                    } else {
+                        layer.msg("提交失败", {icon: 5,time: 1500, shade:0.4});
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+    // 鼠标移至图片上方,鼠标样式变为手状态
+    $("ul").on("mouseover", "img", function () {
+        this.style.cursor = "pointer";
+    });
+
+    // 图片点击预览,ul为父类元素,img为已存在元素或者未来生成元素
+    $("ul").on("click", "img", function () {
+        clickPicture(this);
+    });
+
+    // 点击图片放大预览
+    function clickPicture(obj) {
+        var img = new Image();
+        img.src = obj.src;
+        img.onload = function (ev) {
+            // 获取图片高度
+            var height = this.height;
+            // 获取图片宽度
+            var width = this.width;
+            // 图片URL地址
+            var imgHtml = "<img style='height: 100%;width: 100%' src='" + obj.src + "' />";
+            // 图片显示面积,前参数为宽,后参数为高
+            var area = [];
+            if (height <= 747 && width <= 1680) {
+                area = [width + 'px', height + 'px'];
+            } else if (height > 747 && width <= 1680) {
+                area = [width + 'px', 747 + 'px'];
+            } else if (height <= 747 && width > 1680) {
+                area = [1680 + 'px', height + 'px'];
+            } else {
+                area = [1680 + 'px', 747 + 'px'];
+            }
+            //弹出层
+            top.layer.open({
+                type: 1,
+                shade: 0.8,
+                offset: 'auto',
+                area: area,
+                shadeClose: true,//点击外围关闭弹窗
+                scrollbar: false,//不显示滚动条
+                title: false, //不显示标题
+                content: imgHtml, //捕获的元素
+                cancel: function () {
+                    //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+                }
+            });
+        };
+    }
+
+    // TODO:PDF/DOC在线预览
+</script>
+</body>
+
+</html>

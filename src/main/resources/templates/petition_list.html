@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
-><!--1-->
+>
 <head>
     <meta charset="UTF-8">
     <title>欢迎页面-X-admin2.0</title>
@@ -46,7 +46,8 @@
     </div>
     <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加信访件','./toPetitionAdd',750,650)"><i class="layui-icon"></i>添加信访件
+        <button shiro:hasRole="user" class="layui-btn" onclick="x_admin_show('添加信访件','./toPetitionAdd',750,400)"><i
+                class="layui-icon"></i>添加信访件
         </button>
     </xblock>
     <table id="list" lay-filter="list"></table>
@@ -63,18 +64,66 @@
                 , cols: [ //设置表头
                     [
                         //表头
-                        {field: 'code', title: '编号', width: 80, sort: true, fixed: 'left'}
-                        , {field: 'contentType', title: '内容分类', width: 100}
-                        , {field: 'petitionType', title: '信源分类', width: 100}
-                        , {field: 'reflectName', title: '反映人', width: 100}
-                        , {field: 'bereflectName', title: '被反映人', width: 100}
-                        , {field: 'acceptTime', title: '收件时间', width: 200}
-                        , {field: 'stateDetail', title: '核实结果', width: 100}
-                        , {field: 'petitionState', title: '处理状态', width: 100}
-                        , {title: '相关操作', fixed: 'right', width: 300, align: 'center', toolbar: '#toolBar'}
+                        {
+                            field: 'code', title: '编号', width: 80, sort: true, fixed: 'left', align: 'center'
+                        }
+                        , {
+                        field: 'contentType', title: '内容分类', width: 110, align: 'center'
+                        , templet: function (data) {
+                            if (data.contentType == 0) {
+                                return "<span class='layui-badge layui-bg-gray'>无</span>";
+                            }
+                            else if (data.contentType == 1) {
+                                return "<span class='layui-badge layui-bg-orange'>客户服务</span>";
+                            }
+                            else if (data.contentType == 2) {
+                                return "<span class='layui-badge layui-bg-blue'>VIP服务</span>";
+                            }
+                        }
+                    }
+                        , {
+                        field: 'petitionType', title: '信源分类', width: 110, align: 'center'
+                        , templet: function (data) {
+                            if (data.petitionType == 0) {
+                                return "<span class='layui-badge layui-bg-gray'>无</span>";
+                            }
+                            else if (data.petitionType == 1) {
+                                return "<span class='layui-badge layui-bg-orange'>公司信源</span>";
+                            }
+                            else if (data.petitionType == 2) {
+                                return "<span class='layui-badge layui-bg-blue'>城市信源</span>";
+                            }
+                        }
+                    }
+                        , {field: 'reflectName', title: '反映人', width: 110, align: 'center'}
+                        , {field: 'bereflectName', title: '被反映人', width: 110, align: 'center'}
+                        , {field: 'acceptTime', title: '收件时间', width: 180, align: 'center'}
+                        , {
+                        field: 'petitionState', title: '处理状态', width: 110, align: 'center'
+                        , templet: function (data) {
+                            if (data.petitionState == 0) {
+                                return "<span class='layui-badge layui-bg-green'>草稿</span>";
+                            }
+                            else if (data.petitionState == 1) {
+                                return "<span class='layui-badge layui-bg-blue'>一级审批</span>";
+                            }
+                            else if (data.petitionState == 2) {
+                                return "<span class='layui-badge layui-bg-orange'>二级审批</span>";
+                            }
+                            else if (data.petitionState == 3) {
+                                return "<span class='layui-badge'>三级审批</span>";
+                            }
+                        }
+                    }
+                        , {title: '相关操作', fixed: 'right', width: 350, align: 'center', toolbar: '#toolBar'}
                     ]
                 ]
             });
+
+            var arr = [];
+            arr = table.cache;
+            console.log(arr);
+            console.log(tableIns);
 
             //监听工具条
             table.on('tool(list)', function (obj) { //注：tool 是工具条事件名，list 是 table 原始容器的属性 lay-filter="对应的值"
@@ -84,39 +133,62 @@
 
                 // 查看
                 if (layEvent === 'view') {
-                    x_admin_show("查看", "toView?petitionId=" + data.id, 750, 650);
+                    x_admin_show("查看", "toView?petitionId=" + data.id, 750, 400);
                 }
                 // 编辑
                 else if (layEvent === 'edit') {
-                    x_admin_show("编辑", "toEdit?petitionId=" + data.id, 750, 650);
+                    x_admin_show("编辑", "toEdit?petitionId=" + data.id, 750, 400);
                 }
                 // 删除
                 else if (layEvent === 'delete') {
-
+                    //弹出确认框
+                    layer.confirm('您确定要删除编号为' + data.code + '的信访件吗?',
+                        {icon: 3, title: '提示'}, function (index) {
+                            $.ajax({
+                                url: "deletePetition",
+                                data: {id: data.id},
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("删除成功", {icon: 1, time: 1500}, function () {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        layer.msg("删除失败", {icon: 2, time: 1500});
+                                    }
+                                    //关闭确认框
+                                    layer.close(index);
+                                }
+                            });
+                        });
                 }
                 // 提交
                 else if (layEvent === 'petitionSubmit') {
-                    x_admin_show("提交", "toPetitionSubmit?petitionId=" + data.id, 750, 650);
+                    x_admin_show("提交", "toPetitionSubmit?petitionId=" + data.id, 750, 400);
                 }
                 // 报告上传
                 else if (layEvent === 'reportUpload') {
-                    x_admin_show("退回", "toReportUpload?petitionId=" + data.id, 700, 650);
+                    x_admin_show("退回", "toReportUpload?petitionId=" + data.id, 750, 400);
                 }
             });
         });
 
     </script>
     <script type="text/html" id="toolBar">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-xs" lay-event="delete">删除</a>
-        <a class="layui-btn layui-btn-xs" lay-event="petitionSubmit">提交</a>
-        <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
-        <a class="layui-btn layui-btn-xs" lay-event="reportUpload">报告上传</a>
+        <a class="layui-btn layui-btn-xs layui-bg-green" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-bg-red" lay-event="delete">删除</a>
+        <a class="layui-btn layui-btn-xs layui-bg-orange" lay-event="petitionSubmit">提交</a>
+        <a class="layui-btn layui-btn-xs layui-bg-cyan" lay-event="view">查看</a>
+        <a class="layui-btn layui-btn-xs layui-bg-black" lay-event="reportUpload">报告上传</a>
     </script>
 
 </div>
 
 <script>
+    $(function () {
+        $("")
+    });
+
+
     layui.use('laydate', function () {
         var laydate = layui.laydate;
 

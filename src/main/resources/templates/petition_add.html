@@ -99,34 +99,6 @@
 
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>内容分类
-            </label>
-            <div class="layui-input-inline">
-                <select name="contentType" lay-verify="required">
-                    <option value="">请选择分类</option>
-                    <option th:each="content:${contentList}"
-                            th:value="${content.value}"
-                            th:text="${content.dictionaryContent}">
-                    </option>
-                </select>
-            </div>
-
-            <label class="layui-form-label">
-                <span class="x-red">*</span>信源分类
-            </label>
-            <div class="layui-input-inline">
-                <select name="petitionType" lay-verify="required">
-                    <option value="">请选择分类</option>
-                    <option th:each="petition:${petitionList}"
-                            th:value="${petition.value}"
-                            th:text="${petition.dictionaryContent}">
-                    </option>
-                </select>
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">
                 <span class="x-red">*</span>举报内容
             </label>
             <div class="layui-input-inline">
@@ -159,25 +131,32 @@
     </form>
 </div>
 <script>
-    // 编号是否存在标志位
-    var codeFlag;
-    // 验证编号是否存在
+    // 失焦验证编号是否存在
     $("#code").on("blur", function () {
+        if (codeVerification() == true) {
+            layer.msg("该编号已存在");
+        }
+    });
+
+    // 验证编号是否存在
+    function codeVerification() {
+        var flag;
         $.ajax({
             url: "codeVerification",
             data: {code: $("#code").val()},
+            async: false,
             dataType: "text",
             success: function (data) {
+                console.log(data);
                 if (data == "true") {
-                    layer.msg("该编号已存在", function () {
-                        codeFlag = 1;
-                    });
+                    flag = true;
                 } else {
-                    codeFlag = 0;
+                    flag = false;
                 }
             }
         });
-    });
+        return flag;
+    }
 
     // 附件数组
     var upload_arr = [];
@@ -198,7 +177,7 @@
 
         // 监听添加
         form.on('submit(addPetition)', function (data) {
-            if (codeFlag == 1) {
+            if (codeVerification() == true) {
                 layer.msg("编号已存在,禁止添加");
                 return false;
             }
@@ -214,7 +193,8 @@
                 data: {petitionJSON: petitionJSON},
                 success: function (data) {
                     if (data.flag == "true") {
-                        layer.msg("添加成功", function () {
+                        layer.msg("添加成功",
+                            {icon: 6,time:1500, shade:0.4}, function () {
                             //获得frame索引
                             var index = parent.layer.getFrameIndex(window.name);
                             //关闭当前frame
@@ -222,7 +202,7 @@
                             window.parent.location.reload();
                         });
                     } else {
-                        layer.msg("添加失败");
+                        layer.msg("添加失败", {icon: 5,time:1500, shade:0.4});
                     }
                 }
             });

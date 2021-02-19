@@ -3,6 +3,7 @@ package com.dfrz.javaprojectstage3.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.Petition;
+import com.dfrz.javaprojectstage3.bean.User;
 
 /**
  * @author：ChenXin
@@ -13,9 +14,10 @@ public interface IPetitionService {
      * 获取信访件列表(分页)
      *
      * @param page
+     * @param user 登录用户信息
      * @return
      */
-    IPage<Petition> getPetitionPage(Page page);
+    IPage<Petition> getPetitionPage(Page page, User user);
 
     /**
      * 根据code编号验证信访件是否存在
@@ -48,4 +50,12 @@ public interface IPetitionService {
      * @return
      */
     Boolean updatePetitionById(Petition petition);
+
+    /**
+     * 根据信访件ID删除信访件
+     *
+     * @param id
+     * @return true 删除成功
+     */
+    Boolean deletePetitionById(Integer id);
 }

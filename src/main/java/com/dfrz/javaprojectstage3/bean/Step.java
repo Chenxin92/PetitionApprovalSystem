@@ -27,6 +27,9 @@ public class Step {
 
     private Date createtime;
 
+    public Step() {
+    }
+
     public Step(Integer id, Integer petitionId, Date auditTime1, Date auditTime2, Date auditTime3, Integer examineUser1, Integer examineUser2, Integer examineUser3, Date createtime) {
         this.id = id;
         this.petitionId = petitionId;
