@@ -175,7 +175,8 @@
                         <div class="layui-card-header">
                             <span>
                                 <a>
-                                  <i th:id="picture + ${petitionAttach.id}" class='layui-icon textOmit'>&#x1007;</i>
+                                  <i th:id="p + ${petitionAttach.id}"
+                                     class='layui-icon textOmit'>&#x1007;</i>
                                 </a>
                            </span>
                         </div>
@@ -197,7 +198,7 @@
                 <script th:inline="javascript">
                     var x = [[${petition.getAttachFileList()}]];
                     for (var i = 0;i< x.length; i++) {
-                        $("#picture" + x[i].id).append(x[i].fileName);
+                        $("#p" + x[i].id).append(x[i].fileName);
                     }
                 </script>
             </ul>
@@ -249,20 +250,32 @@
         });
     });
 
-    // 删除点击图片
-    $("ul").on("click", "li", function () {
-        var index = $(this).closest("li").index();
-        upload_arr.splice(index, 1);
-        $(this).closest("li").remove();
-        console.log(upload_arr);
-    });
-
     // 布置作业相关信息
     layui.use(['form', 'layer', 'upload', 'laydate'], function () {
         $ = layui.jquery;
         var form = layui.form;
         var layer = layui.layer;
         var laydate = layui.laydate;
+
+        // 删除点击图片
+        $("ul").on("click", ".textOmit", function () {
+            console.log(this.id);
+            $.ajax({
+                url:'editClickDeletePicture',
+                data: {id: this.id},
+                success: function (data) {
+                    if (data.msg == "true") {
+                        var index = $(this).closest("li").index();
+                        upload_arr.splice(index, 1);
+                        $(this).closest("li").remove();
+                        layer.msg("删除成功");
+                    } else {
+                        layer.msg("删除失败");
+                    }
+                }
+            });
+            console.log(upload_arr);
+        });
 
         // 监听保存
         form.on('submit(SavePetition)', function (data) {
@@ -381,7 +394,7 @@
 
     // 图片点击预览,ul为父类元素,img为已存在元素或者未来生成元素
     $("ul").on("click", "img", function () {
-        clickPicture(this.child);
+        clickPicture(this);
     });
 
     // 点击图片放大预览

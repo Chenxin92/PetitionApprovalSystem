@@ -305,6 +305,24 @@ public class PetitionController {
     }
 
     /**
+     * 编辑页面点击删除图片
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("/editClickDeletePicture")
+    public String editClickDeletePicture(String id) {
+        Integer attachFileId = Integer.valueOf(id.substring(1));
+        Petition petition = new Petition();
+        AttachFile attachFile = new AttachFile();
+        attachFile.setId(attachFileId);
+        petition.getAttachFileList().add(attachFile);
+
+
+        return "false";
+    }
+
+    /**
      * 编辑后保存信访件
      *
      * @param petitionJSON

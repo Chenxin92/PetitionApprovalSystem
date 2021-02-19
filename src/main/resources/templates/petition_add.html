@@ -149,8 +149,7 @@
             <ul class="layui-row layui-col-space10" id="hw_res"></ul>
         </div>
         <div class="layui-form-item">
-            <button class="layui-btn" lay-filter="addPetition" lay-submit=""
-                    onclick="window.parent.location.reload();"><!--点击调用父窗口刷新列表方法-->
+            <button class="layui-btn" lay-filter="addPetition" lay-submit="">
                 添加
             </button>
             <a class="layui-btn" href="javascript:" onclick="x_admin_close()">
@@ -183,7 +182,7 @@
     // 附件数组
     var upload_arr = [];
     // 删除点击图片
-    $("ul").on("click", "li", function () {
+    $("ul").on("click",".textOmit", function () {
         var index = $(this).closest("li").index();
         upload_arr.splice(index, 1);
         $(this).closest("li").remove();
@@ -220,6 +219,7 @@
                             var index = parent.layer.getFrameIndex(window.name);
                             //关闭当前frame
                             parent.layer.close(index);
+                            window.parent.location.reload();
                         });
                     } else {
                         layer.msg("添加失败");
