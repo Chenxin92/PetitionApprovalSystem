@@ -66,9 +66,9 @@
               </button>
 
           </div>
-      </form>
+<!--1-->
     </div>
-
+        </form>
     <script>
         var hwres_arr=new Array();
         layui.use('upload', function(){
@@ -162,12 +162,10 @@
 
 
     <script>
-
         layui.use(['form','layer','layedit'], function(){
             $ = layui.jquery;
           var form = layui.form
           ,layer = layui.layer;
-
             var layedit = layui.layedit;
             layedit.set({
                 uploadImage: {
@@ -175,9 +173,7 @@
                     ,type: 'post' //默认post
                 }
             });
-
             var index2=layedit.build('demo'); //建立编辑器
-        
           //自定义验证规则
           form.verify({
             nikename: function(value){
@@ -192,7 +188,7 @@
                 }
             }
           });
-
+// 45
           //监听提交
             form.on('submit(add)', function(data){
                 layer.msg(JSON.stringify(data.field));
@@ -227,8 +223,7 @@
 
 
     </script>
-
-
+        </div>
   </body>
 
 </html>
