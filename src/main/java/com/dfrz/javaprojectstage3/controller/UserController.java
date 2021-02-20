@@ -176,11 +176,11 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
         // 2.封装用户数据
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword(),user.getRealname());
         // 3. 执行shiro的login方法--会自动调用Realm中的认证方法doGetAuthenticationInfo
         try {
             subject.login(token);
-            //登陆成功后，将用户的学生或讲师信息保存至session中
+            //登陆成功后，将用户的信息保存至session中
             User currentUser = (User) subject.getPrincipal();
             session.setAttribute("currentUser", user);
             map.put("flag", "1");

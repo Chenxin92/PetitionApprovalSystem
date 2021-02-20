@@ -1,166 +1,183 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>欢迎页面-X-admin2.0</title>
-        <meta name="renderer" content="webkit">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" href="./css/font.css">
-        <link rel="stylesheet" href="./css/xadmin.css">
-    </head>
-    <body>
-    <div class="x-body layui-anim layui-anim-up">
-        <blockquote class="layui-elem-quote">欢迎管理员：
-            <span class="x-red">test</span>！当前时间:2018-04-25 20:50:53</blockquote>
-        <fieldset class="layui-elem-field">
-            <legend>数据统计</legend>
-            <div class="layui-field-box">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-body">
-                            <div class="layui-carousel x-admin-carousel x-admin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
-                                <div carousel-item="">
-                                    <ul class="layui-row layui-col-space10 layui-this">
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>66</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>会员数</h3>
-                                                <p>
-                                                    <cite>12</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>回复数</h3>
-                                                <p>
-                                                    <cite>99</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>商品数</h3>
-                                                <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>6766</cite></p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+<html xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8," />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css" media="all">
+    <link rel="stylesheet" href="./css/xadmin.css" media="all">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+</head>
+<body>
+<div class="x-body layui-anim layui-anim-up">
+    <!--轮播图-->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <div class="layui-carousel" id="test3" lay-filter="test4">
+    <div carousel-item="">
+        <div><img width="100%" src="images/1.jpg"></div>
+        <div><img width="100%" src="images/2.jpg"></div>
+        <div><img width="100%" src="images/3.jpg"></div>
+        <div><img width="100%" src="images/4.jpg"></div>
+        <div><img width="100%" src="images/5.jpg"></div>
+        <div><img width="100%" src="images/6.jpg"></div>
+        <div><img width="100%" src="images/7.jpg"></div>
+    </div>
+    </div>
+    <legend><h2 ><font align="center" color="#6495ed">风采展示</font></h2></legend><hr class="layui-bg-red">
+    </fieldset>
+
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">宽高</label>
+                <div class="layui-input-inline" style="width: 98px;">
+                    <input type="tel" name="width" value="1000" autocomplete="on" placeholder="width" class="layui-input demoSet">
+                </div>
+                <div class="layui-input-inline" style="width: 98px;">
+                    <input type="tel" name="height" value="280" autocomplete="on" placeholder="height" class="layui-input demoSet">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">动画类型</label>
+            <div class="layui-input-block">
+                <div class="layui-btn-group demoTest" style="margin-top: 5px;">
+                    <button class="layui-btn layui-btn-sm" style="background-color: #5FB878;" data-type="set" data-key="anim" data-value="default">左右切换</button>
+                    <button class="layui-btn layui-btn-sm" data-type="set" data-key="anim" data-value="updown">上下切换</button>
+                    <button class="layui-btn layui-btn-sm" data-type="set" data-key="anim" data-value="fade">渐隐渐显</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">箭头状态</label>
+            <div class="layui-input-block">
+                <div class="layui-btn-group demoTest" style="margin-top: 5px;">
+                    <button class="layui-btn layui-btn-sm" style="background-color: #5FB878;" data-type="set" data-key="arrow" data-value="hover">悬停显示</button>
+                    <button class="layui-btn layui-btn-sm" data-type="set" data-key="arrow" data-value="always">始终显示</button>
+                    <button class="layui-btn layui-btn-sm" data-type="set" data-key="arrow" data-value="none">不显示</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">指示器位置</label>
+            <div class="layui-input-block">
+                <div class="layui-btn-group demoTest" style="margin-top: 5px;">
+                    <button class="layui-btn layui-btn-sm" style="background-color: #5FB878;" data-key="indicator" data-type="set" data-value="inside">容器内部</button>
+                    <button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="outside">容器外部</button>
+                    <button class="layui-btn layui-btn-sm" data-type="set" data-key="indicator" data-value="none">不显示</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">自动切换</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="switch" lay-skin="switch" checked="" lay-text="ON|OFF" lay-filter="autoplay">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: auto;">时间间隔</label>
+                <div class="layui-input-inline" style="width: 120px;">
+                    <input type="tel" name="interval" value="300" autocomplete="on" placeholder="毫秒" class="layui-input demoSet">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--轮播图-->
+    <fieldset class="layui-elem-field">
+        <legend>数据统计</legend>
+        <div class="layui-field-box">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-carousel x-admin-carousel x-admin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
+                            <div carousel-item="">
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </fieldset>
-        <fieldset class="layui-elem-field">
-            <legend>系统公告</legend>
-            <div class="layui-field-box">
-                <table class="layui-table" lay-skin="line">
-                    <tbody>
-                        <tr>
-                            <td >
-                                <a class="x-a" href="/" target="_blank">新版x-admin 2.0上线了</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td >
-                                <a class="x-a" href="/" target="_blank">交流qq群:(519492808)</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </fieldset>
-        <fieldset class="layui-elem-field">
-            <legend>系统信息</legend>
-            <div class="layui-field-box">
-                <table class="layui-table">
-                    <tbody>
-                        <tr>
-                            <th>xxx版本</th>
-                            <td>1.0.180420</td></tr>
-                        <tr>
-                            <th>服务器地址</th>
-                            <td>x.xuebingsi.com</td></tr>
-                        <tr>
-                            <th>操作系统</th>
-                            <td>WINNT</td></tr>
-                        <tr>
-                            <th>运行环境</th>
-                            <td>Apache/2.4.23 (Win32) OpenSSL/1.0.2j mod_fcgid/2.3.9</td></tr>
-                        <tr>
-                            <th>PHP版本</th>
-                            <td>5.6.27</td></tr>
-                        <tr>
-                            <th>PHP运行方式</th>
-                            <td>cgi-fcgi</td></tr>
-                        <tr>
-                            <th>MYSQL版本</th>
-                            <td>5.5.53</td></tr>
-                        <tr>
-                            <th>ThinkPHP</th>
-                            <td>5.0.18</td></tr>
-                        <tr>
-                            <th>上传附件限制</th>
-                            <td>2M</td></tr>
-                        <tr>
-                            <th>执行时间限制</th>
-                            <td>30s</td></tr>
-                        <tr>
-                            <th>剩余空间</th>
-                            <td>86015.2M</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </fieldset>
-        <fieldset class="layui-elem-field">
-            <legend>开发团队</legend>
-            <div class="layui-field-box">
-                <table class="layui-table">
-                    <tbody>
-                        <tr>
-                            <th>版权所有</th>
-                            <td>xxxxx(xxxx)
-                                <a href="http://www.xxx.com/" class='x-a' target="_blank">访问官网</a></td>
-                        </tr>
-                        <tr>
-                            <th>开发者</th>
-                            <td>马志斌(113664000@qq.com)</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </fieldset>
-        <blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote>
-    </div>
-        <script>
-        var _hmt = _hmt || [];
-        (function() {
-          var hm = document.createElement("script");
-          hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-          var s = document.getElementsByTagName("script")[0]; 
-          s.parentNode.insertBefore(hm, s);
-        })();
-        </script>
-    </body>
+        </div>
+    </fieldset>
+    <fieldset class="layui-elem-field">
+        <legend>系统公告</legend>
+        <div class="layui-field-box">
+
+        </div>
+    </fieldset>
+</div>
+
+<!--轮播js代码-->
+<script>
+    layui.use(['carousel', 'form'], function(){
+        var carousel = layui.carousel
+            ,form = layui.form;
+
+
+        //设定各种参数
+        var ins3 = carousel.render({
+            elem: '#test3'
+        });
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            ,width: '515px'
+            ,height: '300px'
+            ,interval: 500
+        });
+
+        //事件
+        carousel.on('change(test4)', function(res){
+            console.log(res)
+        });
+
+        var $ = layui.$, active = {
+            set: function(othis){
+                var THIS = 'layui-bg-normal'
+                    ,key = othis.data('key')
+                    ,options = {};
+
+                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                options[key] = othis.data('value');
+                ins3.reload(options);
+            }
+        };
+
+        //监听开关
+        form.on('switch(autoplay)', function(){
+            ins3.reload({
+                autoplay: this.checked
+            });
+        });
+
+        $('.demoSet').on('keyup', function(){
+            var value = this.value
+                ,options = {};
+            if(!/^\d+$/.test(value)) return;
+
+            options[this.name] = value;
+            ins3.reload(options);
+        });
+
+        //其它示例
+        $('.demoTest .layui-btn').on('click', function(){
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+    });
+</script>
+<!--轮播js代码-->
+</body>
 </html>
