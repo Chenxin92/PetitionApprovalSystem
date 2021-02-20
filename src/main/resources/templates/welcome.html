@@ -5,14 +5,13 @@
     <title>欢迎页面-X-admin2.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8," />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./css/font.css" media="all">
     <link rel="stylesheet" href="./css/xadmin.css" media="all">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script th:src="@{/lib/layui/layui.all.js}" charset="utf-8"></script>
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
     <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
-
 </head>
 <body>
 <div class="x-body layui-anim layui-anim-up">
@@ -20,22 +19,27 @@
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <div class="layui-carousel" id="test3" lay-filter="test4">
     <div carousel-item="">
-
-    <div><img src="images/2.jpg"></div>
-        <div><img src="images/22.png"></div>
+        <div><img width="100%" src="images/1.jpg"></div>
+        <div><img width="100%" src="images/2.jpg"></div>
+        <div><img width="100%" src="images/3.jpg"></div>
+        <div><img width="100%" src="images/4.jpg"></div>
+        <div><img width="100%" src="images/5.jpg"></div>
+        <div><img width="100%" src="images/6.jpg"></div>
+        <div><img width="100%" src="images/7.jpg"></div>
     </div>
     </div>
-    <legend>风采一览</legend>
+    <legend><h2 ><font align="center" color="#6495ed">风采展示</font></h2></legend><hr class="layui-bg-red">
     </fieldset>
+
     <div class="layui-form">
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">宽高</label>
                 <div class="layui-input-inline" style="width: 98px;">
-                    <input type="tel" name="width" value="600" autocomplete="off" placeholder="width" class="layui-input demoSet">
+                    <input type="tel" name="width" value="1000" autocomplete="on" placeholder="width" class="layui-input demoSet">
                 </div>
                 <div class="layui-input-inline" style="width: 98px;">
-                    <input type="tel" name="height" value="280" autocomplete="off" placeholder="height" class="layui-input demoSet">
+                    <input type="tel" name="height" value="280" autocomplete="on" placeholder="height" class="layui-input demoSet">
                 </div>
             </div>
         </div>
@@ -83,7 +87,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label" style="width: auto;">时间间隔</label>
                 <div class="layui-input-inline" style="width: 120px;">
-                    <input type="tel" name="interval" value="3000" autocomplete="off" placeholder="毫秒" class="layui-input demoSet">
+                    <input type="tel" name="interval" value="300" autocomplete="on" placeholder="毫秒" class="layui-input demoSet">
                 </div>
             </div>
         </div>
@@ -99,50 +103,7 @@
                     <div class="layui-card-body">
                         <div class="layui-carousel x-admin-carousel x-admin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
                             <div carousel-item="">
-                                <ul class="layui-row layui-col-space10 layui-this">
-                                    <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>文章数</h3>
-                                            <p>
-                                                <cite>66</cite></p>
-                                        </a>
-                                    </li>
-                                    <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>会员数</h3>
-                                            <p>
-                                                <cite>12</cite></p>
-                                        </a>
-                                    </li>
-                                    <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>回复数</h3>
-                                            <p>
-                                                <cite>99</cite></p>
-                                        </a>
-                                    </li>
-                                    <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>商品数</h3>
-                                            <p>
-                                                <cite>67</cite></p>
-                                        </a>
-                                    </li>
-                                    <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>文章数</h3>
-                                            <p>
-                                                <cite>67</cite></p>
-                                        </a>
-                                    </li>
-                                    <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>文章数</h3>
-                                            <p>
-                                                <cite>6766</cite></p>
-                                        </a>
-                                    </li>
-                                </ul>
+
                             </div>
                         </div>
                     </div>
@@ -153,20 +114,7 @@
     <fieldset class="layui-elem-field">
         <legend>系统公告</legend>
         <div class="layui-field-box">
-            <table class="layui-table" lay-skin="line">
-                <tbody>
-                <tr>
-                    <td >
-                        <a class="x-a" href="/" target="_blank">新版x-admin 2.0上线了</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td >
-                        <a class="x-a" href="/" target="_blank">交流qq群:(519492808)</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+
         </div>
     </fieldset>
 </div>
@@ -178,22 +126,20 @@
             ,form = layui.form;
 
 
-        //改变下时间间隔、动画类型、高度
-        carousel.render({
-            elem: '#test2'
-            ,interval: 1800
-            ,anim: 'fade'
-            ,height: '120px'
-        });
-
         //设定各种参数
         var ins3 = carousel.render({
             elem: '#test3'
         });
-
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            ,width: '515px'
+            ,height: '300px'
+            ,interval: 500
+        });
 
         //事件
-        carousel.on('change(test3)', function(res){
+        carousel.on('change(test4)', function(res){
             console.log(res)
         });
 
