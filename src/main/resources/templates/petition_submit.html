@@ -131,6 +131,62 @@
                 </select>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>部门
+            </label>
+            <div class="layui-input-inline">
+                <select name="department" lay-verify="required"
+                        lay-filter="department">
+                    <option value="">请选择部门</option>
+                    <option th:each="department:${departmentList}"
+                            th:value="${department}"
+                            th:text="${department}"
+                    ></option>
+                </select>
+            </div>
+            <!--部门选择后获取负责人列表-->
+            <script>
+                // 记录上一次获取列表长度,默认为0
+                var temp = 0;
+                layui.use('form', function () {
+                    var form = layui.form;
+                    form.on('select(department)', function (data) {
+                        console.log(data.value);
+                        $.ajax({
+                            url:'getTwoPrincipalListByDepartment',
+                            data:{department: data.value},
+                            success: function (data) {
+                                if (temp > 0) {
+                                    // 清除之前添加的append操作
+                                    for (var i = 0; i < temp; i++) {
+                                        $("#principal").children().get(
+                                            $("#principal").children().length - 1
+                                        ).remove();
+                                    }
+                                }
+                                for (var i = 0; i < data.length; i++) {
+                                    $("#principal").append(
+                                        '<option value="'+data[i].id+'"> '+data[i].realname+' </option>');
+                                }
+                                // 记录本次列表长度
+                                temp = data.length;
+                                // 刷新下拉框
+                                form.render('select');
+                            }
+                        });
+                    });
+                });
+            </script>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>负责人
+            </label>
+            <div class="layui-input-inline">
+                <select id="principal" name="principal" lay-verify="required">
+                    <option value="">请选择部门负责人</option>
+                </select>
+            </div>
+        </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -199,17 +255,21 @@
                 },
                 success: function (data) {
                     if (data.flag == "true") {
-                        layer.msg("提交成功", {icon: 6,time: 1500, shade:0.4},
+                        layer.msg("提交成功", {icon: 6, time: 1500, shade: 0.4},
                             function () {
-                            //获得frame索引
-                            var index = parent.layer.getFrameIndex(window.name);
-                            //关闭当前frame
-                            parent.layer.close(index);
-                            // 刷新列表
-                            window.parent.location.reload();
-                        });
+                                //获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                // 刷新信访件列表
+                                window.parent.tableIns.reload({
+                                    page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
+                                });
+                            });
                     } else {
-                        layer.msg("提交失败", {icon: 5,time: 1500, shade:0.4});
+                        layer.msg("提交失败", {icon: 5, time: 1500, shade: 0.4});
                     }
                 }
             });

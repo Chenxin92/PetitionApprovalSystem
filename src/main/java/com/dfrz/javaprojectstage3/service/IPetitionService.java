@@ -15,9 +15,11 @@ public interface IPetitionService {
      *
      * @param page
      * @param user 登录用户信息
+     * @param startTime 搜索条件起始时间
+     * @param endTime 搜索条件结束时间
      * @return
      */
-    IPage<Petition> getPetitionPage(Page page, User user);
+    IPage<Petition> getPetitionPage(Page page, User user, String startTime, String endTime);
 
     /**
      * 根据code编号验证信访件是否存在

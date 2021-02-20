@@ -124,6 +124,9 @@
             <button class="layui-btn" lay-filter="addPetition" lay-submit="">
                 添加
             </button>
+            <button class="layui-btn" lay-filter="savePetition" lay-submit="">
+                保存
+            </button>
             <a class="layui-btn" href="javascript:" onclick="x_admin_close()">
                 取消
             </a>
@@ -190,7 +193,7 @@
             // 发异步，把数据提交给php
             $.ajax({
                 url: "addPetition",
-                data: {petitionJSON: petitionJSON},
+                data: {petitionJSON: petitionJSON, state: 1}, // 1为添加
                 success: function (data) {
                     if (data.flag == "true") {
                         layer.msg("添加成功",
@@ -199,10 +202,54 @@
                             var index = parent.layer.getFrameIndex(window.name);
                             //关闭当前frame
                             parent.layer.close(index);
-                            window.parent.location.reload();
+                                // 刷新信访件列表
+                                window.parent.tableIns.reload({
+                                    page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
+                                });
                         });
                     } else {
                         layer.msg("添加失败", {icon: 5,time:1500, shade:0.4});
+                    }
+                }
+            });
+            return false;
+        });
+
+        // 监听保存
+        form.on('submit(savePetition)', function (data) {
+            if (codeVerification() == true) {
+                layer.msg("编号已存在,禁止保存");
+                return false;
+            }
+            // 作业对象
+            var petition = new Object();
+            petition.dataField = data.field;
+            petition.arr = upload_arr;
+            // 转成JSON格式
+            var petitionJSON = JSON.stringify(petition);
+            // 发异步，把数据提交给php
+            $.ajax({
+                url: "addPetition",
+                data: {petitionJSON: petitionJSON, state: 0}, // 0为保存
+                success: function (data) {
+                    if (data.flag == "true") {
+                        layer.msg("保存成功",
+                            {icon: 6,time:1500, shade:0.4}, function () {
+                                //获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                // 刷新信访件列表
+                                window.parent.tableIns.reload({
+                                    page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
+                                });
+                            });
+                    } else {
+                        layer.msg("保存失败", {icon: 5,time:1500, shade:0.4});
                     }
                 }
             });

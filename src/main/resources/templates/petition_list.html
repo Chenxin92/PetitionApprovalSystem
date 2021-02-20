@@ -38,28 +38,33 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <input class="layui-input" placeholder="开始日" name="start" id="start" autocomplete="off">
+            <input class="layui-input" placeholder="截止日" name="end" id="end" autocomplete="off">
+            <button class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock>
-        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
         <button shiro:hasRole="user" class="layui-btn" onclick="x_admin_show('添加信访件','./toPetitionAdd',750,400)"><i
                 class="layui-icon"></i>添加信访件
         </button>
     </xblock>
     <table id="list" lay-filter="list"></table>
     <script>
-        //所获得的 tableIns 即为当前容器的实例
         var tableIns;
-        layui.use('table', function () {
+        layui.use(['laydate', 'form', 'layer', 'table'], function () {
             var table = layui.table;
+            var laydate = layui.laydate;
+            var form = layui.form;
+            var layer = layui.layer;
+            //所获得的 tableIns 即为当前容器的实例
             tableIns = table.render({
                 elem: '#list'
                 , height: 550
                 , url: 'getPetitionList' //数据接口
+                ,where: { //设定异步数据接口的额外参数，任意设
+                    startTime: null
+                    ,endTime: null
+                }
                 , page: true //开启分页
                 , cols: [ //设置表头
                     [
@@ -97,7 +102,7 @@
                     }
                         , {field: 'reflectName', title: '反映人', width: 110, align: 'center'}
                         , {field: 'bereflectName', title: '被反映人', width: 110, align: 'center'}
-                        , {field: 'acceptTime', title: '收件时间', width: 180, align: 'center'}
+                        , {field: 'acceptTime', title: '收件时间', sort: true, width: 180, align: 'center'}
                         , {
                         field: 'petitionState', title: '处理状态', width: 110, align: 'center'
                         , templet: function (data) {
@@ -118,12 +123,41 @@
                         , {title: '相关操作', fixed: 'right', width: 350, align: 'center', toolbar: '#toolBar'}
                     ]
                 ]
+                ,done: function (res, curr, count) {
+                    console.log(res);
+                }
             });
 
-            var arr = [];
-            arr = table.cache;
-            console.log(arr);
-            console.log(tableIns);
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+
+            // 搜索功能
+            form.on('submit(search)', function (data) {
+                var startTime = data.field.start;
+                var endTime = data.field.end;
+                if (startTime > endTime) {
+                    layer.msg("开始时间不能大于结束时间", {time: 1500});
+                    return false;
+                }
+
+                tableIns.reload({
+                    where: { //设定异步数据接口的额外参数，任意设
+                        startTime: startTime
+                        ,endTime: endTime
+                    }
+                    ,page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false;
+            });
 
             //监听工具条
             table.on('tool(list)', function (obj) { //注：tool 是工具条事件名，list 是 table 原始容器的属性 lay-filter="对应的值"
@@ -171,40 +205,18 @@
                 }
             });
         });
-
     </script>
+
     <script type="text/html" id="toolBar">
         <a class="layui-btn layui-btn-xs layui-bg-green" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-xs layui-bg-red" lay-event="delete">删除</a>
         <a class="layui-btn layui-btn-xs layui-bg-orange" lay-event="petitionSubmit">提交</a>
         <a class="layui-btn layui-btn-xs layui-bg-cyan" lay-event="view">查看</a>
         <a class="layui-btn layui-btn-xs layui-bg-black" lay-event="reportUpload">报告上传</a>
+        <!--todo:按钮隐藏-->
     </script>
 
 </div>
-
-<script>
-    $(function () {
-        $("")
-    });
-
-
-    layui.use('laydate', function () {
-        var laydate = layui.laydate;
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
-    });
-
-</script>
-
 </body>
 
 </html>

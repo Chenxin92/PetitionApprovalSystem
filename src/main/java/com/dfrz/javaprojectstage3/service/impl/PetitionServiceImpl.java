@@ -26,15 +26,30 @@ public class PetitionServiceImpl implements IPetitionService {
     AttachFileMapper attachFileMapper;
 
     @Override
-    public IPage<Petition> getPetitionPage(Page page, User user) {
+    public IPage<Petition> getPetitionPage(Page page, User user, String startTime, String endTime) {
         Integer roleId = user.getRole();
         QueryWrapper<Petition> petitionQueryWrapper = new QueryWrapper<>();
+
+        // 起始时间不为空,添加大于等于起始时间的收件时间条件
+        if (startTime != null && !("".equals(startTime))) {
+            petitionQueryWrapper.ge("accept_time", startTime);
+        }
+
+        // 结束时间不为空,添加小于等于结束时间的收件时间条件
+        if (endTime != null && !("".equals(endTime))) {
+            petitionQueryWrapper.le("accept_time", endTime);
+        }
+
         // 用户
         if (roleId == 1) {
-            // 个人信访件
+            // 只显示个人信访件
             petitionQueryWrapper.eq("user_id", user.getId());
-            // 信访件状态草稿
-            petitionQueryWrapper.eq("petition_state", 0);
+        }
+        // 经办人
+        else if (roleId == 2) {
+            // 除草稿件均可见
+            petitionQueryWrapper.ne("petition_state", 0);
+
         }
         return petitionMapper.selectPage(page, petitionQueryWrapper);
     }
@@ -83,6 +98,7 @@ public class PetitionServiceImpl implements IPetitionService {
         // 获取信访件附件列表
         QueryWrapper<AttachFile> attachFileWrapper = new QueryWrapper<>();
         attachFileWrapper.eq("object_id", id);
+        attachFileWrapper.eq("file_type", 0);
         List<AttachFile> attachFileList = attachFileMapper.selectList(attachFileWrapper);
         petition.setAttachFileList(attachFileList);
 
@@ -106,6 +122,7 @@ public class PetitionServiceImpl implements IPetitionService {
             // 判断附件是否已存在记录
             QueryWrapper<AttachFile> attachFileQueryWrapper = new QueryWrapper<>();
             attachFileQueryWrapper.eq("object_id", petition.getId());
+            attachFileQueryWrapper.eq("file_type", 0);
             attachFileQueryWrapper.eq("file_name", attachFile.getFileName());
             attachFileQueryWrapper.eq("file_path", attachFile.getFilePath());
             if (attachFileMapper.selectOne(attachFileQueryWrapper) != null) {

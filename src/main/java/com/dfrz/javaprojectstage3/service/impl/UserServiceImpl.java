@@ -26,17 +26,18 @@ public class UserServiceImpl implements IUserService {
     RoleMapper roleMapper;
     @Autowired
     PermissionMapper permissionMapper;
+
     @Override
     public boolean login(User user) {
         //条件构造器
         System.out.println("进入");
-        QueryWrapper<User> queryWrapper=new QueryWrapper();
-        Map<String,String> parm=new HashMap<>();
-        parm.put("username",user.getUsername());
-        parm.put("password",user.getPassword());
+        QueryWrapper<User> queryWrapper = new QueryWrapper();
+        Map<String, String> parm = new HashMap<>();
+        parm.put("username", user.getUsername());
+        parm.put("password", user.getPassword());
         queryWrapper.allEq(parm);
-        List<User> list =userMapper.selectList(queryWrapper);
-        if(list!=null && list.size()>0){
+        List<User> list = userMapper.selectList(queryWrapper);
+        if (list != null && list.size() > 0) {
             return true;
         }
 
@@ -65,23 +66,22 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-
     @Override
     public IPage<User> getUsersByPage(Page page) {
-        return userMapper.selectPage(page,null);
+        return userMapper.selectPage(page, null);
     }
 
     @Override
     public User getUserRolePermissionByUname(String username) {
         //1. 根据用户名找用户
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("username",username);
-        User user=userMapper.selectOne(queryWrapper);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        User user = userMapper.selectOne(queryWrapper);
         //2. 找角色
-        Role role=roleMapper.selectById(user.getRole());
+        Role role = roleMapper.selectById(user.getRole());
         user.setUrole(role);
         //3.找权限
-        List<Permission> permissions=permissionMapper.getPermissionsByRoleId(role.getId());
+        List<Permission> permissions = permissionMapper.getPermissionsByRoleId(role.getId());
         role.setPermissions(permissions);
 
         return user;
@@ -96,9 +96,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User getUserByUname(String username) {
         //1. 根据用户名找用户
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("username",username);
-        User user=userMapper.selectOne(queryWrapper);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        User user = userMapper.selectOne(queryWrapper);
         return user;
     }
 
@@ -110,5 +110,19 @@ public class UserServiceImpl implements IUserService {
     @Override
     public int deleteuser(Integer id) {
         return userMapper.deleteById(id);
+    }
+
+    @Override
+    public List<String> getDepartmentList() {
+        return userMapper.getDepartmentList();
+    }
+
+    @Override
+    public List<User> getTwoPrincipalListByDepartment(String department) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("department", department);
+        // 二级审批人(经理)
+        userQueryWrapper.eq("role", 2);
+        return userMapper.selectList(userQueryWrapper);
     }
 }

@@ -7,13 +7,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.*;
 import com.dfrz.javaprojectstage3.bean.Dictionary;
-import com.dfrz.javaprojectstage3.mapper.PetitionMapper;
-import com.dfrz.javaprojectstage3.service.IAttachFileService;
-import com.dfrz.javaprojectstage3.service.IDictionaryService;
-import com.dfrz.javaprojectstage3.service.IPetitionService;
+import com.dfrz.javaprojectstage3.service.*;
 import com.dfrz.javaprojectstage3.utils.Result;
 import com.dfrz.javaprojectstage3.utils.ResultUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.tomcat.jni.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.sound.sampled.Line;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -39,7 +39,11 @@ import java.util.*;
 @RequestMapping("/petition")
 public class PetitionController {
     @Autowired
+    IUserService userService;
+    @Autowired
     IPetitionService petitionService;
+    @Autowired
+    IStepService stepService;
     @Autowired
     IAttachFileService attachFileService;
     @Autowired
@@ -67,16 +71,16 @@ public class PetitionController {
      * @return
      */
     @RequestMapping("/getPetitionList")
-    public Result getPetitionList(Integer page, Integer limit) {
+    public Result getPetitionList(Integer page, Integer limit, String startTime, String endTime) {
         // 分页
         Page<Petition> petitionPage = new Page<>();
         petitionPage.setCurrent(page);
         petitionPage.setSize(limit);
 
         // 获取当前登入用户信息
-        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
 
-        IPage<Petition> iPage = petitionService.getPetitionPage(petitionPage, user);
+        IPage<Petition> iPage = petitionService.getPetitionPage(petitionPage, user, startTime, endTime);
         Result result = ResultUtils.success(iPage.getRecords());
         result.setCode(0);
         result.setCount((int) iPage.getTotal());
@@ -181,13 +185,13 @@ public class PetitionController {
     }
 
     /**
-     * 添加信访件
+     * 添加/保存信访件
      *
      * @param petitionJSON
      * @return
      */
     @RequestMapping("/addPetition")
-    public Map<String, String> submitPetition(String petitionJSON) {
+    public Map<String, String> submitPetition(String petitionJSON, Integer state) {
         Map<String, String> map = new HashMap<>(1);
         map.put("flag", "false");
         // 获取当前角色
@@ -215,8 +219,8 @@ public class PetitionController {
         petition.setContentType(0);
         petition.setPetitionType(0);
         petition.setContent(content);
-        // 添加后为一级审批中(经办人)
-        petition.setPetitionState(1);
+        // 添加后为一级审批中(经办人),保存为草稿件
+        petition.setPetitionState(state);
         petition.setUserId(user.getId());
 
         // 获取petition附件
@@ -375,6 +379,7 @@ public class PetitionController {
         petition.setBereflectPost(bereflectPost);
         petition.setBereflectDepartment(bereflectDepartment);
         petition.setContent(content);
+        petition.setPetitionState(1);
         petition.setUserId(user.getId());
 
         // 获取petition附件
@@ -430,6 +435,8 @@ public class PetitionController {
         Dictionary petitionDictionary = dictionaryService.getDictionaryByTypeKey("petition");
         // 获取内容分类
         Dictionary contentDictionary = dictionaryService.getDictionaryByTypeKey("content");
+        // 获取部门列表
+        List<String> departmentList = userService.getDepartmentList();
         // 获取信访件
         Petition petition = petitionService.getPetitionById(petitionId);
         ModelAndView mv = new ModelAndView();
@@ -437,7 +444,21 @@ public class PetitionController {
         mv.addObject(petition);
         mv.addObject("petitionList", petitionDictionary.getDictionaryDataList());
         mv.addObject("contentList", contentDictionary.getDictionaryDataList());
+        mv.addObject("departmentList", departmentList);
         return mv;
+    }
+
+    /**
+     * 根据部门获取二级审批人员列表
+     *
+     * @param department
+     * @return
+     */
+    @RequestMapping("/getTwoPrincipalListByDepartment")
+    public List<User> getTwoPrincipalListByDepartment(String department) {
+        logger.info(department);
+        List<User> principalList = userService.getTwoPrincipalListByDepartment(department);
+        return principalList;
     }
 
     /**
@@ -461,6 +482,7 @@ public class PetitionController {
         Integer petitionId = petitionParameter.getInteger("id");
         Integer contentType = petitionParameter.getInteger("contentType");
         Integer petitionType = petitionParameter.getInteger("petitionType");
+        Integer principalId = petitionParameter.getInteger("principal");
 
         Petition petition = new Petition();
         // 信访件ID
@@ -471,20 +493,24 @@ public class PetitionController {
         petition.setPetitionType(petitionType);
         // 提交给经理(二级审批人员)
         petition.setPetitionState(2);
-        if(!petitionService.updatePetitionById(petition)) {
+        if (!petitionService.updatePetitionById(petition)) {
             return map;
         }
 
         Step step = new Step();
         // 一级审批时间
-        Date date = new Date(System.currentTimeMillis());
-        step.setAuditTime1(date);
+        step.setAuditTime1(new Date(System.currentTimeMillis()));
+        // 设置信访件ID
+        step.setPetitionId(petitionId);
         // 一级审批人
         step.setExamineUser1(user.getId());
-        //todo:添加step
-        if (petitionService.addPetition(petition)) {
-            map.put("flag", "true");
+        // 设置二级审批人
+        step.setExamineUser2(principalId);
+        if (!stepService.addStep(step)) {
+            return map;
         }
+
+        map.put("flag", "true");
 
         return map;
     }
