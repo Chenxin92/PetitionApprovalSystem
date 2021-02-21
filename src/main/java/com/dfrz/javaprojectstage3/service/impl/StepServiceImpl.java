@@ -1,5 +1,6 @@
 package com.dfrz.javaprojectstage3.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dfrz.javaprojectstage3.bean.Step;
 import com.dfrz.javaprojectstage3.mapper.StepMapper;
 import com.dfrz.javaprojectstage3.service.IStepService;
@@ -18,5 +19,12 @@ public class StepServiceImpl implements IStepService {
     @Override
     public Boolean addStep(Step step) {
         return stepMapper.insert(step) > 0;
+    }
+
+    @Override
+    public Step getStepByPetitionId(Integer PetitionId) {
+        QueryWrapper<Step> stepQueryWrapper = new QueryWrapper<>();
+        stepQueryWrapper.eq("petition_id", PetitionId);
+        return stepMapper.selectOne(stepQueryWrapper);
     }
 }

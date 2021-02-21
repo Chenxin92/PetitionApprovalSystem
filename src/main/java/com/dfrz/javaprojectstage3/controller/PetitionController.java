@@ -255,40 +255,24 @@ public class PetitionController {
      *
      * @return
      */
-    @RequestMapping("/toView")
-    public ModelAndView toView(Integer petitionId) {
+    @RequestMapping("/toPetitionView")
+    public ModelAndView toPetitionView(Integer petitionId) {
         // 获取信访件
         Petition petition = petitionService.getPetitionById(petitionId);
         // 获取信源值
-        Dictionary petitionDictionary = dictionaryService.getDictionaryByTypeKey("petition");
-        List<DictionaryData> petitionDictionaryDataList = petitionDictionary.getDictionaryDataList();
-        String petitionType = "";
-        for (DictionaryData dictionaryData : petitionDictionaryDataList) {
-            if (dictionaryData.getValue().equals(petition.getPetitionType())) {
-                petitionType = dictionaryData.getDictionaryContent();
-                break;
-            }
-        }
-
+        String petitionType = dictionaryService.getDictionaryDataByDictionaryKeyAndType("petition", petition.getPetitionType()).getDictionaryContent();
         // 获取内容值
-        Dictionary contentDictionary = dictionaryService.getDictionaryByTypeKey("content");
-        List<DictionaryData> contentDictionaryDataList = contentDictionary.getDictionaryDataList();
-        String contentType = "";
-        for (DictionaryData dictionaryData : contentDictionaryDataList) {
-            if (dictionaryData.getValue().equals(petition.getPetitionType())) {
-                contentType = dictionaryData.getDictionaryContent();
-                break;
-            }
-        }
+        String contentType = dictionaryService.getDictionaryDataByDictionaryKeyAndType("content", petition.getContentType()).getDictionaryContent();
+        Step step = stepService.getStepByPetitionId(petitionId);
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("petition_view");
         mv.addObject(petition);
         mv.addObject("petitionValue", petitionType);
         mv.addObject("contentValue", contentType);
+        mv.addObject(step);
         return mv;
     }
-
 
     /**
      * 转至信访件编辑页面
@@ -296,8 +280,8 @@ public class PetitionController {
      * @param petitionId
      * @return
      */
-    @RequestMapping("/toEdit")
-    public ModelAndView toEdit(Integer petitionId) {
+    @RequestMapping("/toPetitionEdit")
+    public ModelAndView toPetitionEdit(Integer petitionId) {
         // 获取信源分类
         Dictionary petitionDictionary = dictionaryService.getDictionaryByTypeKey("petition");
         // 获取内容分类
@@ -513,5 +497,32 @@ public class PetitionController {
         map.put("flag", "true");
 
         return map;
+    }
+
+    /**
+     * 获取审批人员用户信息
+     *
+     * @param usersJSON
+     * @return
+     */
+    @RequestMapping("/getStepUsers")
+    public JSONArray getStepUsers(String usersJSON) {
+        // 解析JSON串
+        JSONObject users = JSON.parseObject(usersJSON);
+
+        Integer userId1 =  users.getInteger("uId1");
+        Integer userId2 =  users.getInteger("uId2");
+        Integer userId3 =  users.getInteger("uId3");
+
+        User user1 = userService.getUserById(userId1);
+        User user2 = userService.getUserById(userId2);
+        User user3 = userService.getUserById(userId3);
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.add(user1);
+        jsonArray.add(user2);
+        jsonArray.add(user3);
+
+        return jsonArray;
     }
 }

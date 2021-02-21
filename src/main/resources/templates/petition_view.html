@@ -41,124 +41,232 @@
 
 <body>
 <div class="x-body layui-anim layui-anim-up">
-    <form class="layui-form">
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>编号
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="code" class="layui-input" readonly="true"
-                       th:value="${petition.code}">
-            </div>
-
-            <label class="layui-form-label">
-                <span class="x-red">*</span>收件时间
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="acceptTime"
-                       class="layui-input" readonly="true"
-                       th:value="${#dates.format(petition.acceptTime, 'yyyy-MM-dd HH:mm:ss')}">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>反映人姓名
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="reflectName" class="layui-input" readonly="true"
-                       th:value="${petition.reflectName}">
-            </div>
-
-            <label class="layui-form-label">
-                <span class="x-red">*</span>被反映人姓名
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="bereflectName" class="layui-input" readonly="true"
-                       th:value="${petition.bereflectName}">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>被反映人岗位
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="bereflectPost" class="layui-input" readonly="true"
-                       th:value="${petition.bereflectPost}">
-            </div>
-
-            <label class="layui-form-label">
-                <span class="x-red">*</span>被反映人部门
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="bereflectDepartment" class="layui-input" readonly="true"
-                       th:value="${petition.bereflectDepartment}">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>内容分类
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" name="contentType" class="layui-input" readonly="true"
-                       th:value="${contentValue}">
-            </div>
-
-            <label class="layui-form-label">
-                <span class="x-red">*</span>信源分类
-            </label>
-            <div class="layui-input-inline">
+    <div style="float: left;margin-left: 50px">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>编号
+                </label>
                 <div class="layui-input-inline">
-                    <input type="text" name="petitionType" class="layui-input" readonly="true"
-                           th:value="${petitionValue}">
+                    <input type="text" name="code" class="layui-input" readonly="true"
+                           th:value="${petition.code}">
+                </div>
+
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>收件时间
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="acceptTime"
+                           class="layui-input" readonly="true"
+                           th:value="${#dates.format(petition.acceptTime, 'yyyy-MM-dd HH:mm:ss')}">
                 </div>
             </div>
-        </div>
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>举报内容
-            </label>
-            <div class="layui-input-inline">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>反映人姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="reflectName" class="layui-input" readonly="true"
+                           th:value="${petition.reflectName}">
+                </div>
+
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>被反映人姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="bereflectName" class="layui-input" readonly="true"
+                           th:value="${petition.bereflectName}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>被反映人岗位
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="bereflectPost" class="layui-input" readonly="true"
+                           th:value="${petition.bereflectPost}">
+                </div>
+
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>被反映人部门
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="bereflectDepartment" class="layui-input" readonly="true"
+                           th:value="${petition.bereflectDepartment}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>内容分类
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contentType" class="layui-input" readonly="true"
+                           th:value="${contentValue}">
+                </div>
+
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>信源分类
+                </label>
+                <div class="layui-input-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" name="petitionType" class="layui-input" readonly="true"
+                               th:value="${petitionValue}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>举报内容
+                </label>
+                <div class="layui-input-inline">
                 <textarea name="content" class="layui-textarea" style="width: 500px;height: 180px"
                           th:text="${petition.content}"
                           readonly="true"></textarea>
+                </div>
             </div>
+
+            <div class="layui-form-item">
+                <ul class="layui-row layui-col-space10">
+                    <li class="layui-col-xs2" style="text-align: center;width: 120px"
+                        th:each="petitionAttach:${petition.getAttachFileList()}">
+                        <div class="layui-card layui-bg-gray">
+                            <div class="layui-card-header textOmit"
+                                 th:text="${petitionAttach.getFileName()}">
+                            </div>
+                            <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 1">
+                                <img width="80px" height="70px"
+                                     th:src="${petitionAttach.getFilePath()} + ${petitionAttach.getFileName()}"
+                                     alt="加载失败"
+                                >
+                            </div>
+                            <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 2">
+
+                                <img width="80px" height="70px"
+                                     src="../images/DOC.jpg"
+                                     alt="加载失败"
+                                >
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+    <div style="float: left;margin-left: 200px">
+        <h2>
+            <b>审批时间轴:</b>
+        </h2>
+        <br/>
+        <div class="layui-input-inline">
+            <ul class="layui-timeline"></ul>
+            <script th:inline="javascript">
+                var step = [[${step}]];
+                var date1 = [[${#dates.format(step.auditTime1, 'yyyy-MM-dd HH:mm:ss')}]];
+                var date2 = [[${#dates.format(step.auditTime2, 'yyyy-MM-dd HH:mm:ss')}]];
+                var date3 = [[${#dates.format(step.auditTime3, 'yyyy-MM-dd HH:mm:ss')}]];
+
+                var user1;
+                var user2;
+                var user3;
+
+                var userObjs = new Object();
+                userObjs.uId1 = step.examineUser1;
+                userObjs.uId2 = step.examineUser2;
+                userObjs.uId3 = step.examineUser3;
+                userObjsJSON = JSON.stringify(userObjs);
+
+                $.ajax({
+                    url: 'getStepUsers',
+                    data: {usersJSON: userObjsJSON},
+                    async: false,
+                    success: function (data) {
+                        console.log(data);
+                        user1 = data[0];
+                        user2 = data[1];
+                        user3 = data[2];
+                    }
+                });
+
+                $(".layui-timeline").append(
+                    '<li class="layui-timeline-item">\n' +
+                    '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
+                    '   <div class="layui-timeline-content layui-text">\n' +
+                    '       <h3 class="layui-timeline-title">\n' +
+                    '       ' + date1 + '\n' +
+                    '       </h3>\n' +
+                    '       <p>' + user1.realname + '提交</p>\n' +
+                    '   </div>\n' +
+                    '</li>'
+                );
+
+                if (date2 == null) {
+                    $(".layui-timeline").append(
+                        '<li class="layui-timeline-item">\n' +
+                        '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
+                        '   <div class="layui-timeline-content layui-text">\n' +
+                        '       <h3 class="layui-timeline-title">\n' +
+                        '       审批中\n' +
+                        '       </h3>\n' +
+                        '       <p>' + user2.realname + '</p>\n' +
+                        '   </div>\n' +
+                        '</li>'
+                    );
+                } else {
+                    $(".layui-timeline").append(
+                        '<li class="layui-timeline-item">\n' +
+                        '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
+                        '   <div class="layui-timeline-content layui-text">\n' +
+                        '       <h3 class="layui-timeline-title">\n' +
+                        '       ' + date2 + '\n' +
+                        '       </h3>\n' +
+                        '       <p>' + user2.realname + '已审批</p>\n' +
+                        '   </div>\n' +
+                        '</li>'
+                    );
+                }
+
+                if (date2 != null && date3 == null) {
+                    $(".layui-timeline").append(
+                        '<li class="layui-timeline-item">\n' +
+                        '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
+                        '   <div class="layui-timeline-content layui-text">\n' +
+                        '       <h3 class="layui-timeline-title">\n' +
+                        '       审批中\n' +
+                        '       </h3>\n' +
+                        '       <p>' + user3.realname + '</p>\n' +
+                        '   </div>\n' +
+                        '</li>'
+                    );
+                } else if(date2 != null && date3 != null) {
+                    $(".layui-timeline").append(
+                        '<li class="layui-timeline-item">\n' +
+                        '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
+                        '   <div class="layui-timeline-content layui-text">\n' +
+                        '       <h3 class="layui-timeline-title">\n' +
+                        '       ' + date3 + '\n' +
+                        '       </h3>\n' +
+                        '       <p>' + user3.realname + '已审批</p>\n' +
+                        '   </div>\n' +
+                        '</li>'
+                    );
+                }
+
+                $(".layui-timeline").append(
+                    '<li class="layui-timeline-item">\n' +
+                    '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
+                    '   <div class="layui-timeline-content layui-text">\n' +
+                    '       <h3 class="layui-timeline-title">结束</h3>\n' +
+                    '   </div>\n' +
+                    '</li>'
+                );
+            </script>
         </div>
 
-        <div class="layui-form-item">
-            <ul class="layui-row layui-col-space10">
-                <li class="layui-col-xs2"
-                    th:each="petitionAttach:${petition.getAttachFileList()}">
-                    <div class="layui-card layui-bg-gray">
-                        <div class="layui-card-header textOmit"
-                             th:text="${petitionAttach.getFileName()}">
-                        </div>
-                        <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 1">
-                            <img width="80px" height="70px"
-                                 th:src="${petitionAttach.getFilePath()} + ${petitionAttach.getFileName()}"
-                                 alt="加载失败"
-                            >
-                        </div>
-                        <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 2">
-
-                            <img width="80px" height="70px"
-                                 src="../images/DOC.jpg"
-                                 alt="加载失败"
-                            >
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="layui-form-item">
-            <a class="layui-btn" href="javascript:" onclick="x_admin_close()">
-                关闭
-            </a>
-        </div>
-    </form>
+    </div>
 </div>
 
 <script>
@@ -210,6 +318,7 @@
             });
         };
     }
+
     // TODO:PDF/DOC在线预览
 </script>
 </body>

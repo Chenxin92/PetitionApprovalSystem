@@ -123,9 +123,9 @@
                         , {title: '相关操作', fixed: 'right', width: 350, align: 'center', toolbar: '#toolBar'}
                     ]
                 ]
-                ,done: function (res, curr, count) {
-                    console.log(res);
-                }
+                // ,done: function (res, curr, count) {
+                //     // console.log(res);
+                // }
             });
 
             //执行一个laydate实例
@@ -167,11 +167,11 @@
 
                 // 查看
                 if (layEvent === 'view') {
-                    x_admin_show("查看", "toView?petitionId=" + data.id, 750, 400);
+                    parent.addTab("查看编号", "petition/toPetitionView?petitionId=" + data.id, data.code);
                 }
                 // 编辑
                 else if (layEvent === 'edit') {
-                    x_admin_show("编辑", "toEdit?petitionId=" + data.id, 750, 400);
+                    x_admin_show("编辑", "toPetitionEdit?petitionId=" + data.id, 750, 400);
                 }
                 // 删除
                 else if (layEvent === 'delete') {

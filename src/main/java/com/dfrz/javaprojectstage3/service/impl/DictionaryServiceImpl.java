@@ -37,4 +37,18 @@ public class DictionaryServiceImpl implements IDictionaryService {
         dictionary.setDictionaryDataList(dictionaryDataList);
         return dictionary;
     }
+
+    @Override
+    public DictionaryData getDictionaryDataByDictionaryKeyAndType(String key, Integer type) {
+        // 查询字典获取
+        QueryWrapper<Dictionary> dictionaryWrapper = new QueryWrapper<>();
+        dictionaryWrapper.eq("type_key", key);
+        Dictionary dictionary = dictionaryMapper.selectOne(dictionaryWrapper);
+
+        // 获取数据表对应内容
+        QueryWrapper<DictionaryData> dictionaryDataQueryWrapper = new QueryWrapper<>();
+        dictionaryDataQueryWrapper.eq("dictionary_id", dictionary.getId());
+        dictionaryDataQueryWrapper.eq("value", type);
+        return dictionaryDataMapper.selectOne(dictionaryDataQueryWrapper);
+    }
 }
