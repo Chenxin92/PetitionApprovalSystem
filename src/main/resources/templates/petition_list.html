@@ -120,12 +120,34 @@
                             }
                         }
                     }
-                        , {title: '相关操作', fixed: 'right', width: 350, align: 'center', toolbar: '#toolBar'}
+                        , {title: '相关操作', fixed: 'right', width: 130, align: 'center', toolbar: '#toolBar'}
                     ]
                 ]
-                // ,done: function (res, curr, count) {
-                //     // console.log(res);
-                // }
+                // 隐藏按钮
+                ,done: function (res, curr, count) {
+                    var arr = res.data;
+
+                    for (var i = 0; i < arr.length; i++) {
+                        var state = arr[i].petitionState;
+                        // 编辑和删除按钮
+                        if (state != 0) {
+                            $($("table a[lay-event='edit']")[i]).hide();
+                            $($("table a[lay-event='delete']")[i]).hide();
+                        }
+                        // 提交按钮
+                        if (state != 1) {
+                            $($("table a[lay-event='petitionSubmit']")[i]).hide();
+                        }
+                        // 查看按钮
+                        if (state < 2) {
+                            $($("table a[lay-event='view']")[i]).hide();
+                        }
+                        // 报告上传按钮
+                        if (state >= 0) {
+                            $($("table a[lay-event='reportUpload']")[i]).hide();
+                        }
+                    }
+                }
             });
 
             //执行一个laydate实例
@@ -201,7 +223,7 @@
                 }
                 // 报告上传
                 else if (layEvent === 'reportUpload') {
-                    x_admin_show("退回", "toReportUpload?petitionId=" + data.id, 750, 400);
+                    x_admin_show("报告上传", "toReportUpload?petitionId=" + data.id, 750, 400);
                 }
             });
         });
