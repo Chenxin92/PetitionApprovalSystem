@@ -59,15 +59,58 @@
                 , cols: [ //设置表头
                     [
                         //表头
-                        {field: 'code', title: '编号', width: 80, sort: true, fixed: 'left'}
-                        , {field: 'contentType', title: '内容分类', width: 100}
-                        , {field: 'petitionType', title: '信源分类', width: 100}
-                        , {field: 'reflectName', title: '反映人', width: 100}
-                        , {field: 'bereflectName', title: '被反映人', width: 100}
-                        , {field: 'acceptTime', title: '收件时间', width: 200}
-                        , {field: 'stateDetail', title: '核实结果', width: 100}
-                        , {field: 'petitionState', title: '处理状态', width: 100}
-                        , {title: '相关操作', fixed: 'right', width: 300, align: 'center', toolbar: '#toolBar'}
+                        {
+                            field: 'code', title: '编号', width: 80, sort: true, fixed: 'left', align: 'center'
+                        }
+                        , {
+                        field: 'contentType', title: '内容分类', width: 110, align: 'center'
+                        , templet: function (data) {
+                            if (data.contentType == 0) {
+                                return "<span class='layui-badge layui-bg-gray'>无</span>";
+                            }
+                            else if (data.contentType == 1) {
+                                return "<span class='layui-badge layui-bg-orange'>客户服务</span>";
+                            }
+                            else if (data.contentType == 2) {
+                                return "<span class='layui-badge layui-bg-blue'>VIP服务</span>";
+                            }
+                        }
+                    }
+                        , {
+                        field: 'petitionType', title: '信源分类', width: 110, align: 'center'
+                        , templet: function (data) {
+                            if (data.petitionType == 0) {
+                                return "<span class='layui-badge layui-bg-gray'>无</span>";
+                            }
+                            else if (data.petitionType == 1) {
+                                return "<span class='layui-badge layui-bg-orange'>公司信源</span>";
+                            }
+                            else if (data.petitionType == 2) {
+                                return "<span class='layui-badge layui-bg-blue'>城市信源</span>";
+                            }
+                        }
+                    }
+                        , {field: 'reflectName', title: '反映人', width: 110, align: 'center'}
+                        , {field: 'bereflectName', title: '被反映人', width: 110, align: 'center'}
+                        , {field: 'acceptTime', title: '收件时间', width: 180, align: 'center'}
+                        , {
+                        field: 'petitionState', title: '处理状态', width: 110, align: 'center'
+                        , templet: function (data) {
+                            if (data.petitionState == 0) {
+                                return "<span class='layui-badge layui-bg-green'>草稿</span>";
+                            }
+                            else if (data.petitionState == 1) {
+                                return "<span class='layui-badge layui-bg-blue'>一级审批</span>";
+                            }
+                            else if (data.petitionState == 2) {
+                                return "<span class='layui-badge layui-bg-orange'>二级审批</span>";
+                            }
+                            else if (data.petitionState == 3) {
+                                return "<span class='layui-badge'>三级审批</span>";
+                            }
+                        }
+                    }
+                        , {title: '相关操作', fixed: 'right', width: 350, align: 'center', toolbar: '#toolBar'}
                     ]
                 ]
             });
@@ -80,30 +123,20 @@
 
                 // 查看
                 if (layEvent === 'view') {
-                    x_admin_show("查看", "toView?petitionId=" + data.id, 750, 650);
+                    x_admin_show("查看", "toView?petitionId=" + data.id, 750, 500);
                 }
-                // 编辑
-                else if (layEvent === 'edit') {
-                    x_admin_show("编辑", "toEdit?petitionId=" + data.id, 750, 650);
-                }
-                // 删除
-                else if (layEvent === 'delete') {
 
+                // 审批
+                else if (layEvent === 'petitionExamine') {
+                    x_admin_show("审批", "toPetitionExamine?petitionId=" + data.id, 750, 450);
                 }
-                // 提交
-                else if (layEvent === 'petitionSubmit') {
-                    x_admin_show("提交", "toPetitionSubmit?petitionId=" + data.id, 750, 650);
-                }
-                // 报告上传
-                else if (layEvent === 'reportUpload') {
-                    x_admin_show("退回", "toReportUpload?petitionId=" + data.id, 700, 650);
-                }
+
             });
         });
 
     </script>
     <script type="text/html" id="toolBar">
-        <a class="layui-btn layui-btn-xs" lay-event="petitionSubmit">审批</a>
+        <a class="layui-btn layui-btn-xs" lay-event="petitionExamine">审批</a>
         <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
     </script>
 

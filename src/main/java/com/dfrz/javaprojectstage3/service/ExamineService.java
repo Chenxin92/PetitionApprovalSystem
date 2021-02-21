@@ -3,7 +3,10 @@ package com.dfrz.javaprojectstage3.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.Petition;
+import com.dfrz.javaprojectstage3.bean.User;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 作者：wenqi
@@ -19,6 +22,13 @@ public interface ExamineService {
      * @param page
      * @return
      */
-    IPage<Petition> getPetitionPagebyCurrentuser(Page page,Integer examineuser, Integer userid);
+    IPage<Petition> getPetitionPagebyCurrentuser(Page page,Integer examineuser, Integer userid, Integer petitionstate);
+
+    /**
+     * 根据部门获取用户列表
+     *
+     * @return
+     */
+    List<User> getUserListByDepartment(String department, Integer role);
 
 }

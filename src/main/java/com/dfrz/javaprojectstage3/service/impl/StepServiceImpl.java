@@ -27,4 +27,12 @@ public class StepServiceImpl implements IStepService {
         stepQueryWrapper.eq("petition_id", PetitionId);
         return stepMapper.selectOne(stepQueryWrapper);
     }
+
+    @Override
+    public Boolean updatestepById(Step step) {
+        // 更新petition失败返回
+        if (stepMapper.updateById(step) <= 0) {
+            return false;
+        }else return true;
+    }
 }

@@ -22,4 +22,12 @@ public interface IStepService {
      * @return
      */
     Step getStepByPetitionId(Integer PetitionId);
+
+    /**
+     * 根据信访件ID更新step
+     *
+     * @param step
+     * @return
+     */
+    Boolean updatestepById(Step step);
 }

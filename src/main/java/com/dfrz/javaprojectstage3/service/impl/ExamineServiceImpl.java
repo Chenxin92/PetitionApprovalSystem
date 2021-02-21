@@ -35,9 +35,15 @@ public class ExamineServiceImpl implements ExamineService {
 
 
     @Override
-    public IPage<Petition> getPetitionPagebyCurrentuser(Page page,Integer examineuser,Integer userid) {
-        IPage<Petition> ipage=stepMapper.getPetitionPagebyCurrentuser(page,examineuser,userid);
+    public IPage<Petition> getPetitionPagebyCurrentuser(Page page,Integer examineuser,Integer userid, Integer petitionstate) {
+        IPage<Petition> ipage=stepMapper.getPetitionPagebyCurrentuser(page,examineuser,userid,petitionstate);
         return ipage;
 
+    }
+
+    @Override
+    public List<User> getUserListByDepartment(String department,Integer role) {
+        List<User> users=stepMapper.getUserListByDepartment(department,role);
+        return users;
     }
 }

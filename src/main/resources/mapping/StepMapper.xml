@@ -12,7 +12,17 @@ INNER JOIN (
 		t_step
 	WHERE
 		examine_user#{examineuser} = #{userid}
-) b ON a.id = b.petition_id
+) b ON a.id = b.petition_id AND a.petition_state= #{petitionstate}
     </select>
+
+
+	<select id="getUserListByDepartment" resultType="User">
+ SELECT a.*
+        FROM
+        t_users a
+        WHERE
+        department = #{department,jdbcType=VARCHAR} AND a.role=#{role}
+    </select>
+
 
 </mapper>
