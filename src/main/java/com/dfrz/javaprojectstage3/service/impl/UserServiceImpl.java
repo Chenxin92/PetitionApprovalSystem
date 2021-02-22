@@ -123,7 +123,7 @@ public class UserServiceImpl implements IUserService {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("department", department);
         // 二级审批人(经理)
-        userQueryWrapper.eq("role", 2);
+        userQueryWrapper.eq("role", 3);
         return userMapper.selectList(userQueryWrapper);
     }
 
