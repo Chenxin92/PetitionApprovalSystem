@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+>
 <head>
     <meta charset="UTF-8">
     <title>信访管理系统</title>
@@ -81,25 +83,24 @@
                 </a>
                 <ul class="sub-menu">
 
-                    <li>
+                    <li shiro:hasAnyRoles="user,agent">
                         <a _href="./petition/toPetitionList">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>信访件列表</cite>
                         </a>
                     </li>
-                    <li>
-                        <a _href="#">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>我的信访件</cite>
-                        </a>
-                    </li>
-                    <li>
+                    <li shiro:hasAnyRoles="manager,leader">
                         <a _href="./examine1/toExamineList">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>信件审批</cite>
                         </a>
                     </li>
-
+                    <li>
+                        <a _href="./petition/toMyPetitionList">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>我的信访件</cite>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

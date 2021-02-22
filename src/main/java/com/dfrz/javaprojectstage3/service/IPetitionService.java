@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.Petition;
 import com.dfrz.javaprojectstage3.bean.User;
 
+import java.util.List;
+
 /**
  * @author：ChenXin
  * @date 2021/2/17 1:59
@@ -19,7 +21,18 @@ public interface IPetitionService {
      * @param endTime 搜索条件结束时间
      * @return
      */
-    IPage<Petition> getPetitionPage(Page page, User user, String startTime, String endTime);
+    IPage<Petition> getPetitionListPage(Page page, User user, String startTime, String endTime);
+
+    /**
+     * 获取我的信访件列表(分页)
+     *
+     * @param page
+     * @param user 登录用户信息
+     * @param startTime 搜索条件起始时间
+     * @param endTime 搜索条件结束时间
+     * @return
+     */
+    List<Petition> getMyPetitionListPage(Page page, User user, String startTime, String endTime);
 
     /**
      * 根据code编号验证信访件是否存在
