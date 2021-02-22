@@ -24,11 +24,15 @@ public class UserRealm extends AuthorizingRealm {
     /*登陆之后-授权*/
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        //获取Subject
+        // 获取subject
         Subject subject = SecurityUtils.getSubject();
+        // 获取user
         User user = (User) subject.getPrincipal();
+        // 设置session超时时长(一周,单位:ms)
+        subject.getSession().setTimeout(1000 * 60 * 60 * 24 * 7);
         //根据uname从数据库查询角色和权限
         User userRolePermission = userService.getUserRolePermissionByUname(user.getUsername());
+
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         List<String> roles = new ArrayList<>();

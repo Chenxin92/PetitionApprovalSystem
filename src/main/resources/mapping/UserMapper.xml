@@ -15,4 +15,16 @@
         select department '部门名称',COUNT(*) '总数' from t_users WHERE department!= 'null' GROUP BY department
 
     </select>
+
+    <select id="getCountList" resultType="Count">
+        SELECT
+            department department,
+            COUNT(department) total
+        FROM
+            t_users
+        WHERE
+            department IS NOT NULL
+        GROUP BY
+            department
+    </select>
 </mapper>
