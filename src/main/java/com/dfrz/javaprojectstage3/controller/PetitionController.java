@@ -11,7 +11,6 @@ import com.dfrz.javaprojectstage3.service.*;
 import com.dfrz.javaprojectstage3.utils.Result;
 import com.dfrz.javaprojectstage3.utils.ResultUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.tomcat.jni.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.sound.sampled.Line;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -64,6 +61,18 @@ public class PetitionController {
     }
 
     /**
+     * 转至我的信访件列表页面
+     *
+     * @return
+     */
+    @RequestMapping("/toMyPetitionList")
+    public ModelAndView toMyPetitionList() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("petition_MyList");
+        return mv;
+    }
+
+    /**
      * 显示信访件列表
      *
      * @param page
@@ -73,18 +82,53 @@ public class PetitionController {
     @RequestMapping("/getPetitionList")
     public Result getPetitionList(Integer page, Integer limit, String startTime, String endTime) {
         // 分页
-        Page<Petition> petitionPage = new Page<>();
-        petitionPage.setCurrent(page);
-        petitionPage.setSize(limit);
+        Page<Petition> petitionPage = getPetitionPage(page, limit);
 
         // 获取当前登入用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
 
-        IPage<Petition> iPage = petitionService.getPetitionPage(petitionPage, user, startTime, endTime);
+        IPage<Petition> iPage = petitionService.getPetitionListPage(petitionPage, user, startTime, endTime);
         Result result = ResultUtils.success(iPage.getRecords());
         result.setCode(0);
         result.setCount((int) iPage.getTotal());
         return result;
+    }
+
+    /**
+     * 显示我的信访件列表
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/getMyPetitionList")
+    public Result getMyPetitionList(Integer page, Integer limit, String startTime, String endTime) {
+        // 分页
+        Page<Petition> petitionPage = getPetitionPage(page, limit);
+
+        // 获取当前登入用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        List<Petition> petitionList = petitionService.getMyPetitionListPage(petitionPage, user, startTime, endTime);
+        Result result = ResultUtils.success(petitionList);
+        result.setCode(0);
+        result.setCount(petitionList.size());
+        return result;
+    }
+
+    /**
+     * 获取分页
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    private Page<Petition> getPetitionPage(Integer page, Integer limit) {
+        // 分页
+        Page<Petition> petitionPage = new Page<>();
+        petitionPage.setCurrent(page);
+        petitionPage.setSize(limit);
+        return petitionPage;
     }
 
     /**
@@ -510,9 +554,9 @@ public class PetitionController {
         // 解析JSON串
         JSONObject users = JSON.parseObject(usersJSON);
 
-        Integer userId1 =  users.getInteger("uId1");
-        Integer userId2 =  users.getInteger("uId2");
-        Integer userId3 =  users.getInteger("uId3");
+        Integer userId1 = users.getInteger("uId1");
+        Integer userId2 = users.getInteger("uId2");
+        Integer userId3 = users.getInteger("uId3");
 
         User user1 = userService.getUserById(userId1);
         User user2 = userService.getUserById(userId2);

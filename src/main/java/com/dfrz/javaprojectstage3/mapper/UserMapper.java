@@ -5,6 +5,7 @@ import com.dfrz.javaprojectstage3.bean.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UserMapper extends BaseMapper<User> {
@@ -14,4 +15,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     List<String> getDepartmentList();
+    public List getDepartmentcount(String department);
 }

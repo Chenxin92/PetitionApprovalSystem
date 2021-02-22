@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
     public boolean login(User user);
@@ -43,4 +44,16 @@ public interface IUserService {
      * @return
      */
     List<User> getTwoPrincipalListByDepartment(String department);
+
+    /**
+     * 获取部门名称
+     * @return
+     */
+    public List<String> getDepartmentName();
+
+    /**
+     * 获取部门人数统计
+     * @return
+     */
+    public List<Integer> getgetDepartmentCount();
 }

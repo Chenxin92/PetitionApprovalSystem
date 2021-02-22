@@ -28,7 +28,7 @@
       <span class="layui-breadcrumb">
         <a>首页</a>
         <a>
-          <cite>信访件列表</cite>
+          <cite>我的信访件</cite>
         </a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
@@ -43,11 +43,6 @@
             <button class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock>
-        <button shiro:hasRole="user" class="layui-btn" onclick="x_admin_show('添加信访件','./toPetitionAdd',750,400)"><i
-                class="layui-icon"></i>添加信访件
-        </button>
-    </xblock>
     <table id="list" lay-filter="list"></table>
     <script>
         var tableIns;
@@ -60,7 +55,7 @@
             tableIns = table.render({
                 elem: '#list'
                 , height: 550
-                , url: 'getPetitionList' //数据接口
+                , url: 'getMyPetitionList' //数据接口
                 ,where: { //设定异步数据接口的额外参数，任意设
                     startTime: null
                     ,endTime: null
@@ -238,7 +233,7 @@
     <script type="text/html" id="toolBar">
         <a class="layui-btn layui-btn-xs layui-bg-green" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-xs layui-bg-red" lay-event="delete">删除</a>
-        <a shiro:hasRole="agent" class="layui-btn layui-btn-xs layui-bg-orange" lay-event="petitionSubmit">提交</a>
+        <a shiro:hasRoles="agent" class="layui-btn layui-btn-xs layui-bg-orange" lay-event="petitionSubmit">提交</a>
         <a class="layui-btn layui-btn-xs layui-bg-cyan" lay-event="view">查看</a>
         <a shiro:hasRole="agent" class="layui-btn layui-btn-xs layui-bg-black" lay-event="reportUpload">报告上传</a>
     </script>
