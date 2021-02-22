@@ -35,10 +35,16 @@ public class ExamineServiceImpl implements ExamineService {
 
 
     @Override
-    public IPage<Petition> getPetitionPagebyCurrentuser(Page page,Integer examineuser,Integer userid, Integer petitionstate) {
-        IPage<Petition> ipage=stepMapper.getPetitionPagebyCurrentuser(page,examineuser,userid,petitionstate);
+    public IPage<Petition> getPetitionPagebyCurrentuserAndTime(Page page,Integer examineuser,Integer userid, Integer petitionstate,String acceptTime) {
+        IPage<Petition> ipage=stepMapper.getPetitionPagebyCurrentuserAndTime(page,examineuser,userid,petitionstate,acceptTime);
         return ipage;
 
+    }
+
+    @Override
+    public IPage<Petition> getPetitionPagebyCurrentuser(Page page, Integer examineuser, Integer userid, Integer petitionstate) {
+        IPage<Petition> ipage=stepMapper.getPetitionPagebyCurrentuser(page,examineuser,userid,petitionstate);
+        return ipage;
     }
 
     @Override

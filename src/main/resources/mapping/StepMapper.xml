@@ -3,6 +3,22 @@
 <mapper namespace="com.dfrz.javaprojectstage3.mapper.StepMapper">
 
 
+
+    <select id="getPetitionPagebyCurrentuserAndTime" resultType="Petition">
+           SELECT a.* FROM t_petition a
+INNER JOIN (
+	SELECT
+		*
+	FROM
+		t_step
+	WHERE
+		examine_user#{examineuser} = #{userid}
+) b ON a.id = b.petition_id AND a.petition_state= #{petitionstate}
+        AND DATE(a.accept_time) = #{acceptTime,jdbcType=VARCHAR}
+
+
+    </select>
+
     <select id="getPetitionPagebyCurrentuser" resultType="Petition">
            SELECT a.* FROM t_petition a
 INNER JOIN (
@@ -13,7 +29,11 @@ INNER JOIN (
 	WHERE
 		examine_user#{examineuser} = #{userid}
 ) b ON a.id = b.petition_id AND a.petition_state= #{petitionstate}
+
+
     </select>
+
+
 
 
 	<select id="getUserListByDepartment" resultType="User">

@@ -16,7 +16,13 @@ import java.util.List;
 @Repository
 public interface StepMapper extends BaseMapper<Step> {
 
+    IPage<Petition> getPetitionPagebyCurrentuserAndTime(Page page, @Param("examineuser") Integer examineuser, @Param("userid") Integer userid, @Param("petitionstate") Integer petitionstate,@Param("acceptTime")String acceptTime);
+
+
     IPage<Petition> getPetitionPagebyCurrentuser(Page page, @Param("examineuser") Integer examineuser, @Param("userid") Integer userid, @Param("petitionstate") Integer petitionstate);
+
+
+
 
     /**
      * 根据部门获取用户列表

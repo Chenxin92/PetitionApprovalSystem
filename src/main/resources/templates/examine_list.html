@@ -38,19 +38,20 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <input class="layui-input" placeholder="请选择查询日期" name="acceptTime" id="acceptTime" autocomplete="off">
+            <button class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
+
 
     <table id="list" lay-filter="list"></table>
     <script>
         //所获得的 tableIns 即为当前容器的实例
         var tableIns;
-        layui.use('table', function () {
+        layui.use(['laydate', 'form',  'table'], function () {
             var table = layui.table;
+            var laydate = layui.laydate;
+            var form = layui.form;
             tableIns = table.render({
                 elem: '#list'
                 , height: 550
@@ -115,6 +116,26 @@
                 ]
             });
 
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#acceptTime' //指定元素
+            });
+            // 搜索功能
+            form.on('submit(search)', function (data) {
+                var acceptTime = data.field.acceptTime;
+
+                console.log(acceptTime);
+                tableIns.reload({
+                    where: { //设定异步数据接口的额外参数，任意设
+                        acceptTime: acceptTime
+                    }
+                    ,page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false;
+            });
+
             //监听工具条
             table.on('tool(list)', function (obj) { //注：tool 是工具条事件名，list 是 table 原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
@@ -123,7 +144,7 @@
 
                 // 查看
                 if (layEvent === 'view') {
-                    x_admin_show("查看", "toView?petitionId=" + data.id, 750, 500);
+                    parent.addTab("查看编号", "petition/toPetitionView?petitionId=" + data.id, data.code);
                 }
 
                 // 审批
@@ -132,30 +153,19 @@
                 }
 
             });
+
         });
 
     </script>
     <script type="text/html" id="toolBar">
         <a class="layui-btn layui-btn-xs" lay-event="petitionExamine">审批</a>
-        <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
+        <a class="layui-btn layui-btn-xs layui-bg-cyan" lay-event="view">查看</a>
     </script>
 
 </div>
 
 <script>
-    layui.use('laydate', function () {
-        var laydate = layui.laydate;
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
-    });
 
 </script>
 
