@@ -14,6 +14,7 @@ import com.dfrz.javaprojectstage3.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,4 +126,36 @@ public class UserServiceImpl implements IUserService {
         userQueryWrapper.eq("role", 2);
         return userMapper.selectList(userQueryWrapper);
     }
+
+
+    /**
+     * 获取部门名称
+     * @return
+     */
+    @Override
+    public List<String> getDepartmentName() {
+        List<String> user=new ArrayList<>();
+        List<User> list=userMapper.selectList(null);
+        for (User u:list
+                ) {
+            user.add(u.getDepartment());
+        }
+        return user;
+    }
+    /**
+     * 获取部门名称人数
+     * @return
+     */
+    @Override
+    public List<Integer> getgetDepartmentCount() {
+        List result=new ArrayList<>();
+        List<User> users=userMapper.selectList(null);
+        for (User u: users
+                ) {
+            List<Integer> count=userMapper.getDepartmentcount(u.getDepartment());
+            result.add(count);
+        }
+        return result;
+    }
+
 }

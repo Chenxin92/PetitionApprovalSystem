@@ -59,7 +59,9 @@ public class UserTest {
     }
     @Test
     public void test05(){
-        User user=new User(1, "1", "333");
+        User user=new User();
+//        System.out.println("查找部门名称"+userService.getDepartmentName());
+        System.out.println("查找各部门人数1"+userMapper.getDepartmentcount("安保部门"));
 
 
 
