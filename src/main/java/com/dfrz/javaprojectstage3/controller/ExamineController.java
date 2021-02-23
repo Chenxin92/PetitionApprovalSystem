@@ -144,12 +144,16 @@ public class ExamineController {
         List<String> departmentList = userService.getDepartmentList();
 
         petitionIdall = petitionId;
+        //获取当前登陆用户的信息
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("advice_add");
         mv.addObject("petitionList", petitionDictionary.getDictionaryDataList());
         mv.addObject("contentList", contentDictionary.getDictionaryDataList());
         mv.addObject("departmentList", departmentList);
+        mv.addObject("user",user);
         return mv;
     }
 
@@ -261,12 +265,35 @@ public class ExamineController {
         String department = petitionParameter.getString("department");
         String content = petitionParameter.getString("content");
         String leader=petitionParameter.getString("leader");
-        User leader1=userService.getUserById(Integer.valueOf(leader));
-
         Step step=stepService.getStepByPetitionId(petitionId);
-        if (user.getRole()==3){
-            step.setExamineUser3(leader1.getId());
+
+        if (leader==null||leader.equals("")){
+
+            if (user.getRole()==3){
+                //二级审批时间
+                step.setAuditTime2(new Date(System.currentTimeMillis()));
+            }else {
+                //三级审批时间
+                step.setAuditTime3(new Date(System.currentTimeMillis()));
+            }
+
+        }else {
+            User leader1=userService.getUserById(Integer.valueOf(leader));
+
+
+            if (user.getRole()==3){
+                step.setExamineUser3(leader1.getId());
+                //二级审批时间
+                step.setAuditTime2(new Date(System.currentTimeMillis()));
+            }else {
+                //三级审批时间
+                step.setAuditTime3(new Date(System.currentTimeMillis()));
+            }
         }
+
+
+
+
         stepService.updatestepById(step);
 
         Advice advice = new Advice();
@@ -297,12 +324,17 @@ public class ExamineController {
         if (adviceService.addAdvice(advice, petitionId)) {
             map.put("flag", "true");
             Petition petition = petitionService.getPetitionById(petitionId);
-            if (user.getRole() == 2) {
-                petition.setPetitionState(2);
-            } else if (user.getRole() == 3){
-                petition.setPetitionState(3);
-            }else {
+
+            if (leader==null||leader.equals("")){
                 petition.setPetitionState(-2);
+            }else {
+                if (user.getRole() == 2) {
+                    petition.setPetitionState(2);
+                } else if (user.getRole() == 3){
+                    petition.setPetitionState(3);
+                }else if (user.getRole()==4){
+                    petition.setPetitionState(-2);
+                }
             }
 
             petitionService.updatePetitionById(petition);
@@ -335,14 +367,19 @@ public class ExamineController {
         JSONObject petitionParameter = jsonObject.getJSONObject("dataField");
         String department = petitionParameter.getString("department");
         String content = petitionParameter.getString("content");
-        String leader=petitionParameter.getString("leader");
-        User leader1=userService.getUserById(Integer.valueOf(leader));
+
 
         Step step=stepService.getStepByPetitionId(petitionId);
+
         if (user.getRole()==3){
-            step.setExamineUser3(leader1.getId());
+            //二级审批时间
+            step.setAuditTime2(new Date(System.currentTimeMillis()));
+        }else {
+            //三级审批时间
+            step.setAuditTime3(new Date(System.currentTimeMillis()));
         }
 
+        stepService.updatestepById(step);
 
         Advice advice = new Advice();
         advice.setContent(content);
