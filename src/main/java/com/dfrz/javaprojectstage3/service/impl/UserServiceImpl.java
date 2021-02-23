@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import com.dfrz.javaprojectstage3.bean.Count;
 import com.dfrz.javaprojectstage3.bean.Permission;
 import com.dfrz.javaprojectstage3.bean.Role;
 import com.dfrz.javaprojectstage3.bean.User;
@@ -123,7 +124,7 @@ public class UserServiceImpl implements IUserService {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("department", department);
         // 二级审批人(经理)
-        userQueryWrapper.eq("role", 2);
+        userQueryWrapper.eq("role", 3);
         return userMapper.selectList(userQueryWrapper);
     }
 
@@ -158,4 +159,8 @@ public class UserServiceImpl implements IUserService {
         return result;
     }
 
+    @Override
+    public List<Count> getCountList() {
+        return userMapper.getCountList();
+    }
 }

@@ -2,6 +2,7 @@ package com.dfrz.javaprojectstage3.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dfrz.javaprojectstage3.bean.Count;
 import com.dfrz.javaprojectstage3.bean.User;
 
 import java.util.List;
@@ -47,13 +48,22 @@ public interface IUserService {
 
     /**
      * 获取部门名称
+     *
      * @return
      */
     public List<String> getDepartmentName();
 
     /**
      * 获取部门人数统计
+     *
      * @return
      */
     public List<Integer> getgetDepartmentCount();
+
+    /**
+     * 获取部门统计
+     *
+     * @return
+     */
+    List<Count> getCountList();
 }
