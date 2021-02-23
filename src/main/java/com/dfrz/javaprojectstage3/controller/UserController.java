@@ -292,6 +292,21 @@ public class UserController {
     }
 
     /**
+     * 是否为人事部经理或者领导
+     * @return
+     */
+    @RequestMapping("/userEdit")
+    public boolean userEdit() {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        if (user.getRole()==3||user.getRole()==4){
+            if (user.getDepartment().equals("人事部门")){
+                return true;
+            }else return false;
+        }else return false;
+    }
+
+    /**
      * 退出
      *
      * @return
