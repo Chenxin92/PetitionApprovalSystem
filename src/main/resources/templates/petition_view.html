@@ -217,7 +217,7 @@
                     );
                 } else {
                     $(".layui-timeline").append(
-                        '<li class="layui-timeline-item">\n' +
+                        '<li onclick="showAdvice(user2)" class="layui-timeline-item">\n' +
                         '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
                         '   <div class="layui-timeline-content layui-text">\n' +
                         '       <h3 class="layui-timeline-title">\n' +
@@ -243,7 +243,7 @@
                     );
                 } else if(date2 != null && date3 != null) {
                     $(".layui-timeline").append(
-                        '<li class="layui-timeline-item">\n' +
+                        '<li onclick="showAdvice(user3)" class="layui-timeline-item">\n' +
                         '   <i class="layui-icon layui-timeline-axis">&#xe63f;</i>\n' +
                         '   <div class="layui-timeline-content layui-text">\n' +
                         '       <h3 class="layui-timeline-title">\n' +
@@ -263,6 +263,11 @@
                     '   </div>\n' +
                     '</li>'
                 );
+
+                // 显示上级建议
+                function showAdvice(user) {
+                    x_admin_show("查看建议", "showAdvicePic?userId=" + user.id, 750, 400);
+                }
             </script>
         </div>
 

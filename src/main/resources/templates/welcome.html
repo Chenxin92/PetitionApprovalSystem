@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.springframework.org/schema/jdbc" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>欢迎页面-X-admin2.0</title>
@@ -208,7 +209,7 @@
     </fieldset>
     <fieldset class="layui-elem-field">
         <legend><font face="verdana" color="red">系统公告栏<img hight="35" width="35" src="images/gongao.jpg"></font></legend>
-        <div id="scrollDiv">
+        <div id="scrollDiv" >
             <ul>
                 <li><font color="blue">人力资源部门：新进人员一律要先准备好身份证等复印件1。 2020-02-19</font></li>
                 <li><font color="blue">财务部门：工资发放日期改为每月的15号 2020-02-18</font></li>
@@ -219,11 +220,23 @@
                 <li><font color="red">全体公告：过年期间务必完成上级任务！ 2020-02-19</font></li>
                 <li><font color="blue">行政部门：信访件处理务必于七日内完成</font></li>
             </ul>
+            <script th:inline="javascript">
+                var arr = [[${noticeList}]];
+                for (var i = 0; i < arr.length; i++) {
+                    if ( i % 2 == 0) {
+                        $("#scrollDiv ul").append(
+                            '<li><font color="blue">'+arr[i].title+':'+ arr[i].content +'</font></li>'
+                        );
+                    } else {
+                        $("#scrollDiv ul").append(
+                            '<li><font color="red">'+arr[i].title+':'+ arr[i].content +'</font></li>'
+                        );
+                    }
+                }
+            </script>
         </div>
     </fieldset>
 </div>
-
-
 <!--轮播js代码-->
 <script>
     layui.use(['carousel', 'form'], function () {

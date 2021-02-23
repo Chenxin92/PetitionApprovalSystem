@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dfrz.javaprojectstage3.mapper.AdviceMapper" >
-
+    <select id="getPetitionByAdviceId" resultType="Petition">
+        SELECT
+          b.*
+        FROM
+          t_petition_advice a
+        LEFT JOIN t_petition b ON a.petition_id = b.id
+        WHERE
+          a.advice_id = #{adviceId}
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.dfrz.javaprojectstage3.service;
 
 import com.dfrz.javaprojectstage3.bean.Advice;
+import com.dfrz.javaprojectstage3.bean.Petition;
 
 /**
  * 作者：wenqi
@@ -14,5 +15,23 @@ public interface IAdviceService {
      * @param advice
      * @return
      */
-    Boolean addAdvice(Advice advice,Integer petitionID);
+    Boolean addAdvice(Advice advice, Integer petitionID);
+
+    /**
+     * 根据ID获取意见
+     *
+     * @param id
+     * @return
+     */
+    Advice getAdviceById(Integer id);
+
+    Advice getAdviceByCreateUser(Integer userId);
+
+    /**
+     * 根据意见ID获取信访件
+     *
+     * @param adviceId
+     * @return
+     */
+    Petition getPetitionByAdviceId(Integer adviceId);
 }

@@ -47,6 +47,8 @@ public class PetitionController {
     IAttachFileService attachFileService;
     @Autowired
     IDictionaryService dictionaryService;
+    @Autowired
+    IAdviceService adviceService;
 
     private static Logger logger = LoggerFactory.getLogger(PetitionController.class);
 
@@ -587,5 +589,17 @@ public class PetitionController {
         jsonArray.add(user3);
 
         return jsonArray;
+    }
+
+    @RequestMapping("/showAdvicePic")
+    public ModelAndView showAdvicePic(Integer userId) {
+        Advice advice = adviceService.getAdviceByCreateUser(userId);
+        User user = userService.getUserById(userId);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("advice_view");
+        modelAndView.addObject("advice",advice);
+        modelAndView.addObject("user",user);
+        return modelAndView;
     }
 }

@@ -1,7 +1,9 @@
 package com.dfrz.javaprojectstage3.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dfrz.javaprojectstage3.bean.Advice;
 import com.dfrz.javaprojectstage3.bean.AttachFile;
+import com.dfrz.javaprojectstage3.bean.Petition;
 import com.dfrz.javaprojectstage3.bean.PetitionAdvice;
 import com.dfrz.javaprojectstage3.mapper.*;
 import com.dfrz.javaprojectstage3.service.IAdviceService;
@@ -59,5 +61,22 @@ public class AdviceServiceImpl implements IAdviceService {
         }
 
         return true;
+    }
+
+    @Override
+    public Advice getAdviceById(Integer id) {
+        return adviceMapper.selectById(id);
+    }
+
+    @Override
+    public Advice getAdviceByCreateUser(Integer userId) {
+        QueryWrapper<Advice> adviceQueryWrapper = new QueryWrapper<>();
+        adviceQueryWrapper.eq("create_user", userId);
+        return adviceMapper.selectOne(adviceQueryWrapper);
+    }
+
+    @Override
+    public Petition getPetitionByAdviceId(Integer adviceId) {
+        return adviceMapper.getPetitionByAdviceId(adviceId);
     }
 }

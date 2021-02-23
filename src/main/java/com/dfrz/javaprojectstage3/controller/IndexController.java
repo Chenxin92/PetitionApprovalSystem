@@ -3,7 +3,9 @@ package com.dfrz.javaprojectstage3.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.dfrz.javaprojectstage3.bean.Count;
+import com.dfrz.javaprojectstage3.bean.Notice;
 import com.dfrz.javaprojectstage3.service.IUserService;
+import com.dfrz.javaprojectstage3.service.NoticeService;
 import com.dfrz.javaprojectstage3.utils.Result;
 import com.dfrz.javaprojectstage3.utils.ResultUtils;
 import org.slf4j.Logger;
@@ -26,6 +28,9 @@ import java.util.Map;
 public class IndexController {
     @Autowired
     IUserService userService;
+    @Autowired
+    NoticeService noticeService;
+
     private static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @RequestMapping("/toIndex")
@@ -37,8 +42,10 @@ public class IndexController {
 
     @RequestMapping("/welcome")
     public ModelAndView welcome() {
+        List<Notice> noticeList = noticeService.getNotice();
         ModelAndView mv = new ModelAndView();
         mv.setViewName("welcome");
+        mv.addObject("noticeList", noticeList);
         return mv;
     }
 
