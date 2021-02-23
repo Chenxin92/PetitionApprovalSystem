@@ -45,6 +45,7 @@ public class UserController {
 
     /**
      * 登录页面
+     *
      * @return
      */
     @RequestMapping("/toLogin")
@@ -56,6 +57,7 @@ public class UserController {
 
     /**
      * 用户列表页面
+     *
      * @return
      */
     @RequestMapping("/touseradd")
@@ -67,6 +69,7 @@ public class UserController {
 
     /**
      * 用户列表页面
+     *
      * @return
      */
     @RequestMapping("/toUserList")
@@ -78,6 +81,7 @@ public class UserController {
 
     /**
      * 用户列表页面数据
+     *
      * @param page
      * @param limit
      * @return
@@ -98,6 +102,7 @@ public class UserController {
 
     /**
      * 信访单列表页面数据
+     *
      * @param page
      * @param limit
      * @return
@@ -119,6 +124,7 @@ public class UserController {
 
     /**
      * 查看用户
+     *
      * @param id
      * @return
      */
@@ -135,6 +141,7 @@ public class UserController {
 
     /**
      * 查看信访件
+     *
      * @param id
      * @return
      */
@@ -150,6 +157,7 @@ public class UserController {
 
     /**
      * 编辑用户
+     *
      * @param id
      * @return
      */
@@ -165,6 +173,7 @@ public class UserController {
 
     /**
      * 登录方法
+     *
      * @param user
      * @return
      */
@@ -176,7 +185,7 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
         // 2.封装用户数据
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword(),user.getRealname());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword(), user.getRealname());
         // 3. 执行shiro的login方法--会自动调用Realm中的认证方法doGetAuthenticationInfo
         try {
             subject.login(token);
@@ -196,33 +205,36 @@ public class UserController {
         }
         return map;
     }
+
     @RequestMapping("/adduser")
     public Result adduser(String userJSON) {
         logger.info(userJSON);
         //获取当前登陆用户的信息
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();
-        Session session=subject.getSession();
+        Session session = subject.getSession();
         //解析json串
-        JSONObject jsonObject =JSON.parseObject(userJSON);
+        JSONObject jsonObject = JSON.parseObject(userJSON);
         // 获取user参数
-        JSONObject adduser=jsonObject.getJSONObject("dataField");
-        String username=adduser.getString("username");
-        String password=adduser.getString("password");
+        JSONObject adduser = jsonObject.getJSONObject("dataField");
+        String username = adduser.getString("username");
+        String password = adduser.getString("password");
         Integer role = adduser.getInteger("role");
-        String department=adduser.getString("department");
-        User user1=new User();
+        String department = adduser.getString("department");
+        User user1 = new User();
         user1.setUsername(username);
         user1.setPassword(password);
         user1.setRole(role);
         user1.setDepartment(department);
         userService.adduser(user1);
-        Result result=ResultUtils.success(1);
+        Result result = ResultUtils.success(1);
         result.setCode(0);
         return result;
     }
+
     /**
      * 更新用户
+     *
      * @param updateuserJSON
      * @return
      */
@@ -232,22 +244,22 @@ public class UserController {
         //获取当前登陆用户的信息
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();
-        Session session=subject.getSession();
+        Session session = subject.getSession();
         //解析json串
-        JSONObject jsonObject =JSON.parseObject(updateuserJSON);
+        JSONObject jsonObject = JSON.parseObject(updateuserJSON);
         // 获取user参数
-        JSONObject updateuser=jsonObject.getJSONObject("dataField");
-        Integer id=updateuser.getInteger("id");
-        String username=updateuser.getString("username");
-        String realname=updateuser.getString("realname");
-        String sex=updateuser.getString("sex");
-        String phone=updateuser.getString("phone");
-        String email=updateuser.getString("email");
-        String department=updateuser.getString("department");
-        Integer role=updateuser.getInteger("role");
-        String status=updateuser.getString("status");
-        String address=updateuser.getString("address");
-        User user1=new User();
+        JSONObject updateuser = jsonObject.getJSONObject("dataField");
+        Integer id = updateuser.getInteger("id");
+        String username = updateuser.getString("username");
+        String realname = updateuser.getString("realname");
+        String sex = updateuser.getString("sex");
+        String phone = updateuser.getString("phone");
+        String email = updateuser.getString("email");
+        String department = updateuser.getString("department");
+        Integer role = updateuser.getInteger("role");
+        String status = updateuser.getString("status");
+        String address = updateuser.getString("address");
+        User user1 = new User();
         user1.setId(id);
         user1.setUsername(username);
         user1.setRealname(realname);
@@ -259,13 +271,14 @@ public class UserController {
         user1.setStatus(status);
         user1.setAddress(address);
         userService.updateuserById(user1);
-        Result result=ResultUtils.success(1);
+        Result result = ResultUtils.success(1);
         result.setCode(0);
         return result;
     }
 
     /**
      * 删除用户
+     *
      * @param deleteuserJSON
      * @return
      */
@@ -275,35 +288,40 @@ public class UserController {
         //获取当前登陆用户的信息
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();
-        Session session=subject.getSession();
+        Session session = subject.getSession();
         //解析json串
-        JSONObject jsonObject =JSON.parseObject(deleteuserJSON);
+        JSONObject jsonObject = JSON.parseObject(deleteuserJSON);
         // 获取user参数
-        JSONObject deleteuser=jsonObject.getJSONObject("dataField");
-        Integer id=deleteuser.getInteger("id");
-        String username=deleteuser.getString("username");
-        User user1=new User();
+        JSONObject deleteuser = jsonObject.getJSONObject("dataField");
+        Integer id = deleteuser.getInteger("id");
+        String username = deleteuser.getString("username");
+        User user1 = new User();
         user1.setId(id);
         user1.setUsername(username);
         userService.deleteuser(id);
-        Result result=ResultUtils.success(1);
+        Result result = ResultUtils.success(1);
         result.setCode(0);
         return result;
     }
 
     /**
      * 是否为人事部经理或者领导
+     *
      * @return
      */
     @RequestMapping("/userEdit")
     public boolean userEdit() {
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();
-        if (user.getRole()==3||user.getRole()==4){
-            if (user.getDepartment().equals("人事部门")){
+        if (user.getRole() == 3 || user.getRole() == 4) {
+            if (user.getDepartment().equals("人事部门")) {
                 return true;
-            }else return false;
-        }else return false;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
