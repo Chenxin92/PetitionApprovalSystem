@@ -290,4 +290,17 @@ public class UserController {
         result.setCode(0);
         return result;
     }
+
+    /**
+     * 退出
+     *
+     * @return
+     */
+    @RequestMapping("/logout")
+    public ModelAndView logout() {
+        SecurityUtils.getSubject().logout();
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
 }
