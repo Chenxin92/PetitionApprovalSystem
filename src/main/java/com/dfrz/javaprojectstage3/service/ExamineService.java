@@ -22,7 +22,18 @@ public interface ExamineService {
      * @param page
      * @return
      */
+    IPage<Petition> getPetitionPagebyCurrentuserAndTime(Page page,Integer examineuser, Integer userid, Integer petitionstate,String acceptTime);
+
+
+    /**
+     *
+     * 根据当前登录人获取需要登录人审批的信访件（分页）
+     *
+     * @param page
+     * @return
+     */
     IPage<Petition> getPetitionPagebyCurrentuser(Page page,Integer examineuser, Integer userid, Integer petitionstate);
+
 
     /**
      * 根据部门获取用户列表

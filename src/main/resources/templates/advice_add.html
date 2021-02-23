@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>欢迎页面-X-admin2.0</title>
@@ -51,11 +52,11 @@
                       class="layui-textarea" style="width: 580px;height: 180px"></textarea>
             </div>
         </div>
-            <div>
-                <div> <span  style="float: left;margin-top: 10px" ><span class="x-red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span>下一审批环节&nbsp;&nbsp;</span></div>
+            <div >
+                <div shiro:hasAnyRoles="user,agent,manager" > <span  style="float: left;margin-top: 10px" ><span class="x-red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>下一审批环节&nbsp;&nbsp;</span></div>
 
                 <div  style="float: left;width: 200px">
-                    <select id="department"  name="department" lay-verify="required"
+                    <select shiro:hasAnyRoles="user,agent,manager"  id="department"  name="department"
                             lay-filter="department">
                         <option  value="">请选择部门</option>
                         <option th:each="department:${departmentList}"
@@ -71,7 +72,7 @@
 
 
                 <div style="float: left;width: 200px;" class="layui-input-inline">
-                    <select id="leaders" name="leader"  lay-verify="required"  lay-filter="leader" >
+                    <select shiro:hasAnyRoles="user,agent,manager"  id="leaders" name="leader"   lay-filter="leader" >
                         <option value="">请选择领导</option>
                     </select>
                 </div><!--1-->
@@ -100,7 +101,7 @@
 
         <div style="float: right"  class="layui-form-item">
             <button class="layui-btn" lay-filter="addAdvice" lay-submit="">
-                提交
+                通过
             </button>
             <button class="layui-btn" lay-filter="returnAdvice" lay-submit="">
                 退回
@@ -219,16 +220,14 @@
 
         // 监听添加
         form.on('submit(addAdvice)', function (data) {
-            if (codeVerification() == true) {
-                layer.msg("编号已存在,禁止添加");
-                return false;
-            }
+
             // 作业对象
             var petition = new Object();
             petition.dataField = data.field;
             petition.arr = upload_arr;
             // 转成JSON格式
             var petitionJSON = JSON.stringify(petition);
+            console.log(petitionJSON)
             // 发异步，把数据提交给php
             $.ajax({
                 url: "addAdvice",
@@ -253,10 +252,7 @@
 
         // 监听添加
         form.on('submit(returnAdvice)', function (data) {
-            if (codeVerification() == true) {
-                layer.msg("编号已存在,禁止添加");
-                return false;
-            }
+
             // 作业对象
             var petition = new Object();
             petition.dataField = data.field;

@@ -72,7 +72,7 @@ public class ExamineController {
      * @return
      */
     @RequestMapping("/getExamineList")
-    public Result getExamineList(Integer page, Integer limit) {
+    public Result getExamineList(Integer page, Integer limit, String acceptTime) {
         // 分页
         Page<Petition> petitionPage = new Page<>();
         petitionPage.setCurrent(page);
@@ -83,11 +83,20 @@ public class ExamineController {
         User user = (User) subject.getPrincipal();
         IPage<Petition> iPage;
 
-        if (user.getRole() == 3) {
-            iPage = examineService.getPetitionPagebyCurrentuser(petitionPage, 2, user.getId(), 2);
-        } else {
-            iPage = examineService.getPetitionPagebyCurrentuser(petitionPage, 3, user.getId(), 3);
+        if (acceptTime==null||acceptTime==""){
+            if (user.getRole() == 3) {
+                iPage = examineService.getPetitionPagebyCurrentuser(petitionPage, 2, user.getId(), 2);
+            } else {
+                iPage = examineService.getPetitionPagebyCurrentuser(petitionPage, 3, user.getId(), 3);
+            }
+        }else {
+            if (user.getRole() == 3) {
+                iPage = examineService.getPetitionPagebyCurrentuserAndTime(petitionPage, 2, user.getId(), 2,acceptTime);
+            } else {
+                iPage = examineService.getPetitionPagebyCurrentuserAndTime(petitionPage, 3, user.getId(), 3,acceptTime);
+            }
         }
+
 
         Result result = ResultUtils.success(iPage.getRecords());
         result.setCode(0);
@@ -105,32 +114,17 @@ public class ExamineController {
         // 获取信访件
         Petition petition = petitionService.getPetitionById(petitionId);
         // 获取信源值
-        Dictionary petitionDictionary = dictionaryService.getDictionaryByTypeKey("petition");
-        List<DictionaryData> petitionDictionaryDataList = petitionDictionary.getDictionaryDataList();
-        String petitionType = "";
-        for (DictionaryData dictionaryData : petitionDictionaryDataList) {
-            if (dictionaryData.getValue().equals(petition.getPetitionType())) {
-                petitionType = dictionaryData.getDictionaryContent();
-                break;
-            }
-        }
-
+        String petitionType = dictionaryService.getDictionaryDataByDictionaryKeyAndType("petition", petition.getPetitionType()).getDictionaryContent();
         // 获取内容值
-        Dictionary contentDictionary = dictionaryService.getDictionaryByTypeKey("content");
-        List<DictionaryData> contentDictionaryDataList = contentDictionary.getDictionaryDataList();
-        String contentType = "";
-        for (DictionaryData dictionaryData : contentDictionaryDataList) {
-            if (dictionaryData.getValue().equals(petition.getPetitionType())) {
-                contentType = dictionaryData.getDictionaryContent();
-                break;
-            }
-        }
+        String contentType = dictionaryService.getDictionaryDataByDictionaryKeyAndType("content", petition.getContentType()).getDictionaryContent();
+        Step step = stepService.getStepByPetitionId(petitionId);
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("petition_view");
         mv.addObject(petition);
         mv.addObject("petitionValue", petitionType);
         mv.addObject("contentValue", contentType);
+        mv.addObject(step);
         return mv;
     }
 
@@ -150,12 +144,16 @@ public class ExamineController {
         List<String> departmentList = userService.getDepartmentList();
 
         petitionIdall = petitionId;
+        //获取当前登陆用户的信息
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("advice_add");
         mv.addObject("petitionList", petitionDictionary.getDictionaryDataList());
         mv.addObject("contentList", contentDictionary.getDictionaryDataList());
         mv.addObject("departmentList", departmentList);
+        mv.addObject("user",user);
         return mv;
     }
 
@@ -267,12 +265,35 @@ public class ExamineController {
         String department = petitionParameter.getString("department");
         String content = petitionParameter.getString("content");
         String leader=petitionParameter.getString("leader");
-        User leader1=userService.getUserById(Integer.valueOf(leader));
-
         Step step=stepService.getStepByPetitionId(petitionId);
-        if (user.getRole()==3){
-            step.setExamineUser3(leader1.getId());
+
+        if (leader==null||leader.equals("")){
+
+            if (user.getRole()==3){
+                //二级审批时间
+                step.setAuditTime2(new Date(System.currentTimeMillis()));
+            }else {
+                //三级审批时间
+                step.setAuditTime3(new Date(System.currentTimeMillis()));
+            }
+
+        }else {
+            User leader1=userService.getUserById(Integer.valueOf(leader));
+
+
+            if (user.getRole()==3){
+                step.setExamineUser3(leader1.getId());
+                //二级审批时间
+                step.setAuditTime2(new Date(System.currentTimeMillis()));
+            }else {
+                //三级审批时间
+                step.setAuditTime3(new Date(System.currentTimeMillis()));
+            }
         }
+
+
+
+
         stepService.updatestepById(step);
 
         Advice advice = new Advice();
@@ -303,12 +324,17 @@ public class ExamineController {
         if (adviceService.addAdvice(advice, petitionId)) {
             map.put("flag", "true");
             Petition petition = petitionService.getPetitionById(petitionId);
-            if (user.getRole() == 2) {
-                petition.setPetitionState(2);
-            } else if (user.getRole() == 3){
-                petition.setPetitionState(3);
-            }else {
+
+            if (leader==null||leader.equals("")){
                 petition.setPetitionState(-2);
+            }else {
+                if (user.getRole() == 2) {
+                    petition.setPetitionState(2);
+                } else if (user.getRole() == 3){
+                    petition.setPetitionState(3);
+                }else if (user.getRole()==4){
+                    petition.setPetitionState(-2);
+                }
             }
 
             petitionService.updatePetitionById(petition);
@@ -341,14 +367,19 @@ public class ExamineController {
         JSONObject petitionParameter = jsonObject.getJSONObject("dataField");
         String department = petitionParameter.getString("department");
         String content = petitionParameter.getString("content");
-        String leader=petitionParameter.getString("leader");
-        User leader1=userService.getUserById(Integer.valueOf(leader));
+
 
         Step step=stepService.getStepByPetitionId(petitionId);
+
         if (user.getRole()==3){
-            step.setExamineUser3(leader1.getId());
+            //二级审批时间
+            step.setAuditTime2(new Date(System.currentTimeMillis()));
+        }else {
+            //三级审批时间
+            step.setAuditTime3(new Date(System.currentTimeMillis()));
         }
 
+        stepService.updatestepById(step);
 
         Advice advice = new Advice();
         advice.setContent(content);

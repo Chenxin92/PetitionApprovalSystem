@@ -119,10 +119,11 @@
                   <option value="研发部门">研发部门</option>
                   <option value="安保部门">安保部门</option>
                   <option value="人力资源部门">人力资源部门</option>
-                  <script th:inline="javascript">
-                      $("#L_department").val([[${user.department}]]);
-                  </script>
+
               </select>
+              <script th:inline="javascript">
+                  $("#L_department").val([[${user.department}]]);
+              </script>
           </div><!--1-->
           <div class="layui-form-mid layui-word-aux">
               <!-- <span class="x-red">*</span>将会成为您唯一的登入名-->
