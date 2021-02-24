@@ -59,7 +59,7 @@
 <div class="left-nav">
     <div id="side-nav">
         <ul id="nav">
-            <li id="userEdit">
+            <li shiro:hasRole="admin">
                 <a href="javascript:;">
                     <i class="iconfont">&#xe6b8;</i>
                     <cite>员工管理</cite>
@@ -75,7 +75,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li shiro:hasAnyRoles="user,agent,manager,leader">
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
                     <cite>信访件管理</cite>
@@ -103,7 +103,7 @@
                     </li>
                 </ul>
             </li>
-            <li shiro:hasAnyRoles="agent,manager,leader">
+            <li shiro:hasRole="admin">
                 <a href="javascript:;">
                     <i class="iconfont">&#xe726;</i>
                     <cite>管理员</cite>
@@ -217,17 +217,17 @@
     }
 
 
-    $.ajax({
-        url: "user/userEdit",
-        success: function (data) {
-            if (data) {
-                $("#userEdit").attr("style","display:content");
-
-            } else {
-                $("#userEdit").attr("style","display:none");
-            }
-        }
-    });
+    // $.ajax({
+    //     url: "user/userEdit",
+    //     success: function (data) {
+    //         if (data) {
+    //             $("#userEdit").attr("style","display:content");
+    //
+    //         } else {
+    //             $("#userEdit").attr("style","display:none");
+    //         }
+    //     }
+    // });
 
 
 
