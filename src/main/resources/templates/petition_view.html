@@ -138,14 +138,14 @@
                                  th:text="${petitionAttach.getFileName()}">
                             </div>
                             <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 1">
-                                <img width="80px" height="70px"
+                                <img onclick="clickPicture(this)" width="80px" height="70px"
                                      th:src="${petitionAttach.getFilePath()} + ${petitionAttach.getFileName()}"
                                      alt="加载失败"
                                 >
                             </div>
                             <div class="layui-card-body" th:if="${petitionAttach.getType()} eq 2">
-
-                                <img width="80px" height="70px"
+                                <span style="display: none" id="pdfName" th:text="${petitionAttach.getFileName()}" ></span>
+                                <img onclick="previewPdf()" width="80px" height="70px"
                                      src="../images/DOC.jpg"
                                      alt="加载失败"
                                 >
@@ -156,6 +156,7 @@
             </div>
         </form>
     </div>
+
     <div style="float: left;margin-left: 200px">
         <h2>
             <b>审批时间轴:</b>
@@ -280,10 +281,10 @@
         this.style.cursor = "pointer";
     });
 
-    // 图片点击预览,ul为父类元素,img为已存在元素或者未来生成元素
-    $("ul").on("click", "img", function () {
-        clickPicture(this);
-    });
+    // // 图片点击预览,ul为父类元素,img为已存在元素或者未来生成元素
+    // $("ul").on("click", "img", function () {
+    //     clickPicture(this);
+    // });
 
     // 点击图片放大预览
     function clickPicture(obj) {
@@ -324,7 +325,34 @@
         };
     }
 
-    // TODO:PDF/DOC在线预览
+    // PDF/DOC预览
+    function previewPdf() {
+        var file=$("#pdfName").html();
+        console.log("filepdf="+file)
+        var strFile =  file.substring(file.lastIndexOf(".") + 1);
+        if (strFile == "doc" || strFile == "DOC") {
+            file = file.substring(0,file.indexOf("."));
+            file = file + ".PDF";
+        }
+        var url = "../../../upload/petition/doc/" + file;
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            //弹出层
+            top.layer.open({
+                type: 2,
+                shade: 0.8,
+                offset: 'auto',
+                area: ['1000px','700px'],
+                shadeClose: true,//点击外围关闭弹窗
+                scrollbar: false,//不显示滚动条
+                title: false, //不显示标题
+                content: "./plugins/pdfjs/web/viewer.html?file=" + url, //捕获的元素
+                cancel: function () {
+                    //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+                }
+            });
+        });
+    }
 </script>
 </body>
 
