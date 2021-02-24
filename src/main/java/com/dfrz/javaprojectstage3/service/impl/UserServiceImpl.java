@@ -83,7 +83,7 @@ public class UserServiceImpl implements IUserService {
         Role role = roleMapper.selectById(user.getRole());
         user.setUrole(role);
         //3.找权限
-        List<Permission> permissions = permissionMapper.getPermissionsByRoleId(role.getId());
+        List<Permission> permissions = permissionMapper.getPermissionListByRoleId(role.getId());
         role.setPermissions(permissions);
 
         return user;

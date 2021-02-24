@@ -3,33 +3,14 @@ package com.dfrz.javaprojectstage3.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dfrz.javaprojectstage3.bean.Notice;
-import com.dfrz.javaprojectstage3.bean.Role;
-import com.dfrz.javaprojectstage3.bean.User;
+import com.dfrz.javaprojectstage3.bean.Permission;
 import com.dfrz.javaprojectstage3.service.IPermissionService;
-import com.dfrz.javaprojectstage3.service.IUserService;
-import com.dfrz.javaprojectstage3.service.NoticeService;
-import com.dfrz.javaprojectstage3.utils.Result;
-import com.dfrz.javaprojectstage3.utils.ResultUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
-import java.util.Map;
 /**
  * 作者：zhengyefeng
  * 日期: 2021/2/20 0:53
@@ -40,18 +21,54 @@ import java.util.Map;
 public class PermissionController {
     @Autowired
     IPermissionService permissionService;
-    /*跳转树形菜单页面*/
-    @RequestMapping("/tree")
-    public ModelAndView toTree(){
-        ModelAndView mv=new ModelAndView();
+
+    /**
+     * 跳转树形菜单页面
+     */
+    @RequestMapping("/toTree")
+    public ModelAndView toTree() {
+        ModelAndView mv = new ModelAndView();
         mv.setViewName("tree");
         return mv;
     }
 
-    /*异步加载树形节点*/
-    @RequestMapping("/ajaxTree")
-    public String ajaxTree(@RequestParam("roleid") Integer roleid){
-        String json=permissionService.jsonTree(roleid);
-        return json;
+    /**
+     * 获取数据库权限树
+     *
+     * @return
+     */
+    @RequestMapping("/tree")
+    public String treeString(@Param("roleId") Integer roleId) {
+        return permissionService.getPermissionTreeString(roleId);
     }
+
+    @RequestMapping("/updatePermission")
+    public String updatePermission(String objectJSON) {
+        // 解析JSON对象
+        JSONObject jsonObject = JSON.parseObject(objectJSON);
+
+        JSONObject permission = jsonObject.getJSONObject("data");
+
+        // 获取权限ID
+        Integer permissionId = permission.getInteger("id");
+
+        // 需要修改权限的角色ID
+        Integer roleId = jsonObject.getInteger("roleId");
+
+        // 添加/删除权限
+        Boolean checked = jsonObject.getBoolean("checked");
+
+        Boolean temp = permissionService.isPermissionByIdAndRoleId(roleId, permissionId);
+
+        if (checked == true && temp == false) {
+
+            return "" + permissionService.addPermissionByIdAndRoleId(roleId, permissionId);
+        } else if (checked == false && temp == true) {
+            return "" + permissionService.deletePermissionByIdAndRoleId(roleId, permissionId);
+        }
+
+        return "";
+    }
+
+
 }
