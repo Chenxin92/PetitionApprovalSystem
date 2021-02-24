@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dfrz.javaprojectstage3.bean.Notice;
 import com.dfrz.javaprojectstage3.bean.Role;
 import com.dfrz.javaprojectstage3.bean.User;
+import com.dfrz.javaprojectstage3.service.IPermissionService;
 import com.dfrz.javaprojectstage3.service.IUserService;
 import com.dfrz.javaprojectstage3.service.NoticeService;
 import com.dfrz.javaprojectstage3.utils.Result;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,11 +38,20 @@ import java.util.Map;
 @RestController
 @RequestMapping("/permission")
 public class PermissionController {
+    @Autowired
+    IPermissionService permissionService;
     /*跳转树形菜单页面*/
     @RequestMapping("/tree")
     public ModelAndView toTree(){
         ModelAndView mv=new ModelAndView();
         mv.setViewName("tree");
         return mv;
+    }
+
+    /*异步加载树形节点*/
+    @RequestMapping("/ajaxTree")
+    public String ajaxTree(@RequestParam("roleid") Integer roleid){
+        String json=permissionService.jsonTree(roleid);
+        return json;
     }
 }

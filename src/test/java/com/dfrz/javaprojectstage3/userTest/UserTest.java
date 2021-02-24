@@ -49,7 +49,7 @@ public class UserTest {
         List<Permission> permissions=user.getUrole().getPermissions();
         for (Permission p:permissions
                 ) {
-            System.out.println(p.getPermissionName());
+            System.out.println(p.getPermissionKey());
         }
     }
     @Test

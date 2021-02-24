@@ -11,7 +11,7 @@
     </select>
 
     <!--查询user表部门人数-->
-    <select id="getDepartmentcount" resultType="String">
+    <select id="getDepartmentcountByid" resultType="map">
         select department '部门名称',COUNT(*) '总数' from t_users WHERE department!= 'null' GROUP BY department
 
     </select>

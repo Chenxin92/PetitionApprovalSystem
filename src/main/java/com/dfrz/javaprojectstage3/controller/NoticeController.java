@@ -152,7 +152,7 @@ public class NoticeController {
         String type=updatenotice.getString("type");
         Integer user_id=updatenotice.getInteger("user_id");
         Notice notice=new Notice();
-        notice.setId(id );
+        notice.setId(id);
         notice.setTitle(title);
         notice.setContent(content);
         notice.setType(type);

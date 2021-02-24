@@ -27,16 +27,6 @@
     <div class="left_open">
         <i title="展开左侧栏" class="iconfont">&#xe699;</i>
     </div>
-    <ul class="layui-nav left fast-add" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;">+新增</a>
-            <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                <dd><a onclick="x_admin_show('资讯','http://www.baidu.com')"><i class="iconfont">&#xe6a2;</i>资讯</a></dd>
-                <dd><a onclick="x_admin_show('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a></dd>
-                <dd><a onclick="x_admin_show('用户','http://www.baidu.com')"><i class="iconfont">&#xe6b8;</i>用户</a></dd>
-            </dl>
-        </li>
-    </ul>
     <ul class="layui-nav right" lay-filter="">
 
         <li class="layui-nav-item">
@@ -46,7 +36,7 @@
                 登录！</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
-                <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
+                <dd><a onclick="x_admin_show('修改密码','http://www.baidu.com')">修改密码</a></dd>
                 <dd><a href="./user/logout">退出</a></dd>
             </dl>
         </li>
@@ -110,13 +100,6 @@
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
-
-                    <li>
-                        <a _href="admin-role.html">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>角色管理</cite>
-                        </a>
-                    </li>
                     <li>
                         <a _href="./permission/tree">
                             <i class="iconfont">&#xe6a7;</i>
@@ -127,6 +110,12 @@
                         <a _href="./notice/tonotice">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>公告管理</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a _href="./DictionaryData/todictionaryDatadetails">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>资料库管理</cite>
                         </a>
                     </li>
                 </ul>
@@ -147,13 +136,7 @@
                     <li>
                         <a _href="echarts2.html">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>请假统计</cite>
-                        </a>
-                    </li>
-                    <li>
-                        <a _href="echarts3.html">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>工资统计</cite>
+                            <cite>部门人数统计</cite>
                         </a>
                     </li>
 

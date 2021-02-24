@@ -1,5 +1,6 @@
 package com.dfrz.javaprojectstage3.bean;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -13,7 +14,7 @@ public class Permission {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
     @TableField(value = "permissionName")
-    private String permissionName;
+    private String title;
 
     private String url;
 
@@ -22,16 +23,16 @@ public class Permission {
     private String permissionKey;
 
 
-    public Permission(Integer id, String permissionName, Integer pid, String permissionKey) {
+    public Permission(Integer id, String title, Integer pid, String permissionKey) {
         this.id = id;
-        this.permissionName = permissionName;
+        this.title = title;
         this.pid = pid;
-        this.permissionKey = permissionKey;
+        this.title = permissionKey;
     }
 
-    public Permission(Integer id, String permissionName, String url, Integer pid, String permissionKey, List<Permission> children, boolean checked) {
+    public Permission(Integer id, String title, String url, Integer pid, String permissionKey, List<Permission> children, boolean checked) {
         this.id = id;
-        this.permissionName = permissionName;
+        this.title = title;
         this.url = url;
         this.pid = pid;
         this.permissionKey = permissionKey;
@@ -39,9 +40,9 @@ public class Permission {
         this.checked = checked;
     }
 
-    public Permission(Integer id, String permissionName, String url, Integer pid, String permissionKey) {
+    public Permission(Integer id, String title, String url, Integer pid, String permissionKey) {
         this.id = id;
-        this.permissionName = permissionName;
+        this.title = title;
         this.url = url;
         this.pid = pid;
         this.permissionKey = permissionKey;
@@ -69,6 +70,43 @@ public class Permission {
         }
     }
 
+    /**
+     * 节点
+     * @param args
+     */
+    public static void main(String[] args) {
+        Permission root = new Permission(0, "顶层节点", -1,"top");
+        Permission node = null;
+        node=new Permission(1,"用户管理",0,"user");
+        root.add(node);
+        node=new Permission(2,"信访件管理",0,"information");
+        root.add(node);
+        node=new Permission(3,"公告管理",0,"notice");
+        root.add(node);
+        node=new Permission(4,"用户列表",1,"user_list");
+        root.add(node);
+        node=new Permission(5,"编辑用户",1,"user_update");
+        root.add(node);
+
+        node=new Permission(5,"删除用户",1,"user_delete");
+        root.add(node);
+        node=new Permission(6,"信访件发布",2,"information-add");
+        root.add(node);
+        node=new Permission(7,"信访件删除",2,"information-delete-add");
+        root.add(node);
+        node=new Permission(8,"信访件查询",2,"information-list");
+        root.add(node);
+        node=new Permission(9,"信访件处理",2,"information-handle");
+        root.add(node);
+        node=new Permission(10,"添加用户",1,"user_add");
+        root.add(node);
+        //转JSON  GSON、fastjson
+        String json=JSONObject.toJSONString(root);
+        System.out.println(json);
+
+
+
+    }
 
 
     public Integer getId() {
@@ -79,12 +117,12 @@ public class Permission {
         this.id = id;
     }
 
-    public String getPermissionName() {
-        return permissionName;
+    public String gettitle() {
+        return title;
     }
 
     public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
+        this.title = permissionName;
     }
 
     public String getPermissionKey() {
@@ -111,12 +149,14 @@ public class Permission {
     public void setPid(Integer pid) {
         this.pid = pid;
     }
-
-    @Override
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+ @Override
     public String toString() {
         return "Permission{" +
                 "id=" + id +
-                ", permissionName='" + permissionName + '\'' +
+                ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
                 ", permissionKey='" + permissionKey + '\'' +

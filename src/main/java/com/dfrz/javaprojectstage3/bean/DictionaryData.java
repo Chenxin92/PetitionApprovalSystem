@@ -17,6 +17,26 @@ public class DictionaryData {
     @TableField(value = "dictionary_content")
     private String dictionaryContent;
 
+    public DictionaryData(Integer id, Integer dictionaryId, String dictionaryContent, Integer value) {
+        this.id = id;
+        this.dictionaryId = dictionaryId;
+        this.dictionaryContent = dictionaryContent;
+        this.value = value;
+    }
+
+    public DictionaryData() {
+    }
+
+    @Override
+    public String toString() {
+        return "DictionaryData{" +
+                "id=" + id +
+                ", dictionaryId=" + dictionaryId +
+                ", dictionaryContent='" + dictionaryContent + '\'' +
+                ", value=" + value +
+                '}';
+    }
+
     private Integer value;
 
     public Integer getId() {
@@ -51,13 +71,4 @@ public class DictionaryData {
         this.value = value;
     }
 
-    @Override
-    public String toString() {
-        return "DictionaryData{" +
-                "id=" + id +
-                ", dictionaryId=" + dictionaryId +
-                ", dictionaryContent='" + dictionaryContent + '\'' +
-                ", value=" + value +
-                '}';
-    }
 }

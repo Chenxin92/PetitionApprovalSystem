@@ -56,14 +56,6 @@ public class IndexController {
      */
     @RequestMapping("/departmentCount")
     public String getDepartmentCount() {
-        //获取部门名称
-        //List<String> departmentList = userService.getDepartmentName();
-        //获取各部门人数
-        //List datas = userService.getgetDepartmentCount();
-        //Map<String, Object> maps = new HashMap<>();
-        //maps.put("departmentname", departmentList);
-        //maps.put("datas", datas);
-        //Result result = ResultUtils.success(maps);
         List<Count> countList = userService.getCountList();
         return JSON.toJSONString(countList);
     }

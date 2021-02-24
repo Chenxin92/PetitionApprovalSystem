@@ -16,11 +16,11 @@ public interface NoticeService {
     public IPage<Notice> getNoticeByPage(Page<?> page);
     public List<Notice> getNotice();
     public void save(Notice notice);
-    public Notice getNoticeById(Integer id);
-    public Notice getNoticeBytitle(String title);
     public int addnotice(Notice notice);
     public int updatenoticeByid(Notice notice);
     public int deletenoticeById(Integer id);
+    public Notice getNoticeBytitle(String title);
+    public Notice getNoticeById(Integer id);
 
 
 }
