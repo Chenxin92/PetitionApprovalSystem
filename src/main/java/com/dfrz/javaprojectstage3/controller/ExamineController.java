@@ -10,6 +10,7 @@ import com.dfrz.javaprojectstage3.bean.Dictionary;
 import com.dfrz.javaprojectstage3.service.*;
 import com.dfrz.javaprojectstage3.utils.Result;
 import com.dfrz.javaprojectstage3.utils.ResultUtils;
+import com.dfrz.javaprojectstage3.utils.WordToPdfUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -223,12 +224,29 @@ public class ExamineController {
             String fileName = file.getOriginalFilename();
             logger.info("DOC名称:" + fileName);
             // 构建服务端上传目录的文件
-            File uploadFile = new File(classPath.getPath(), "/static/upload/petition/doc/" + File.separator + fileName);
+            String uploadURL = "/static/upload/petition/doc/" + File.separator;
+            File uploadFile = new File(classPath.getPath(), uploadURL + fileName);
             if (!uploadFile.exists()) {
                 uploadFile.mkdirs();
             }
             // 文件IO读写
             file.transferTo(uploadFile);
+
+            // 判断文件是否是PDF格式
+            int index = fileName.lastIndexOf(".");
+            String fileNameEnd = fileName.substring(index + 1);
+            if (!"pdf".equalsIgnoreCase(fileNameEnd)) {
+                // 获取类加载根目录
+                String projectPath = this.getClass().getResource("/").getPath();
+                // 原文件路径
+                String sourceFile = projectPath + uploadURL + fileName;
+                logger.info("源文件路径:" + sourceFile);
+                // 目标文件路径
+                String destFile = projectPath + uploadURL + fileName.substring(0, fileName.lastIndexOf(".")) + ".PDF";
+                logger.info("目标文件路径:" + destFile);
+                int flag = WordToPdfUtils.office2PDF(sourceFile, destFile);
+                logger.info("转换PDF:" + (flag == 0 ? "转换成功" : "转换失败"));
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
