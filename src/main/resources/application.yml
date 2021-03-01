@@ -1,13 +1,13 @@
 server:
-  port: 8080
+  port: 8083
   servlet:
-    context-path: /javaprojectstage3
+    context-path: /PetitionApprovalSystem
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/javaprojectstage3?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/javaprojectstage3?useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: zyf
+    password: 1234
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
@@ -30,13 +30,25 @@ spring:
     cache: false  #是否使用缓存
     mode: HTML  #严格的HTML语法模式
     suffix: .html  #后缀名
+  ## Redis配置
+  redis:
+    database: 0
+    host: 192.168.211.130
+    port: 6379
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
 mybatis:
   mapper-locations: classpath:mapping/*.xml
-  type-aliases-package: com.dfrz.javaprojectstage3.bean
+  type-aliases-package: com.cx.javaprojectstage3.bean
 
 mybatis-plus:
   mapper-locations: classpath:mapping/*.xml
-  type-aliases-package: com.dfrz.javaprojectstage3.bean
+  type-aliases-package: com.cx.javaprojectstage3.bean
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

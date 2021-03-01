@@ -8,10 +8,10 @@
         <relativePath/> <!-- lookup parent from repository -->
         <version>2.4.1</version>
     </parent>
-    <groupId>com.dfrz.javaProjectStage3</groupId>
-    <artifactId>javaprojectstage3</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>javaprojectstage3</name>
+    <groupId>com.dfrz.PetitionApprovalSystem</groupId>
+    <artifactId>PetitionApprovalSystem</artifactId>
+    <version>1.0</version>
+    <name>PetitionApprovalSystem</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
@@ -166,7 +166,18 @@
             <version>2.2.1</version>
         </dependency>
 
+        <!--SpringBoot整合Redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.9.0</version>
+        </dependency>
 
     </dependencies>
 
