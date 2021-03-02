@@ -11,14 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 作者：zhengyefeng
- * 日期: 2021/1/28 15:40
- * 描述:
+ * @author Sora
  */
 @Service
 public class NoticeServiceImpl implements NoticeService {
     @Autowired
     NoticeMapper noticeMapper;
+
     @Override
     public IPage<Notice> getNoticeByPage(Page page) {
         return noticeMapper.selectPage(page, null);
@@ -26,8 +25,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public List<Notice> getNotice() {
-        return noticeMapper.selectList(null
-        );
+        return noticeMapper.selectList(null);
     }
 
     @Override
@@ -41,32 +39,17 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public Notice getNoticeBytitle(String title) {
-        return null;
-    }
-
-    /**
-     * 添加公告
-     * @param notice
-     * @return
-     */
-    @Override
-    public int addnotice(Notice notice) {
+    public int addNotice(Notice notice) {
         return noticeMapper.insert(notice);
     }
 
-    /**
-     * 修改公告
-     * @param notice
-     * @return
-     */
     @Override
-    public int updatenoticeByid(Notice notice) {
+    public int updateNoticeById(Notice notice) {
         return noticeMapper.updateById(notice);
     }
 
     @Override
-    public int deletenoticeById(Integer id) {
+    public int deleteNoticeById(Integer id) {
         return noticeMapper.deleteById(id);
     }
 }

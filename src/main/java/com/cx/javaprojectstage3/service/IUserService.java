@@ -8,27 +8,25 @@ import com.cx.javaprojectstage3.bean.User;
 import java.util.List;
 
 public interface IUserService {
-    public boolean login(User user);
+    boolean login(User user);
 
-    public List<User> getUsers();
+    List<User> getUsers();
 
-    public void save(User user);
+    void save(User user);
 
-    public int updateuserById(User user);
+    int updateuserById(User user);
 
-    public User getUserById(Integer id);
+    User getUserById(Integer id);
 
-    public IPage<User> getUsersByPage(Page<?> page);
+    IPage<User> getUsersByPage(Page<?> page);
 
-    public User getUserRolePermissionByUname(String username);
+    User getUserRolePermissionByUname(String username);
 
-    public int adduser(User user);
+    int adduser(User user);
 
-    public User getUserByUname(String uname);
+    User getUserByUname(String uname);
 
-    public User findById(Integer id);
-
-    public int deleteuser(Integer id);
+    int deleteuser(Integer id);
 
     /**
      * 获取所有部门列表
@@ -44,20 +42,6 @@ public interface IUserService {
      * @return
      */
     List<User> getTwoPrincipalListByDepartment(String department);
-
-    /**
-     * 获取部门名称
-     *
-     * @return
-     */
-    public List<String> getDepartmentName();
-
-    /**
-     * 获取部门人数统计
-     *
-     * @return
-     */
-    public List<Integer> getgetDepartmentCount();
 
     /**
      * 获取部门统计

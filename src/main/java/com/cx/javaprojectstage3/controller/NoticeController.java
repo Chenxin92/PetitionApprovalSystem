@@ -122,7 +122,7 @@ public class NoticeController {
         notice.setTitle(title);
         notice.setContent(content);
         notice.setType(type);
-        noticeService.addnotice(notice);
+        noticeService.addNotice(notice);
         Result result=ResultUtils.success(1);
         result.setCode(0);
         return result;
@@ -155,7 +155,7 @@ public class NoticeController {
         notice.setContent(content);
         notice.setType(type);
         notice.setUserId(user_id);
-        noticeService.updatenoticeByid(notice);
+        noticeService.updateNoticeById(notice);
         Result result=ResultUtils.success(1);
         result.setCode(0);
         return result;
@@ -188,7 +188,7 @@ public class NoticeController {
         notice.setContent(content);
         notice.setType(type);
         notice.setUserId(user_id);
-        noticeService.deletenoticeById(id);
+        noticeService.deleteNoticeById(id);
         Result result=ResultUtils.success(1);
         result.setCode(0);
         return result;

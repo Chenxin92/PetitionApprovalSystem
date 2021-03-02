@@ -7,19 +7,55 @@ import com.cx.javaprojectstage3.bean.Notice;
 import java.util.List;
 
 /**
- * 作者：zhengyefeng
- * 日期: 2021/1/28 15:39
- * 描述:
+ * @author Sora
  */
 public interface NoticeService {
-    public IPage<Notice> getNoticeByPage(Page<?> page);
-    public List<Notice> getNotice();
-    public void save(Notice notice);
-    public int addnotice(Notice notice);
-    public int updatenoticeByid(Notice notice);
-    public int deletenoticeById(Integer id);
-    public Notice getNoticeBytitle(String title);
-    public Notice getNoticeById(Integer id);
+    /**
+     * 获取所有公告(分页)
+     *
+     * @param page
+     * @return
+     */
+    IPage<Notice> getNoticeByPage(Page<?> page);
 
+    /**
+     * 获取所有公告
+     *
+     * @return
+     */
+    List<Notice> getNotice();
 
+    void save(Notice notice);
+
+    /**
+     * 添加公告
+     *
+     * @param notice
+     * @return
+     */
+    int addNotice(Notice notice);
+
+    /**
+     * 更新公告
+     *
+     * @param notice
+     * @return
+     */
+    int updateNoticeById(Notice notice);
+
+    /**
+     * 删除公告
+     *
+     * @param id
+     * @return
+     */
+    int deleteNoticeById(Integer id);
+
+    /**
+     * 根据ID获取公告
+     *
+     * @param id
+     * @return
+     */
+    Notice getNoticeById(Integer id);
 }
