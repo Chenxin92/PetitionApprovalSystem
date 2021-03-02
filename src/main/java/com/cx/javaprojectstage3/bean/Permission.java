@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * @author Sora
  */
+@Data
 @TableName(value = "t_permissions")
 public class Permission {
     @TableId(value = "id", type = IdType.AUTO)
@@ -62,62 +64,6 @@ public class Permission {
         }
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getPermissionKey() {
-        return permissionKey;
-    }
-
-    public void setPermissionKey(String permissionKey) {
-        this.permissionKey = permissionKey;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Integer getPid() {
-        return pid;
-    }
-
-    public void setPid(Integer pid) {
-        this.pid = pid;
-    }
-
-    public List<Permission> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Permission> children) {
-        this.children = children;
-    }
-
-    public Boolean getChecked() {
-        return checked;
-    }
-
-    public void setChecked(Boolean checked) {
-        this.checked = checked;
-    }
-
     public Permission() {
     }
 
@@ -126,18 +72,5 @@ public class Permission {
         this.permissionKey = permissionKey;
         this.title = title;
         this.pid = pid;
-    }
-
-    @Override
-    public String toString() {
-        return "Permission{" +
-                "id=" + id +
-                ", permissionKey='" + permissionKey + '\'' +
-                ", title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                ", pid=" + pid +
-                ", children=" + children +
-                ", checked=" + checked +
-                '}';
     }
 }
