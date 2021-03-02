@@ -19,6 +19,9 @@ public class Role {
     @TableField(exist = false)
     private List<Permission> permissions;
 
+    public Role() {
+    }
+
     public Role(Integer id, String roleKey, String roleName) {
         this.id = id;
         this.roleKey = roleKey;
